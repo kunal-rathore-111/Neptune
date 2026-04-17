@@ -17,7 +17,8 @@ dist-ssr
 
 # Bun
 .bun-*
-+ .turbo
+.turbo/
+**/.turbo/
 
 # Env
 .env

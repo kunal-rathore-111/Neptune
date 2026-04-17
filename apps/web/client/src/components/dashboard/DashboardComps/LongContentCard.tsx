@@ -1,9 +1,9 @@
-import { BrowserIcon } from "@repo/icons/Brower";
-import { XIcon } from "@repo/icons/Close";
-import { DeleteIcon } from "@repo/icons/Delete";
-import { EditIcon } from "@repo/icons/Edit";
-import { ShareIcon } from "@repo/icons/Share";
-import { ShareOffIcon } from "@repo/icons/Shareoff";
+import { BrowserIcon } from "@repo/icons";
+import { XIcon } from "@repo/icons";
+import { DeleteIcon } from "@repo/icons";
+import { EditIcon } from "@repo/icons";
+import { ShareIcon } from "@repo/icons";
+import { ShareOffIcon } from "@repo/icons";
 import type { CardDTO } from "@/lib/constants/content/SampleCardData";
 import Tags from "@/lib/utils/Tags";
 import { LinkIcon } from "lucide-react";

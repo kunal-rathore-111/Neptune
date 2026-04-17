@@ -1,6 +1,6 @@
-import { cn } from "@repo/libs/utils";
 import { motion, type Variants } from "framer-motion";
 import { colors } from "../constants/colors";
+import { cn } from "@repo/libs";
 
 // generating color string based(tag based)
 function getColor(tag: string) {

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import Marquee from "@repo/ui/Marquee";
-import { HandHeartIcon } from "@repo/icons/HandHeart";
+import { Marquee } from "@repo/ui";
+import { HandHeartIcon } from "@repo/icons";
 import {
   animateIconUsingRef,
   type IconHandle,

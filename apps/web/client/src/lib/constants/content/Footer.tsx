@@ -1,6 +1,6 @@
-import { GithubIcon } from "@repo/icons/Github";
-import { TwitterIcon } from "@repo/icons/Twitter";
-import { MailCheckIcon } from "@repo/icons/Mail";
+import { GithubIcon } from "@repo/icons";
+import { TwitterIcon } from "@repo/icons";
+import { MailCheckIcon } from "@repo/icons";
 import {
   EmailLink,
   GithubRepo,

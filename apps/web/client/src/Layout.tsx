@@ -10,7 +10,7 @@ import ErrorPage from "./Pages/ErrorPage";
 const PrivacyPolicyPage = React.lazy(() => import("./Pages/PrivacyPolicy"));
 const TermsofServicePage = React.lazy(() => import("./Pages/Terms"));
 import ContactPage from "./Pages/Contact";
-import ScrollToTop from "@repo/ui/ScrollToTop";
+import { ScrollToTop } from "@repo/ui";
 import React, { Suspense } from "react";
 import LoadingPage from "./Pages/Loading";
 

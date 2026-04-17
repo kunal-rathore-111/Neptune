@@ -1,8 +1,4 @@
-import { GithubIcon } from "@repo/icons/Github";
-
-import { Button } from "@repo/ui/custom_buttons/button";
-import DotComp from "@repo/ui/Dot";
-import ThemeHomeComp from "@repo/ui/ThemeHomeComp";
+import { GithubIcon } from "@repo/icons";
 
 import { EmailLink, GithubRepo } from "@/lib/utils/SocialLinks_PolicyDate";
 import { HelpCircle, MailIcon } from "lucide-react";
@@ -11,9 +7,14 @@ import {
   StepsArray,
   TipsArray,
 } from "@/lib/constants/content/docs";
-import BackToHome_MoveUpComp from "@repo/ui/BackToHome_MoveUpComp";
 import { FeaturesCard } from "@/components/Docs/FeaturesCard";
 import { StepsCard } from "@/components/Docs/StepsCard";
+import {
+  DotComp,
+  ThemeHomeComp,
+  Button,
+  BackToHome_MoveUpComp,
+} from "@repo/ui";
 
 export default function Docs() {
   return (
@@ -76,7 +77,7 @@ export default function Docs() {
               })}
             </ul>
           </div>
-          {/* support */}
+          {/* Support Section */}
           <div className="flex flex-col gap-2 text-sm">
             <h2 className="text-lg">Support</h2>
             <p className="">Need help? We're here for you.</p>

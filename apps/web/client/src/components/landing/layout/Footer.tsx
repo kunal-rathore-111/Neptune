@@ -1,4 +1,4 @@
-import { BookTextIcon } from "@repo/icons/Book";
+import { BookTextIcon } from "@repo/icons";
 import { footerLinks, socialLinks } from "@/lib/constants/content/Footer";
 import { Link } from "react-router";
 export const Footer = () => {

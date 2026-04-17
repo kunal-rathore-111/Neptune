@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router";
-import { GithubIcon } from "@repo/icons/Github";
-import { BookTextIcon } from "@repo/icons/Book";
+import { GithubIcon } from "@repo/icons";
+import { BookTextIcon } from "@repo/icons";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { GithubRepo } from "@/lib/utils/SocialLinks_PolicyDate";
-import ThemeToggleButton from "@repo/ui/custom_buttons/ThemeButton";
-import { Button } from "@repo/ui/button";
+import { Button, ThemeToggleButton } from "@repo/ui";
 
 export const Nav = () => {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ export const Nav = () => {
 
   const NavFunctionalComps = [
     { label: "Features", action: () => handleScrollTo("features") },
-    { label: "Blog", action: () => { } },
+    { label: "Blog", action: () => {} },
     { label: "Docs", action: () => navigate("/docs") },
     // will update later after comletion of dashboard page to only when authenticated
     { label: "Dashboard", action: () => navigate("/user/dashboard") },

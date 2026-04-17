@@ -1,8 +1,6 @@
 import { MailIcon, UserIcon } from "lucide-react";
-import { FloatingLabelInput } from "@repo/ui/Form/FloatingLabelInput";
+import { FloatingLabelInput, Textarea, ThemeHomeComp } from "@repo/ui";
 import { useState } from "react";
-import { Textarea } from "@repo/ui/textarea";
-import ThemeHomeComp from "@repo/ui/ThemeHomeComp";
 import { Link } from "react-router";
 
 export default function ContactForm() {

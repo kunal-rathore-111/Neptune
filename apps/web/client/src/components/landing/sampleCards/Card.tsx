@@ -1,23 +1,19 @@
 "use client";
 
-import { LinkIcon } from "@repo/icons/Link";
-import {
-  CardBody,
-  CardContainer,
-  CardItem,
-} from "@repo/ui/Card/3d-card";
+import { LinkIcon } from "@repo/icons";
+import { CardBody, CardContainer, CardItem } from "@repo/ui";
 import { useRef } from "react";
 
 import Tags from "@/lib/utils/Tags";
-import { ShareIcon } from "@repo/icons/Share";
-import { EditIcon } from "@repo/icons/Edit";
-import { DeleteIcon } from "@repo/icons/Delete";
-import { BrowserIcon } from "@repo/icons/Brower";
+import { ShareIcon } from "@repo/icons";
+import { EditIcon } from "@repo/icons";
+import { DeleteIcon } from "@repo/icons";
+import { BrowserIcon } from "@repo/icons";
 import { type CardDTO } from "@/lib/constants/content/SampleCardData";
 import { easeInOut, motion } from "framer-motion";
 import type { IconHandle } from "@/lib/utils/IconAnimateRef";
-import { ShareOffIcon } from "@repo/icons/Shareoff";
-import { LinkOffIcon } from "@repo/icons/LinkOff";
+import { ShareOffIcon } from "@repo/icons";
+import { LinkOffIcon } from "@repo/icons";
 
 export function ThreeDCardDemo({ cardData }: { cardData: CardDTO }) {
   const parent = {

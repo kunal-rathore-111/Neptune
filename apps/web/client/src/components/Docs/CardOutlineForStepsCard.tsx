@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CardBody, CardContainer, CardItem } from "@repo/ui/Card/3d-card";
+import { CardBody, CardContainer, CardItem } from "@repo/ui";
 
 type CardOutlineProps = {
   children: ReactNode;

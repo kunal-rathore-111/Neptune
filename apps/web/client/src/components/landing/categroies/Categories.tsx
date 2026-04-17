@@ -1,5 +1,5 @@
-import DotComp from "@repo/ui/Dot";
-import Marquee from "@repo/ui/Marquee";
+import { DotComp } from "@repo/ui";
+import { Marquee } from "@repo/ui";
 
 export default function Categories() {
   const words = [

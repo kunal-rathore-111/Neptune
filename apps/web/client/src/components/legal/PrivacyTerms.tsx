@@ -1,6 +1,5 @@
 import { POLICY_DATE } from "@/lib/utils/SocialLinks_PolicyDate";
-import BackToHome_MoveUpComp from "@repo/ui/BackToHome_MoveUpComp";
-import ThemeHomeComp from "@repo/ui/ThemeHomeComp";
+import { BackToHome_MoveUpComp, ThemeHomeComp } from "@repo/ui";
 
 interface DataDTO {
   title: string;

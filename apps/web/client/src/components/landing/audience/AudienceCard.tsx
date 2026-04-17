@@ -1,13 +1,5 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/avatar/avatar";
-import {
-  CardBody,
-  CardContainer,
-  CardItem,
-} from "@repo/ui/Card/3d-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui";
+import { CardBody, CardContainer, CardItem } from "@repo/ui";
 import { type AudienceCommentArrayDTO } from "@/lib/constants/content/audience";
 
 interface AudienceCardDTO {

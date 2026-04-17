@@ -1,30 +1,22 @@
-import { BookTextIcon } from "@repo/icons/Book";
-import ThemeToggleButton from "@repo/ui/custom_buttons/ThemeButton";
-import { PlusIcon } from "@repo/icons/Plus";
+import { BookTextIcon } from "@repo/icons";
+import { ThemeToggleButton } from "@repo/ui";
+import { PlusIcon } from "@repo/icons";
 import { useEffect, useRef, useState } from "react";
 import {
   animateIconUsingRef,
   type IconHandle,
 } from "@/lib/utils/IconAnimateRef";
-import { Button } from "@repo/ui/custom_buttons/button";
+import { Button } from "@repo/ui";
 import { ChevronRightIcon } from "lucide-react";
 import {
   SideBarMenuData,
   type SideBarMenuDataTypes,
 } from "@/lib/constants/content/DashboardSample";
-import { SettingsIcon } from "@repo/icons/Settings";
+import { SettingsIcon } from "@repo/icons";
 import { useNavigate } from "react-router";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@repo/ui/collapsible";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/avatar/avatar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@repo/ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu";
+} from "@repo/ui";
 import {
   Sidebar,
   SidebarContent,
@@ -44,7 +36,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@repo/ui/sidebar/sidebar";
+} from "@repo/ui";
 
 export function AppSideBar() {
   return (
@@ -159,37 +151,21 @@ function CollapseComp({ menuData }: { menuData: SideBarMenuDataTypes }) {
 function Footer() {
   const AnimateRef = useRef<IconHandle>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [width, setWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      return window.removeEventListener("resize", handleResize);
-    };
-  }, [window.innerWidth]);
   return (
-    <SidebarFooter
-      onMouseLeave={width > 800 ? () => setIsOpen(false) : undefined}
-      /* need to fix for mobiles */
-      onClick={() => setIsOpen(!isOpen)}
-    >
+    <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem className="flex flex-col items-center gap-2 rounded-none border-y">
           {/* UserProfile_Username and settings */}
           <SidebarGroup className="flex-row gap-5 px-1 py-2">
             <SidebarMenuButton className="text-xs">
-              <Avatar className="h-6 w-6 transition-all duration-200 hover:scale-110">
+              <Avatar className="mr-1 inline-block h-6 w-6 transition-all duration-200 hover:scale-110">
                 <AvatarImage src={""} alt={""} />
                 <AvatarFallback>{""}</AvatarFallback>
               </Avatar>{" "}
               Username
             </SidebarMenuButton>
-            <DropdownMenu open={isOpen}>
-              <DropdownMenuTrigger
-                asChild
-                onMouseEnter={width > 800 ? () => setIsOpen(true) : undefined}
-              >
+            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+              <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   className="flex w-fit items-center justify-center border"
                   {...animateIconUsingRef(AnimateRef)}

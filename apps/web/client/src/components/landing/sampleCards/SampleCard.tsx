@@ -1,7 +1,7 @@
 import { motion, easeOut, easeInOut } from "framer-motion";
 import { card1, card2, card3 } from "@/lib/constants/content/SampleCardData";
-import { cn } from "@repo/libs/utils";
 import { ThreeDCardDemo } from "./Card";
+import { cn } from "@repo/libs";
 
 export default function SampleCards() {
   const parent = {

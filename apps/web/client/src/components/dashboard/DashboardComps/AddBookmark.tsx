@@ -1,18 +1,14 @@
 import { Link } from "lucide-react";
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
-import { LinkIcon } from "@repo/icons/Link";
-import { KeyboardIcon } from "@repo/icons/Keyboard";
-import { XIcon } from "@repo/icons/Close";
-import { Field, FieldGroup, FieldLabel } from "@repo/ui/Form/field";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@repo/ui/Form/input-group";
-import { Textarea } from "@repo/ui/textarea";
-import { Checkbox } from "@repo/ui/checkbox";
-import { TagsInputComp } from "@repo/ui/tags-input/TagsInput";
+import { LinkIcon } from "@repo/icons";
+import { KeyboardIcon } from "@repo/icons";
+import { XIcon } from "@repo/icons";
+import { Field, FieldGroup, FieldLabel } from "@repo/ui";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@repo/ui";
+import { Textarea } from "@repo/ui";
+import { Checkbox } from "@repo/ui";
+import { TagsInputComp } from "@repo/ui";
 
 interface AddBookMarkCardDTO {
   setOpenAddCard: Dispatch<SetStateAction<boolean>>;

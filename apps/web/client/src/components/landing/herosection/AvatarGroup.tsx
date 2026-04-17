@@ -1,7 +1,7 @@
 import Person1 from "@/assets/images/avatar/landing/person1.png";
 import Person2 from "@/assets/images/avatar/landing/person2.png";
 import Person3 from "@/assets/images/avatar/landing/person3.png";
-import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "@repo/ui/avatar/avatar";
+import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "@repo/ui";
 
 export function AvatarGroupComp() {
   const AvatarDataArray = [

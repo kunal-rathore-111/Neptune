@@ -1,15 +1,16 @@
 import { ButtonsClass } from "@/lib/constants/styles";
-import { cn } from "@repo/libs/utils";
+import { cn } from "@repo/libs";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import AddBookMarkCard from "./DashboardComps/AddBookmark";
 import { AppSideBar } from "./DashboardComps/SideBarLayout";
-import { SidebarProvider, SidebarTrigger } from "@repo/ui/sidebar/sidebar";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@repo/ui/Form/input-group";
+  SidebarProvider,
+  SidebarTrigger,
+} from "@repo/ui";
 import DashboardComp from "./DashboardComps/DashboardComp";
 
 export function FullDashboardPage() {

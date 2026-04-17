@@ -1,4 +1,4 @@
-import DotComp from "@repo/ui/Dot";
+import { DotComp } from "@repo/ui";
 import { BentoGrid } from "./BentoGrid/BentoGridLayout";
 
 export default function Features() {

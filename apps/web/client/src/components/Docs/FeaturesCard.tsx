@@ -1,6 +1,6 @@
 import { colors } from "@/lib/constants/colors";
 import { type FeaturesArrayDTO } from "@/lib/constants/content/docs";
-import { cn } from "@repo/libs/utils";
+import { cn } from "@repo/libs";
 
 interface FeaturesCardDTO {
   data: FeaturesArrayDTO;

@@ -1,6 +1,6 @@
-import { CodeIcon } from "@repo/icons/Code";
-import { ExamIcon } from "@repo/icons/ExamIcon";
-import { GithubIcon } from "@repo/icons/Github";
+import { CodeIcon } from "@repo/icons";
+import { ExamIcon } from "@repo/icons";
+import { GithubIcon } from "@repo/icons";
 
 export interface CardDTO {
   categoryIcon: typeof CodeIcon;

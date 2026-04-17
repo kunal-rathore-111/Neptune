@@ -1,4 +1,4 @@
-import { cn } from "@repo/libs/utils";
+import { cn } from "@repo/libs";
 import CardOutline from "./CardOutlineForStepsCard";
 import { colors } from "@/lib/constants/colors";
 import type { StepsArrayDTO } from "@/lib/constants/content/docs";

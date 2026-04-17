@@ -1,11 +1,10 @@
-import { ClapIcon } from "@repo/icons/Demo";
-import { Button } from "@repo/ui/custom_buttons/button";
+import { ClapIcon } from "@repo/icons";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
-import { SendIcon } from "@repo/icons/Send";
+import { SendIcon } from "@repo/icons";
 import { AvatarGroupComp } from "./AvatarGroup";
-import { DotPattern } from "@repo/ui/dot-pattern";
-import { GlobeIcon } from "@repo/icons/Globe";
+import { Button, DotPattern } from "@repo/ui";
+import { GlobeIcon } from "@repo/icons";
 
 export default function HeroWrapper() {
   return (
@@ -50,7 +49,7 @@ function HeroSection() {
               </Button>
 
               <Button
-                variant={"secondary_hover"}
+                variant={"secondary"}
                 className="border border-amber-900/40 bg-white/10 shadow-sm hover:bg-gray-300/30 dark:border-white/30 dark:hover:bg-zinc-300/14"
                 asChild
               >

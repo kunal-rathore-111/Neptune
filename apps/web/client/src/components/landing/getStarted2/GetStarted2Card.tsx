@@ -1,10 +1,6 @@
-import { Button } from "@repo/ui/button";
-import {
-  CardBody,
-  CardContainer,
-  CardItem,
-} from "@repo/ui/Card/3d-card";
-import GlareHover from "@repo/ui/glareHover/GlareHover";
+import { Button } from "@repo/ui";
+import { CardBody, CardContainer, CardItem } from "@repo/ui";
+import { GlareHover } from "@repo/ui";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 

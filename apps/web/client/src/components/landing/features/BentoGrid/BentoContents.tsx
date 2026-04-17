@@ -2,12 +2,12 @@ import { motion, easeInOut, AnimatePresence } from "framer-motion";
 import Tags from "@/lib/utils/Tags";
 
 import { useEffect, useState } from "react";
-import { Tree, type TreeViewElement } from "@repo/ui/contentTree/content-tree";
-import { TypingAnimation } from "@repo/ui/typing-animation";
-import { LockIcon } from "@repo/icons/Lock";
-import { ChromeIcon } from "@repo/icons/Chrome";
-import { Switch } from "@repo/ui/switch";
-import DotComp from "@repo/ui/Dot";
+import { Tree, type TreeViewElement } from "@repo/ui";
+import { TypingAnimation } from "@repo/ui";
+import { LockIcon } from "@repo/icons";
+import { ChromeIcon } from "@repo/icons";
+import { Switch } from "@repo/ui";
+import { DotComp } from "@repo/ui";
 
 export function Col1() {
   const elements: TreeViewElement[] = [
