@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type FormEvent } from "react";
 import { Link } from "react-router";
 import {
   EyeIcon,
@@ -9,15 +9,17 @@ import {
   UserIcon,
 } from "lucide-react";
 import { GithubIcon, GoogleIcon } from "@repo/icons";
-import { Button, FloatingLabelInput } from "@repo/ui";
+import { Button, FloatingLabelInput, toast } from "@repo/ui";
 import { ThemeHomeComp } from "@repo/ui";
 import {
   CommonValidatorComp,
   validatePasswordInput,
   validateUsernameInput,
 } from "./validateSign";
+import { signInSchema, signUpSchema } from "@repo/validation";
+import { signInUpFunction } from "@/services/authService";
 
-type AuthMode = "signin" | "signup";
+export type AuthMode = "signin" | "signup";
 
 const authContent = {
   signin: {
@@ -95,6 +97,27 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
     },
   ];
 
+  /* FORM SUBMISSION */
+  function handleFormSubmit(e: FormEvent) {
+    e.preventDefault();
+    const data =
+      mode === "signin" ? { email, password } : { email, password, username };
+    // check zodValidation
+    const result =
+      mode === "signin"
+        ? signInSchema.safeParse(data)
+        : signUpSchema.safeParse(data);
+
+    if (!result.success) {
+      console.log(result.error.issues[0]);
+      toast(result.error.issues[0].message);
+      return;
+    } else {
+      // backend call function-
+      signInUpFunction({ data, mode });
+    }
+  }
+
   return (
     <>
       <div className="flex items-center justify-center p-6 lg:w-full">
@@ -115,7 +138,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
               </p>
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleFormSubmit}>
               {/* Full Name Input */}
               {mode === "signup" ? (
                 <div className="space-y-2">

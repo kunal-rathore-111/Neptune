@@ -10,9 +10,9 @@ export * from './icons/Edit';
 export * from './icons/ExamIcon';
 export * from './icons/Github';
 export * from './icons/Globe';
-export * from './icons/Check';
 export * from './icons/HandHeart';
 export * from './icons/Home';
+
 export * from './icons/Keyboard';
 export * from './icons/LeftArrow';
 export * from './icons/Link';

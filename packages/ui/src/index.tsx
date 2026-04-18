@@ -44,3 +44,4 @@ export * from './components/custom_buttons/ThemeButton';
 export * from './components/custom_buttons/HomeButton';
 export * from './components/custom_buttons/MoveUpButton';
 export * from './components/custom_buttons/BackToHomeButton';
+export * from './components/sonner/sonner';

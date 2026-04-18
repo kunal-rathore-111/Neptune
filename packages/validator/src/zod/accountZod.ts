@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
 export const signInSchema = z.object({
-  email: z.email().min(4).max(200),
+  email: z
+    .email()
+    .min(4, { message: 'Please increase email length to atleast 4 letters' })
+    .max(200, { message: 'Please decrease email length to atmax 200 letters' }),
   password: z
     .string()
     .min(6, { message: 'Please increase password length to atleast 6 letters' })
@@ -13,14 +16,17 @@ export const signInSchema = z.object({
 });
 
 export const signUpSchema = signInSchema.extend({
-  username: z.string().min(4).max(100),
+  username: z
+    .string()
+    .min(4, { message: 'Please increase username length to atleast 4 letters' })
+    .max(100, { message: 'Please decrease username length to atmax 100 letters' }),
 });
 
 export const updatePassswordSchema = signInSchema.extend({
   newPassword: z
     .string()
-    .min(4)
-    .max(200)
+    .min(4, { message: 'Please increase username length to atleast 4 letters' })
+    .max(100, { message: 'Please decrease username length to atmax 100 letters' })
     .regex(/[A-Z]/, { message: 'Please include alteast one uppercase letter in the new password' })
     .regex(/[a-z]/, { message: 'Please include alteast one lowercase letter in the new password' })
     .regex(/[0-9]/, { message: 'Please include alteast one number as letter in the new password' })
