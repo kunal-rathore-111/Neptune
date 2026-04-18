@@ -1,11 +1,8 @@
 import { BookTextIcon } from "@repo/icons";
 import { ThemeToggleButton } from "@repo/ui";
 import { PlusIcon } from "@repo/icons";
-import { useEffect, useRef, useState } from "react";
-import {
-  animateIconUsingRef,
-  type IconHandle,
-} from "@/lib/utils/IconAnimateRef";
+import { useRef, useState } from "react";
+import { animateIconUsingRef, type IconHandle } from "@repo/ui";
 import { Button } from "@repo/ui";
 import { ChevronRightIcon } from "lucide-react";
 import {

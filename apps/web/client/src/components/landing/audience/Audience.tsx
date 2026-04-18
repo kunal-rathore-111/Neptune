@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
 import { Marquee } from "@repo/ui";
 import { HandHeartIcon } from "@repo/icons";
-import {
-  animateIconUsingRef,
-  type IconHandle,
-} from "@/lib/utils/IconAnimateRef";
+import { animateIconUsingRef, type IconHandle } from "@repo/ui";
 import { useRef } from "react";
 import { AudienceCommentArray } from "@/lib/constants/content/audience";
 import { AudienceCard } from "./AudienceCard";

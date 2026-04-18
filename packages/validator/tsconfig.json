@@ -1,15 +1,13 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "./src",
     "outDir": "dist",
-    "strictNullChecks": true
+    "declaration": true,
+    "strictNullChecks": true,
+    "module": "esnext",
+    "moduleResolution": "bundler"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

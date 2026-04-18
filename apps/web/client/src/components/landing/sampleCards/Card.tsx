@@ -11,7 +11,7 @@ import { DeleteIcon } from "@repo/icons";
 import { BrowserIcon } from "@repo/icons";
 import { type CardDTO } from "@/lib/constants/content/SampleCardData";
 import { easeInOut, motion } from "framer-motion";
-import type { IconHandle } from "@/lib/utils/IconAnimateRef";
+import type { IconHandle } from "@repo/ui";
 import { ShareOffIcon } from "@repo/icons";
 import { LinkOffIcon } from "@repo/icons";
 

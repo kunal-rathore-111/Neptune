@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router";
 import {
   EyeIcon,
@@ -11,6 +11,11 @@ import {
 import { GithubIcon, GoogleIcon } from "@repo/icons";
 import { Button, FloatingLabelInput } from "@repo/ui";
 import { ThemeHomeComp } from "@repo/ui";
+import {
+  CommonValidatorComp,
+  validatePasswordInput,
+  validateUsernameInput,
+} from "./validateSign";
 
 type AuthMode = "signin" | "signup";
 
@@ -44,13 +49,51 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [fullName, setFullName] = useState<string>("");
+  const [passwordValidation, setPasswordValidation] = useState<any>();
+  const [usernameValidation, setUsernameValidation] = useState<any>();
+
+  const [username, setUsername] = useState<string>("");
 
   const cardRef = useRef<HTMLDivElement>(null);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  // effect to show/hide PasswordRules
+  useEffect(() => {
+    setPasswordValidation(validatePasswordInput(password));
+  }, [password]);
+  // effect to show/hide UsernameRules
+  useEffect(() => {
+    setUsernameValidation(validateUsernameInput(username));
+  }, [username]);
+
+  const PasswordRules = [
+    { message: "Password length atleast 6", test: (p: string) => p.length > 5 },
+    {
+      message: "Password has lowercase letter",
+      test: (p: string) => /[a-z]/.test(p),
+    },
+    {
+      message: "Password has uppercase letter",
+      test: (p: string) => /[A-Z]/.test(p),
+    },
+    {
+      message: "Password has one number",
+      test: (p: string) => /[0-9]/.test(p),
+    },
+    {
+      message: "One special character",
+      test: (p: string) => /[&%$#@!]/.test(p),
+    },
+  ];
+
+  const UsernameRules = [
+    {
+      message: "Username length atleast 4",
+      test: (p: string) => p.length > 3,
+    },
+  ];
 
   return (
     <>
@@ -74,16 +117,23 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
 
             <form className="space-y-4">
               {/* Full Name Input */}
-              <div className="space-y-2">
-                <FloatingLabelInput
-                  id="fullName"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Full Name"
-                  icon={<UserIcon />}
-                />
-              </div>
+              {mode === "signup" ? (
+                <div className="space-y-2">
+                  <FloatingLabelInput
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Full Name"
+                    icon={<UserIcon size={18} />}
+                  />
+                  <CommonValidatorComp
+                    input={username}
+                    inputValidation={usernameValidation}
+                    inputRules={UsernameRules}
+                  />
+                </div>
+              ) : null}
 
               {/* Email Input */}
               <div className="space-y-2">
@@ -93,7 +143,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email"
-                  icon={<MailIcon />}
+                  icon={<MailIcon size={18} />}
                 />
               </div>
 
@@ -105,9 +155,20 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
-                  icon={<LockIcon />}
-                  rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  icon={<LockIcon size={18} />}
+                  rightIcon={
+                    showPassword ? (
+                      <EyeOffIcon size={18} />
+                    ) : (
+                      <EyeIcon size={18} />
+                    )
+                  }
                   onRightIconClick={togglePasswordVisibility}
+                />
+                <CommonValidatorComp
+                  input={password}
+                  inputValidation={passwordValidation}
+                  inputRules={PasswordRules}
                 />
               </div>
 
