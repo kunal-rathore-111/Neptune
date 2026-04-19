@@ -1,0 +1,25 @@
+import { FetchDataUrl } from "@/api/backend";
+import axios from "axios";
+import { HandleError } from "./handleError";
+
+type FetchDataType =
+  | { type: "error"; message: string }
+  | { data: any; type: "success"; message: string };
+
+export async function fetchData(): Promise<FetchDataType> {
+  try {
+    // console.error("calling fetchdata");
+    const response = await axios(FetchDataUrl, {
+      method: "GET",
+      withCredentials: true,
+    });
+    console.log(response.data);
+    return {
+      message: response.data.message,
+      data: response.data.data,
+      type: "success",
+    };
+  } catch (error) {
+    return HandleError(error);
+  }
+}

@@ -18,7 +18,8 @@ import {
   validatePasswordInput,
   validateUsernameInput,
 } from "@repo/validation";
-import { signInUpFunction } from "@/services/authService";
+import { signInUpService } from "@/services/sign";
+import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 
 export type AuthMode = "signin" | "signup";
 
@@ -103,7 +104,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   ];
 
   /* FORM SUBMISSION */
-  async function handleFormSubmit(e: FormEvent) {
+  async function handleSignFormSubmit(e: FormEvent) {
     e.preventDefault();
     const data =
       mode === "signin" ? { email, password } : { email, password, username };
@@ -120,15 +121,9 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
     } else {
       setIsLoading(true);
       // backend intergration for signup and signin
-      const response = await signInUpFunction({ data, mode });
-      response.type === "success"
-        ? toast.success(response.message, { position: "top-center" })
-        : toast.error(response.message, { position: "top-center" });
-      // if usecase success then perform what need (basically need to redirect to dashboard of user)
+      const response = await signInUpService({ data, mode });
+      HandleResponseUtil(response, "/user/dashboard", navigate);
       setIsLoading(false);
-      if (response.type === "success") {
-        navigate("/user/dashboard");
-      }
     }
   }
 
@@ -152,7 +147,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
               </p>
             </div>
 
-            <form className="space-y-4" onSubmit={handleFormSubmit}>
+            <form className="space-y-4" onSubmit={handleSignFormSubmit}>
               {/* Full Name Input */}
               {mode === "signup" ? (
                 <div className="space-y-2">

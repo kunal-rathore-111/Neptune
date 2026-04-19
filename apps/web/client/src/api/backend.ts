@@ -6,5 +6,8 @@ const InitalRoute =
     : env.VITE_PROD_BACKEND_BASE_URL;
 if (!InitalRoute) throw Error("No Base URL found for backend");
 
-export const SignInRoute = InitalRoute + "/sign-in";
-export const SignUpRoute = InitalRoute + "/sign-up";
+export const SignInUrl = InitalRoute + "/sign-in";
+export const SignUpUrl = InitalRoute + "/sign-up";
+
+export const FetchDataUrl = InitalRoute + "/user/content/fetch"; // to fetch user data for dashboard
+export const SignOutUrl = InitalRoute + "/sign-out";

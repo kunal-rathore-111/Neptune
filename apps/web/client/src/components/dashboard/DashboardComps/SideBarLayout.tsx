@@ -34,6 +34,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui";
+import { signOutService } from "@/services/sign";
+import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 
 export function AppSideBar() {
   return (
@@ -148,6 +150,15 @@ function CollapseComp({ menuData }: { menuData: SideBarMenuDataTypes }) {
 function Footer() {
   const AnimateRef = useRef<IconHandle>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  // to singout on clicking signout button in settings
+  async function signOutHandler() {
+    const response = await signOutService();
+    HandleResponseUtil(response, "/", navigate);
+  }
+
   return (
     <SidebarFooter>
       <SidebarMenu>
@@ -178,8 +189,17 @@ function Footer() {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem className="focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black">
-                    Logout
+                  <DropdownMenuItem
+                    className="w-full focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black"
+                    asChild
+                  >
+                    <button
+                      onClick={() => {
+                        signOutHandler();
+                      }}
+                    >
+                      Logout
+                    </button>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>

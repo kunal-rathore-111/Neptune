@@ -1,6 +1,7 @@
-import { SignInRoute, SignUpRoute } from "@/api/backend";
+import { SignInUrl, SignOutUrl, SignUpUrl } from "@/api/backend";
 import type { AuthMode } from "@/components/sign/Sign";
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
+import { HandleError, type ServiceResponse } from "./handleError";
 
 type signInServiceType = {
   email: string;
@@ -15,11 +16,6 @@ type signInUpFunctionType = {
   mode: AuthMode;
 };
 
-type ServiceResponse = {
-  message: string;
-  type: "error" | "success";
-};
-
 async function signInService(
   data: signInServiceType,
 ): Promise<ServiceResponse> {
@@ -27,7 +23,7 @@ async function signInService(
   try {
     // i can make this logic as common bw sign-in or sign-up
     const response = await axios({
-      url: SignInRoute,
+      url: SignInUrl,
       method: "POST",
       data: data,
       withCredentials: true,
@@ -44,7 +40,7 @@ async function signUpService(
 ): Promise<ServiceResponse> {
   try {
     const response = await axios({
-      url: SignUpRoute,
+      url: SignUpUrl,
       method: "POST",
       data: data,
       withCredentials: true,
@@ -55,7 +51,7 @@ async function signUpService(
   }
 }
 
-export async function signInUpFunction({
+export async function signInUpService({
   data,
   mode,
 }: signInUpFunctionType): Promise<ServiceResponse> {
@@ -63,24 +59,15 @@ export async function signInUpFunction({
   else return await signUpService(data as signUpServiceType);
 }
 
-type BackendError = {
-  requestId?: string;
-  errorType?: string;
-  message?: string;
-  status?: "error";
-};
-
-// function to handle Error
-function HandleError(error: unknown): ServiceResponse {
-  let message = "Something went wrong";
-  if (isAxiosError<BackendError>(error)) {
-    console.error("Error- ", error.response?.data);
-    if (
-      error.response?.data.message &&
-      error.response.status !== 500 &&
-      error.response.data.errorType !== "ServerError"
-    )
-      message = error.response.data.message;
+export async function signOutService(): Promise<ServiceResponse> {
+  try {
+    const response = await axios(SignOutUrl, {
+      method: "POST",
+      withCredentials: true,
+    });
+    return { message: response.data.message, type: "success" };
+  } catch (error) {
+    /* here the no error thrown from server code probably cause there is no middleware but still using cause what if there will server is down */
+    return HandleError(error);
   }
-  return { message: message, type: "error" };
 }

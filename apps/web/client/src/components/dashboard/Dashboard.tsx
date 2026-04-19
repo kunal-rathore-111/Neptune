@@ -1,7 +1,7 @@
 import { ButtonsClass } from "@/lib/constants/styles";
 import { cn } from "@repo/libs";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddBookMarkCard from "./DashboardComps/AddBookmark";
 import { AppSideBar } from "./DashboardComps/SideBarLayout";
 import {
@@ -12,9 +12,20 @@ import {
   SidebarTrigger,
 } from "@repo/ui";
 import DashboardComp from "./DashboardComps/DashboardComp";
+import { fetchData } from "@/services/fetchData";
+import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 
 export function FullDashboardPage() {
   const [addCardState, setOpenAddCard] = useState(false);
+
+  useEffect(() => {
+    async function fetch() {
+      const response = await fetchData();
+      HandleResponseUtil(response, null, null);
+      /* if (response.type === "success") console.error(response?.data); */
+    }
+    fetch();
+  }, []);
 
   return (
     <SidebarProvider className="[--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]">
