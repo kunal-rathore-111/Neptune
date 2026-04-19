@@ -33,6 +33,14 @@ export const updatePassswordSchema = signInSchema.extend({
     .regex(/[&%$#@!]/, { message: 'The new password must contain at least one- &, %, $, #, @, !' }),
 });
 
+export function validatePasswordInput(input: string) {
+  return signUpSchema.shape.password.safeParse(input);
+}
+
+export function validateUsernameInput(input: string) {
+  return signUpSchema.shape.username.safeParse(input);
+}
+
 export type SignInTypes = z.infer<typeof signInSchema>;
 export type SignUpTypes = z.infer<typeof signUpSchema>;
 export type UpdatePasswordTypes = z.infer<typeof updatePassswordSchema>;

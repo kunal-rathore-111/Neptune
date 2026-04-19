@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 // Floating Label Input Component
 export const FloatingLabelInput: React.FC<{
@@ -10,16 +10,7 @@ export const FloatingLabelInput: React.FC<{
   icon: React.ReactNode;
   rightIcon?: React.ReactNode;
   onRightIconClick?: () => void;
-}> = ({
-  id,
-  type,
-  value,
-  onChange,
-  placeholder,
-  icon,
-  rightIcon,
-  onRightIconClick,
-}) => {
+}> = ({ id, type, value, onChange, placeholder, icon, rightIcon, onRightIconClick }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -38,7 +29,7 @@ export const FloatingLabelInput: React.FC<{
         placeholder={placeholder}
         style={
           {
-            "--tw-ring-color": "hsl(var(--ring))",
+            '--tw-ring-color': 'hsl(var(--ring))',
           } as React.CSSProperties
         }
       />
@@ -46,18 +37,16 @@ export const FloatingLabelInput: React.FC<{
         htmlFor={id}
         className={`pointer-events-none absolute left-10 text-sm font-medium transition-all duration-200 ${
           isFocused || value
-            ? "text-foreground -top-2 rounded-sm bg-white px-2 text-xs dark:bg-black"
-            : "text-muted-foreground top-2.5"
-        }`}
-      >
+            ? 'text-foreground -top-2 rounded-sm bg-white px-2 text-xs dark:bg-black'
+            : 'text-muted-foreground top-2.5'
+        }`}>
         {placeholder}
       </label>
       {rightIcon && (
         <button
           type="button"
           onClick={onRightIconClick}
-          className="text-muted-foreground hover:text-foreground focus:text-foreground absolute inset-y-0 right-0 flex items-center pr-3 transition-colors focus:outline-none"
-        >
+          className="text-muted-foreground hover:text-foreground focus:text-foreground absolute inset-y-0 right-0 flex items-center pr-3 transition-colors focus:outline-none">
           {rightIcon}
         </button>
       )}

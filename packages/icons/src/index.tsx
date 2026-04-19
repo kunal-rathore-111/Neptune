@@ -32,3 +32,4 @@ export * from './icons/Sun';
 export * from './icons/Twitter';
 export * from './icons/UpArrow';
 export * from './icons/Google';
+export * from './icons/Loading';

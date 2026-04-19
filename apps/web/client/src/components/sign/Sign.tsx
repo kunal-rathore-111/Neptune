@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, type FormEvent } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   EyeIcon,
   EyeOffIcon,
@@ -8,15 +8,16 @@ import {
   MailIcon,
   UserIcon,
 } from "lucide-react";
-import { GithubIcon, GoogleIcon } from "@repo/icons";
+import { GithubIcon, GoogleIcon, LoaderIcon } from "@repo/icons";
 import { Button, FloatingLabelInput, toast } from "@repo/ui";
 import { ThemeHomeComp } from "@repo/ui";
+import { CommonValidatorComp } from "./validateSign";
 import {
-  CommonValidatorComp,
+  signInSchema,
+  signUpSchema,
   validatePasswordInput,
   validateUsernameInput,
-} from "./validateSign";
-import { signInSchema, signUpSchema } from "@repo/validation";
+} from "@repo/validation";
 import { signInUpFunction } from "@/services/authService";
 
 export type AuthMode = "signin" | "signup";
@@ -54,9 +55,12 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   const [passwordValidation, setPasswordValidation] = useState<any>();
   const [usernameValidation, setUsernameValidation] = useState<any>();
 
+  const [isloading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
 
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const navigate = useNavigate(); // to navigate on user/dashboard on successfull sign
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -70,6 +74,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
     setUsernameValidation(validateUsernameInput(username));
   }, [username]);
 
+  /* rules to validate when user entering input */
   const PasswordRules = [
     { message: "Password length atleast 6", test: (p: string) => p.length > 5 },
     {
@@ -98,7 +103,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   ];
 
   /* FORM SUBMISSION */
-  function handleFormSubmit(e: FormEvent) {
+  async function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
     const data =
       mode === "signin" ? { email, password } : { email, password, username };
@@ -109,12 +114,21 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
         : signUpSchema.safeParse(data);
 
     if (!result.success) {
-      console.log(result.error.issues[0]);
-      toast(result.error.issues[0].message);
+      //console.log(result.error.issues[0]);
+      toast.error(result.error.issues[0].message, { position: "top-right" });
       return;
     } else {
-      // backend call function-
-      signInUpFunction({ data, mode });
+      setIsLoading(true);
+      // backend intergration for signup and signin
+      const response = await signInUpFunction({ data, mode });
+      response.type === "success"
+        ? toast.success(response.message, { position: "top-center" })
+        : toast.error(response.message, { position: "top-center" });
+      // if usecase success then perform what need (basically need to redirect to dashboard of user)
+      setIsLoading(false);
+      if (response.type === "success") {
+        navigate("/user/dashboard");
+      }
     }
   }
 
@@ -199,8 +213,10 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
               <button
                 type="submit"
                 className="ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 w-full items-center justify-center rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                disabled={isloading}
               >
-                {content.buttonTitle}
+                {/* shows button label or loading using state */}
+                {isloading ? <LoaderIcon size={22} /> : content.buttonTitle}
               </button>
             </form>
 
