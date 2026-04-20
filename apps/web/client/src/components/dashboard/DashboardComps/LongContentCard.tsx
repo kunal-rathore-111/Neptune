@@ -30,7 +30,7 @@ export function LongContentCard({
   return (
     <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">
       <div className="relative flex h-fit max-h-[90vh] max-w-200 flex-col rounded-xl border bg-zinc-100 p-10 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
-        <span className="absolute -top-2 -right-2 z-20 rounded-full border bg-zinc-300 p-0.5">
+        <span className="absolute -top-1.5 -right-1.5 z-20 rounded-full border bg-zinc-300 p-0.5">
           {
             <XIcon
               onClick={() => {

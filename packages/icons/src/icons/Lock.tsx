@@ -31,7 +31,7 @@ const LockIcon = forwardRef<LockIconHandle, LockIconProps>(({ className, size = 
           duration: 1.2,
           ease: [0.4, 0, 0.2, 1],
           repeatType: 'loop',
-          repeatDelay: 3,
+          repeatDelay: 2,
           repeat: Infinity,
         }}
         variants={{
@@ -56,7 +56,7 @@ const LockIcon = forwardRef<LockIconHandle, LockIconProps>(({ className, size = 
             duration: 1.8,
             ease: 'easeInOut',
             repeat: Infinity,
-            repeatDelay: 6,
+            repeatDelay: 4,
             delay: 1.2,
             repeatType: 'loop',
           }}

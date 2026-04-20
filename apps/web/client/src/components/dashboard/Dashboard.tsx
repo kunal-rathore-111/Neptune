@@ -47,16 +47,16 @@ export function FullDashboardPage() {
       {isLoading ? (
         <LoadingPage />
       ) : (
-        <SidebarProvider className="w-screen [--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]">
+        <SidebarProvider className="[--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]">
           <AppSideBar />
           <main className="relative flex min-h-screen w-full flex-col py-10 lg:px-8">
             <SidebarTrigger className="w-fit" />
             {dashboardData.length ? (
               <div className="space-y-3">
-                <div>
+                <div className="space-y-3">
                   {/* Header of dashboard */}
                   <div className="flex justify-between">
-                    <div className="text-start">
+                    <div className="spac-y-2 text-start">
                       <h1 className="text-2xl font-semibold"> All Bookmarks</h1>
                       <p>8 bookmarks</p>
                     </div>

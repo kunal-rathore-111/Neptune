@@ -9,5 +9,8 @@ if (!InitalRoute) throw Error("No Base URL found for backend");
 export const SignInUrl = InitalRoute + "/sign-in";
 export const SignUpUrl = InitalRoute + "/sign-up";
 
-export const FetchDataUrl = InitalRoute + "/user/content/fetch"; // to fetch user data for dashboard
 export const SignOutUrl = InitalRoute + "/sign-out";
+
+export const FetchDataUrl = InitalRoute + "/user/content/fetch"; // to fetch user data for dashboard
+
+export const AddBookmarkUrl = InitalRoute + "/user/content/add";

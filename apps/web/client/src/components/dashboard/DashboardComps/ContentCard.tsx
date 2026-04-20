@@ -67,6 +67,7 @@ export function ContentCard({
       </div>
       {/* last section the date and the 4 updations buttons */}
       <div className={"mt-4 flex w-full items-center justify-between text-xs"}>
+        {/* need to change with data */}
         <div>{cardData.contentTable.link}</div>
         <div className="flex gap-2">
           {[
