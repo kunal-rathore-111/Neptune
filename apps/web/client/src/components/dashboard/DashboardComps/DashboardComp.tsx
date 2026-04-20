@@ -1,31 +1,31 @@
-import {
-  card1,
-  card2,
-  card3,
-  card4,
-  card5,
-  card6,
-  card7,
-  type CardDTO,
-} from "@/lib/constants/content/SampleCardData";
 import { ContentCard } from "./ContentCard";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LongContentCard } from "./LongContentCard";
+import type { dashboardFetchDataType } from "@/Types/dashboard";
 
-export default function DashboardComp() {
-  /* dashboard bookmarks cards grid */
-  const [selectedCard, setSelectedCard] = useState<null | CardDTO>(null);
-  const cards = [card1, card2, card3, card4, card5, card6, card7];
+export default function DashboardComp({
+  dashboardData,
+}: {
+  dashboardData: dashboardFetchDataType[];
+}) {
+  /* dashboard bookmarks cardsData grid */
+  const [selectedCard, setSelectedCard] =
+    useState<null | dashboardFetchDataType>(null);
+  const cardsData = dashboardData;
+
+  useEffect(() => {
+    console.error("dashboardData- ", dashboardData);
+  }, [dashboardData]);
 
   return (
     <div className="my-2 flex flex-col gap-10">
       <div className="my-4 grid grid-cols-2 gap-8 lg:grid-cols-3">
-        {cards.map((cardData, idx) => {
+        {cardsData.map((cardData) => {
           return (
-            <motion.div layoutId={cardData.contentTitle}>
+            <motion.div layoutId={cardData.contentTable.id}>
               <ContentCard
-                key={idx}
+                key={cardData.contentTable.id}
                 cardData={cardData}
                 setSelectedCard={setSelectedCard}
               />
@@ -33,7 +33,7 @@ export default function DashboardComp() {
           );
         })}
 
-        {/* render the card data on full screen */}
+        {/* render the card dashboardData on full screen */}
         {selectedCard && (
           <LongContentCard
             selectedCard={selectedCard}

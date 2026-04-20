@@ -1,10 +1,11 @@
 import { FetchDataUrl } from "@/api/backend";
 import axios from "axios";
 import { HandleError } from "./handleError";
+import type { dashboardFetchDataType } from "@/Types/dashboard";
 
 type FetchDataType =
   | { type: "error"; message: string }
-  | { data: any; type: "success"; message: string };
+  | { data: dashboardFetchDataType[]; type: "success"; message: string };
 
 export async function fetchData(): Promise<FetchDataType> {
   try {

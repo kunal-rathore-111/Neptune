@@ -42,7 +42,6 @@ export default function AddBookMarkCard({
 
           <div className="overflow-y-auto px-10">
             <form className="space-y-6">
-              {/* for the header of card */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Link
@@ -72,12 +71,21 @@ export default function AddBookMarkCard({
 
 function InputSection() {
   const [description, setDescription] = useState("");
+  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [tricks, setTricks] = useState<string[]>([]);
+  const [isShareable, setIsShareable] = useState<boolean>(false);
+
   return (
     <FieldGroup className="max-w-sm gap-5">
       <Field className="gap-1">
         <FieldLabel htmlFor="block-start-input ">URL</FieldLabel>
         <InputGroup className="rounded-md border-2 focus:border-2 has-[[data-slot=input-group-control]:focus-visible]:border-yellow-600 has-[[data-slot=input-group-control]:focus-visible]:ring-0">
-          <InputGroupInput placeholder="https://example.com " />
+          <InputGroupInput
+            placeholder="https://example.com "
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
           <InputGroupAddon>
             <LinkIcon size={18} />
           </InputGroupAddon>
@@ -86,7 +94,11 @@ function InputSection() {
       <Field className="gap-1">
         <FieldLabel htmlFor="block-start-input ">Title</FieldLabel>
         <InputGroup className="rounded-md border-2 has-[[data-slot=input-group-control]:focus-visible]:border-yellow-600 has-[[data-slot=input-group-control]:focus-visible]:ring-0">
-          <InputGroupInput placeholder="Title of content" />
+          <InputGroupInput
+            placeholder="Title of content"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <InputGroupAddon>
             <KeyboardIcon size={18} />
           </InputGroupAddon>
@@ -106,12 +118,17 @@ function InputSection() {
       </Field>
       <Field className="gap-1">
         <FieldLabel htmlFor="block-start-input ">Tags</FieldLabel>
-        <TagsInputComp />
+        <TagsInputComp tricks={tricks} setTricks={setTricks} />
       </Field>
 
       <div className="flex items-center gap-3 py-2">
         Make shareable
-        <Checkbox className="inline-block border-black transition-all duration-200 ease-in dark:border-white" />
+        <Checkbox
+          onClick={() => {
+            setIsShareable(!isShareable);
+          }}
+          className="inline-block border-black transition-all duration-200 ease-in dark:border-white"
+        />
       </div>
     </FieldGroup>
   );

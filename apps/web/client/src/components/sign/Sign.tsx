@@ -56,7 +56,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   const [passwordValidation, setPasswordValidation] = useState<any>();
   const [usernameValidation, setUsernameValidation] = useState<any>();
 
-  const [isloading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
 
   const cardRef = useRef<HTMLDivElement>(null);
@@ -147,72 +147,74 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
               </p>
             </div>
 
-            <form className="space-y-4" onSubmit={handleSignFormSubmit}>
-              {/* Full Name Input */}
-              {mode === "signup" ? (
+            <form onSubmit={handleSignFormSubmit}>
+              <fieldset className="space-y-4" disabled={isLoading}>
+                {mode === "signup" ? (
+                  <div className="space-y-2">
+                    {/* Full Name Input */}
+                    <FloatingLabelInput
+                      id="username"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Full Name"
+                      icon={<UserIcon size={18} />}
+                    />
+                    <CommonValidatorComp
+                      input={username}
+                      inputValidation={usernameValidation}
+                      inputRules={UsernameRules}
+                    />
+                  </div>
+                ) : null}
+
+                {/* Email Input */}
                 <div className="space-y-2">
                   <FloatingLabelInput
-                    id="username"
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Full Name"
-                    icon={<UserIcon size={18} />}
-                  />
-                  <CommonValidatorComp
-                    input={username}
-                    inputValidation={usernameValidation}
-                    inputRules={UsernameRules}
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    icon={<MailIcon size={18} />}
                   />
                 </div>
-              ) : null}
 
-              {/* Email Input */}
-              <div className="space-y-2">
-                <FloatingLabelInput
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                  icon={<MailIcon size={18} />}
-                />
-              </div>
+                {/* Password Input */}
+                <div className="space-y-2">
+                  <FloatingLabelInput
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    icon={<LockIcon size={18} />}
+                    rightIcon={
+                      showPassword ? (
+                        <EyeOffIcon size={18} />
+                      ) : (
+                        <EyeIcon size={18} />
+                      )
+                    }
+                    onRightIconClick={togglePasswordVisibility}
+                  />
+                  <CommonValidatorComp
+                    input={password}
+                    inputValidation={passwordValidation}
+                    inputRules={PasswordRules}
+                  />
+                </div>
 
-              {/* Password Input */}
-              <div className="space-y-2">
-                <FloatingLabelInput
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  icon={<LockIcon size={18} />}
-                  rightIcon={
-                    showPassword ? (
-                      <EyeOffIcon size={18} />
-                    ) : (
-                      <EyeIcon size={18} />
-                    )
-                  }
-                  onRightIconClick={togglePasswordVisibility}
-                />
-                <CommonValidatorComp
-                  input={password}
-                  inputValidation={passwordValidation}
-                  inputRules={PasswordRules}
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 w-full items-center justify-center rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
-                disabled={isloading}
-              >
-                {/* shows button label or loading using state */}
-                {isloading ? <LoaderIcon size={22} /> : content.buttonTitle}
-              </button>
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 w-full items-center justify-center rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                  disabled={isLoading}
+                >
+                  {/* shows button label or loading using state */}
+                  {isLoading ? <LoaderIcon size={22} /> : content.buttonTitle}
+                </button>
+              </fieldset>
             </form>
 
             {/* Divider */}
