@@ -11,7 +11,7 @@ import {
 import { GithubIcon, GoogleIcon, LoaderIcon } from "@repo/icons";
 import { Button, FloatingLabelInput, toast } from "@repo/ui";
 import { ThemeHomeComp } from "@repo/ui";
-import { CommonValidatorComp } from "./validateSign";
+import { InputValidationFeedback } from "./InputValidationFeedback";
 import {
   signInSchema,
   signUpSchema,
@@ -66,6 +66,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
   // effect to show/hide PasswordRules
   useEffect(() => {
     setPasswordValidation(validatePasswordInput(password));
@@ -160,7 +161,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
                       placeholder="Full Name"
                       icon={<UserIcon size={18} />}
                     />
-                    <CommonValidatorComp
+                    <InputValidationFeedback
                       input={username}
                       inputValidation={usernameValidation}
                       inputRules={UsernameRules}
@@ -198,7 +199,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
                     }
                     onRightIconClick={togglePasswordVisibility}
                   />
-                  <CommonValidatorComp
+                  <InputValidationFeedback
                     input={password}
                     inputValidation={passwordValidation}
                     inputRules={PasswordRules}

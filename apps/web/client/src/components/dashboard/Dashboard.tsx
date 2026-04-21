@@ -11,7 +11,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@repo/ui";
-import DashboardComp from "./DashboardComps/DashboardComp";
+import DashboardDataList from "./DashboardComps/DashboardDataList";
 import { fetchData } from "@/services/fetchData";
 import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 import LoadingPage from "@/Pages/Loading";
@@ -78,7 +78,7 @@ export function FullDashboardPage() {
                   </InputGroup>
                 </div>
 
-                <DashboardComp dashboardData={dashboardData} />
+                <DashboardDataList dashboardData={dashboardData} />
               </div>
             ) : (
               <div>"NoContentPresentComp" </div>

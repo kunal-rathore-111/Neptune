@@ -14,5 +14,5 @@ export function HandleResponseUtil(
   if (response.type === "success" && navigateTo && navigate) {
     navigate(navigateTo);
   }
-  return null;
+  return;
 }

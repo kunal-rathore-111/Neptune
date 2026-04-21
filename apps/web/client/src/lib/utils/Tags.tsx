@@ -15,15 +15,11 @@ function getColor(tag: string) {
 interface TagsDTO {
   tags: string[];
   childVariant?: Variants;
-  shouldSlice?: boolean;
+  sliceCount?: number;
 }
 
-export default function Tags({
-  tags,
-  childVariant,
-  shouldSlice = true,
-}: TagsDTO) {
-  const displayTags = shouldSlice ? tags.slice(0, 3) : tags;
+export default function Tags({ tags, childVariant, sliceCount = 3 }: TagsDTO) {
+  const displayTags = tags.slice(0, sliceCount);
   return (
     <div className="flex flex-wrap gap-3">
       {displayTags.map((tag, idx) => {

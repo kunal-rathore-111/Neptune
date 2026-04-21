@@ -14,3 +14,4 @@ export const SignOutUrl = InitalRoute + "/sign-out";
 export const FetchDataUrl = InitalRoute + "/user/content/fetch"; // to fetch user data for dashboard
 
 export const AddBookmarkUrl = InitalRoute + "/user/content/add";
+export const DeleteBookmarkUrl = InitalRoute + "/user/content/delete";

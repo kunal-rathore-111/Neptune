@@ -23,7 +23,7 @@ type BackendError = {
 export function HandleError(error: unknown): ErrorServiceResponse {
   let message = "Something went wrong";
   if (isAxiosError<BackendError>(error)) {
-    console.error("Error- ", error.response?.data);
+    // console.error("Error- ", error.response?.data);
     if (
       error.response?.data.message &&
       error.response.status !== 500 &&

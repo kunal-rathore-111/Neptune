@@ -11,12 +11,20 @@ import {
 import { LinkIcon } from "@repo/icons";
 import { KeyboardIcon } from "@repo/icons";
 import { XIcon } from "@repo/icons";
-import { Field, FieldGroup, FieldLabel } from "@repo/ui";
+import { Field, FieldGroup, FieldLabel, toast } from "@repo/ui";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@repo/ui";
 import { Textarea } from "@repo/ui";
 import { Checkbox } from "@repo/ui";
 import { TagsInputComp } from "@repo/ui";
 import { addBookMarkService } from "@/services/addData";
+import {
+  contentZodSchema,
+  validateDescriptionInput,
+  validateLinkInput,
+  validateTitleInput,
+} from "@repo/validation";
+import { InputValidationFeedback } from "@/components/sign/InputValidationFeedback";
+import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 
 interface AddBookMarkCardDTO {
   setOpenAddCard: Dispatch<SetStateAction<boolean>>;
@@ -51,14 +59,20 @@ export default function AddBookMarkCard({
 
   async function handleAddBookMarkFormSubmit(e: FormEvent) {
     e.preventDefault();
-    setIsLoading(true);
 
-    // full data validation logic
     const data = { description, link, title, tags, isShareable, category };
-    //backendcall
-    const response = await addBookMarkService(data);
-    setIsLoading(false);
-    // window.location.reload(); // refresh page after new data store, can change to index db logic to reduce backend calls but i will make the application too complex and large
+    // full data validation-  description, link, title, tags, isShareable, category
+    const result = contentZodSchema.safeParse(data);
+    if (!result.success) {
+      toast.error(result.error.issues[0].message, { position: "top-right" });
+    } else {
+      setIsLoading(true);
+      // backend intergration for signup and signin
+      const response = await addBookMarkService(data);
+      HandleResponseUtil(response, null, null);
+      setIsLoading(false);
+      if (response.type === "success") window.location.reload(); // refresh page after new data store, can change to index db logic to reduce backend calls but i will make the application too complex and large
+    }
   }
 
   /*  useffect to stop background scroll the body (same code was also in the longCardComp) */
@@ -73,13 +87,13 @@ export default function AddBookMarkCard({
     <>
       <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">
         <div className="relative flex h-full max-h-[90vh] w-150 flex-col rounded-xl border bg-zinc-100 p-7 text-start text-xs shadow-sm shadow-zinc-900 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
-          <span className="absolute -top-1.5 -right-1.5 z-20 rounded-full border bg-zinc-300 p-0.5">
+          <span className="absolute -top-2 -right-2 z-20 rounded-full border-2 bg-zinc-300 p-0.5">
             {
               <XIcon
                 onClick={() => {
                   setOpenAddCard(false);
                 }}
-                className="text-zinc-500"
+                className="text-zinc-800"
                 size={20}
               />
             }
@@ -149,6 +163,30 @@ function InputSection({ inputs }: { inputs: inputsType }) {
     inputs.setCategory(e.target.value);
   }
 
+  // common rule for title, description, url (array cause mapping them in InputValidationFeedback.tsx / comp)
+  const CommonRule = [
+    {
+      message: "Length atleast has 4 letters",
+      test: (p: string) => p.length > 3,
+    },
+  ];
+
+  const [descriptionValidation, setDescriptionValidation] = useState<any>();
+  const [linkValidation, setLinkValidation] = useState<any>();
+  const [titleValidation, setTitleValidation] = useState<any>();
+
+  useEffect(() => {
+    setDescriptionValidation(validateDescriptionInput(inputs.description));
+  }, [inputs.description]);
+
+  useEffect(() => {
+    setTitleValidation(validateTitleInput(inputs.title));
+  }, [inputs.title]);
+
+  useEffect(() => {
+    setLinkValidation(validateLinkInput(inputs.link));
+  }, [inputs.link]);
+
   return (
     <FieldGroup className="max-w-sm gap-5">
       <Field className="gap-1">
@@ -163,6 +201,11 @@ function InputSection({ inputs }: { inputs: inputsType }) {
             <LinkIcon size={18} />
           </InputGroupAddon>
         </InputGroup>
+        <InputValidationFeedback
+          input={inputs.link}
+          inputValidation={linkValidation}
+          inputRules={CommonRule}
+        />
       </Field>
       <Field className="gap-1">
         <FieldLabel htmlFor="block-start-input ">Title</FieldLabel>
@@ -176,6 +219,11 @@ function InputSection({ inputs }: { inputs: inputsType }) {
             <KeyboardIcon size={18} />
           </InputGroupAddon>
         </InputGroup>
+        <InputValidationFeedback
+          input={inputs.title}
+          inputValidation={titleValidation}
+          inputRules={CommonRule}
+        />
       </Field>
 
       <Field className="gap-1">
@@ -188,6 +236,11 @@ function InputSection({ inputs }: { inputs: inputsType }) {
             onChange={(e) => inputs.setDescription(e.target.value)}
           ></Textarea>
         </InputGroup>
+        <InputValidationFeedback
+          input={inputs.description}
+          inputValidation={descriptionValidation}
+          inputRules={CommonRule}
+        />
       </Field>
       <Field className="gap-1">
         <FieldLabel htmlFor="block-start-input ">Tags</FieldLabel>

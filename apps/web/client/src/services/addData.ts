@@ -1,5 +1,5 @@
 import { AddBookmarkUrl } from "@/api/backend";
-import { HandleError } from "./handleError";
+import { HandleError, type ServiceResponse } from "./handleError";
 import axios from "axios";
 
 /* need to replace with zod type validation */
@@ -12,17 +12,21 @@ type addBookmarkDataType = {
   category: string;
 };
 
-export async function addBookMarkService(data: addBookmarkDataType) {
+type AddBookmarkResponseType = ServiceResponse;
+
+export async function addBookMarkService(
+  data: addBookmarkDataType,
+): Promise<AddBookmarkResponseType> {
   try {
-    console.log(data);
     const response = await axios(AddBookmarkUrl, {
       method: "POST",
       data: data,
       withCredentials: true,
     });
-    console.error(response.data);
+
+    return { message: response.data.message, type: "success" };
   } catch (error) {
-    console.error("Error= ", error);
+    //console.error("Error= ", error);
     return HandleError(error);
   }
 }

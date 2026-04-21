@@ -2,7 +2,7 @@ import { cn } from "@repo/libs";
 import { Check, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-type CommonValidatorCompType = {
+type InputValidationFeedbackType = {
   input: string;
   inputValidation: any;
   inputRules: {
@@ -11,12 +11,12 @@ type CommonValidatorCompType = {
   }[];
 };
 
-// to use same to show ticks and message on username and password both
-export function CommonValidatorComp({
+// to use same to show ticks and message with respect to the input
+export function InputValidationFeedback({
   input,
   inputValidation,
   inputRules,
-}: CommonValidatorCompType) {
+}: InputValidationFeedbackType) {
   return (
     <AnimatePresence mode="wait">
       {input.length > 0 && !inputValidation.success ? (

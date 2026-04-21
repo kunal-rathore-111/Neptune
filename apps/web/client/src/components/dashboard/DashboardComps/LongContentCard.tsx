@@ -29,14 +29,14 @@ export function LongContentCard({
   const Icon = MapCategoryWithIcon(selectedCard.contentTable.category);
   return (
     <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">
-      <div className="relative flex h-fit max-h-[90vh] max-w-200 flex-col rounded-xl border bg-zinc-100 p-10 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
-        <span className="absolute -top-1.5 -right-1.5 z-20 rounded-full border bg-zinc-300 p-0.5">
+      <div className="relative flex h-fit max-h-[90vh] min-h-50 max-w-200 min-w-90 flex-col rounded-xl border bg-zinc-100 p-10 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
+        <span className="absolute -top-2 -right-2 z-20 rounded-full border-2 bg-zinc-300 p-0.5">
           {
             <XIcon
               onClick={() => {
                 setSelectedCard(null);
               }}
-              className="text-zinc-500"
+              className="text-zinc-900"
               size={20}
             />
           }
@@ -70,14 +70,14 @@ export function LongContentCard({
             {/* Card content the title and description */}
             <div className="flex flex-col gap-3">
               <div>
-                <div className="text-sm font-semibold">
+                <div className="text-sm font-semibold wrap-break-word">
                   Title: {selectedCard.contentTable.title}
                 </div>
               </div>
               <div className="space-y-5">
                 {selectedCard.contentTable.description ? (
                   <div>
-                    <div className="text-sm font-thin text-gray-600/90 dark:text-zinc-400/70">
+                    <div className="text-sm font-thin wrap-break-word text-gray-600/90 dark:text-zinc-400/70">
                       Description: {selectedCard.contentTable.description}
                     </div>
                   </div>
@@ -88,7 +88,7 @@ export function LongContentCard({
                     <div className="max-w-sm text-sm">
                       <Tags
                         tags={selectedCard.contentTable.tags}
-                        shouldSlice={false}
+                        sliceCount={100}
                       />{" "}
                     </div>
                   </div>
@@ -99,7 +99,7 @@ export function LongContentCard({
           {/* last section the date and the 4 updations buttons */}
           <div className={"flex w-full items-center justify-between text-sm"}>
             {/* need to change to date */}
-            <div>Date: {selectedCard.contentTable.link}</div>
+            <div>Date: </div>
             <div className="flex gap-3">
               {[
                 {
