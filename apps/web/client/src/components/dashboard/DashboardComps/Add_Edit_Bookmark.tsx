@@ -16,7 +16,11 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@repo/ui";
 import { Textarea } from "@repo/ui";
 import { Checkbox } from "@repo/ui";
 import { TagsInputComp } from "@repo/ui";
-import { addBookMarkService } from "@/services/addData";
+import {
+  add_edit_BookMarkService,
+  type addBookmarkDataType,
+  type editBookmarkDataType,
+} from "@/services/add_edit_Data";
 import {
   contentZodSchema,
   validateDescriptionInput,
@@ -25,20 +29,37 @@ import {
 } from "@repo/validation";
 import { InputValidationFeedback } from "@/components/sign/InputValidationFeedback";
 import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
+import type { dashboardFetchDataType } from "@/Types/dashboard";
 
 interface AddBookMarkCardDTO {
-  setOpenAddCard: Dispatch<SetStateAction<boolean>>;
+  setOpenAdd_Edit_Card: Dispatch<SetStateAction<boolean>>;
+  presentData?: dashboardFetchDataType;
 }
 
-export default function AddBookMarkCard({
-  setOpenAddCard,
+export function Add_Edit_BookMarkCard({
+  setOpenAdd_Edit_Card,
+  presentData,
 }: AddBookMarkCardDTO) {
   const [description, setDescription] = useState<string>("");
   const [link, setLink] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
-  const [isShareable, setIsShareable] = useState<boolean>(false);
+  const [share, setIsShareable] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("Others");
+
+  useEffect(() => {
+    if (presentData) {
+      setDescription(presentData.contentTable.description || "");
+      setLink(presentData.contentTable.link || "");
+      setTitle(presentData.contentTable.title);
+      setTags(presentData.contentTable.tags || []);
+      setIsShareable(
+        presentData.ContentShareLinkTable?.contentSharehash ? true : false,
+      );
+      setCategory(presentData.contentTable.category || "Others");
+    }
+    // eslint-disable-next-line
+  }, [presentData]);
 
   const inputs = {
     description,
@@ -49,7 +70,7 @@ export default function AddBookMarkCard({
     setTitle,
     tags,
     setTags,
-    isShareable,
+    share,
     setIsShareable,
     category,
     setCategory,
@@ -57,18 +78,30 @@ export default function AddBookMarkCard({
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function handleAddBookMarkFormSubmit(e: FormEvent) {
+  async function handleAdd_Edit_BookMarkFormSubmit(e: FormEvent) {
     e.preventDefault();
 
-    const data = { description, link, title, tags, isShareable, category };
-    // full data validation-  description, link, title, tags, isShareable, category
+    let data: addBookmarkDataType | editBookmarkDataType = {
+      description,
+      link,
+      title,
+      tags,
+      share,
+      category,
+    };
+    if (presentData) {
+      data = { ...data, id: presentData.contentTable.id };
+    }
+    // full data validation-  description, link, title, tags, share, category
     const result = contentZodSchema.safeParse(data);
     if (!result.success) {
       toast.error(result.error.issues[0].message, { position: "top-right" });
     } else {
       setIsLoading(true);
-      // backend intergration for signup and signin
-      const response = await addBookMarkService(data);
+      const type = presentData ? "edit" : "add";
+
+      /*  service call */
+      const response = await add_edit_BookMarkService(data, type);
       HandleResponseUtil(response, null, null);
       setIsLoading(false);
       if (response.type === "success") window.location.reload(); // refresh page after new data store, can change to index db logic to reduce backend calls but i will make the application too complex and large
@@ -91,16 +124,16 @@ export default function AddBookMarkCard({
             {
               <XIcon
                 onClick={() => {
-                  setOpenAddCard(false);
+                  setOpenAdd_Edit_Card(false);
                 }}
                 className="text-zinc-800"
-                size={20}
+                size={18}
               />
             }
           </span>
 
           <div className="overflow-y-auto px-10">
-            <form onSubmit={(e) => handleAddBookMarkFormSubmit(e)}>
+            <form onSubmit={(e) => handleAdd_Edit_BookMarkFormSubmit(e)}>
               <fieldset className="space-y-6" disabled={isLoading}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -139,7 +172,7 @@ type inputsType = {
   setTitle: Dispatch<SetStateAction<string>>;
   tags: string[];
   setTags: Dispatch<SetStateAction<string[]>>;
-  isShareable: boolean;
+  share: boolean;
   setIsShareable: Dispatch<SetStateAction<boolean>>;
   category: string;
   setCategory: Dispatch<SetStateAction<string>>;
@@ -159,6 +192,10 @@ function InputSection({ inputs }: { inputs: inputsType }) {
     "Design",
   ];
 
+  const filteredCategoryArray = [
+    inputs.category,
+    ...categoryArray.filter((cat) => cat != inputs.category),
+  ];
   function handleCategorySelection(e: ChangeEvent<HTMLSelectElement>) {
     inputs.setCategory(e.target.value);
   }
@@ -175,17 +212,19 @@ function InputSection({ inputs }: { inputs: inputsType }) {
   const [linkValidation, setLinkValidation] = useState<any>();
   const [titleValidation, setTitleValidation] = useState<any>();
 
+  useEffect(() => {}, [inputs.share]);
+
   useEffect(() => {
-    setDescriptionValidation(validateDescriptionInput(inputs.description));
-  }, [inputs.description]);
+    setLinkValidation(validateLinkInput(inputs.link));
+  }, [inputs.link]);
 
   useEffect(() => {
     setTitleValidation(validateTitleInput(inputs.title));
   }, [inputs.title]);
 
   useEffect(() => {
-    setLinkValidation(validateLinkInput(inputs.link));
-  }, [inputs.link]);
+    setDescriptionValidation(validateDescriptionInput(inputs.description));
+  }, [inputs.description]);
 
   return (
     <FieldGroup className="max-w-sm gap-5">
@@ -257,7 +296,7 @@ function InputSection({ inputs }: { inputs: inputsType }) {
             id="category"
             onChange={handleCategorySelection}
           >
-            {categoryArray.map((category) => {
+            {filteredCategoryArray.map((category) => {
               return <option value={category}>{category}</option>;
             })}
           </select>
@@ -265,8 +304,10 @@ function InputSection({ inputs }: { inputs: inputsType }) {
         <div className="flex items-center gap-3 py-2">
           Make shareable
           <Checkbox
+            checked={inputs.share}
             onClick={() => {
-              inputs.setIsShareable(!inputs.isShareable);
+              console.error(inputs.share);
+              inputs.setIsShareable(!inputs.share);
             }}
             className="inline-block border-black transition-all duration-200 ease-in dark:border-white"
           />

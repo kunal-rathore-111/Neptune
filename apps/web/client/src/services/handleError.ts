@@ -26,7 +26,6 @@ export function HandleError(error: unknown): ErrorServiceResponse {
     // console.error("Error- ", error.response?.data);
     if (
       error.response?.data.message &&
-      error.response.status !== 500 &&
       error.response.data.errorType !== "ServerError"
     )
       message = error.response.data.message;

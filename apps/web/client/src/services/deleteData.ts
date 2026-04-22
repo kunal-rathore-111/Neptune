@@ -3,7 +3,7 @@ import axios from "axios";
 import { HandleError, type ServiceResponse } from "./handleError";
 
 type deleteServiceType = ServiceResponse;
-export async function deleteService(
+export async function deleteBookMarkService(
   contentId: string,
 ): Promise<deleteServiceType> {
   try {

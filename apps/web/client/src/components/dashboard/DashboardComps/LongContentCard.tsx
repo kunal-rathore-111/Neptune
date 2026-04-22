@@ -37,7 +37,7 @@ export function LongContentCard({
                 setSelectedCard(null);
               }}
               className="text-zinc-900"
-              size={20}
+              size={18}
             />
           }
         </span>

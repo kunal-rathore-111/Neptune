@@ -15,3 +15,4 @@ export const FetchDataUrl = InitalRoute + "/user/content/fetch"; // to fetch use
 
 export const AddBookmarkUrl = InitalRoute + "/user/content/add";
 export const DeleteBookmarkUrl = InitalRoute + "/user/content/delete";
+export const UpdateBookmarkUrl = InitalRoute + "/user/content/update";

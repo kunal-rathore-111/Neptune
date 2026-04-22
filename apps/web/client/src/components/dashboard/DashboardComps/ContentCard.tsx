@@ -7,10 +7,18 @@ import Tags from "@/lib/utils/Tags";
 import { LinkIcon } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
-import { toast } from "@repo/ui";
+import {
+  Button,
+  toast,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui";
 import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
-import { deleteService } from "@/services/deleteData";
+import { deleteBookMarkService } from "@/services/deleteData";
 import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
+import { Add_Edit_BookMarkCard } from "./Add_Edit_Bookmark";
 
 type ContentCardType = {
   cardData: dashboardFetchDataType;
@@ -20,22 +28,30 @@ type actionType = "delete" | "edit" | "toggleShare";
 export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
   const Icon = MapCategoryWithIcon(cardData.contentTable.category);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [editCardState, setEditCardState] = useState<boolean>(false);
+
   // handler for icon clicks like delete edit sharetoggle
   async function handleIconAction(
     action: actionType,
     cardData: dashboardFetchDataType,
   ) {
-    let response;
-    setIsLoading(true);
-    if (action === "delete") {
-      response = await deleteService(cardData.contentTable.id);
+    if (action === "edit") {
+      setEditCardState(true);
+    } else {
+      let response;
+      setIsLoading(true);
+      if (action === "delete") {
+        response = await deleteBookMarkService(cardData.contentTable.id);
+      } else if (action === "toggleShare") {
+        // need to implement toggle share
+      }
+      if (response) {
+        HandleResponseUtil(response, null, null);
+        if (response.type === "success") window.location.reload();
+      }
+      setIsLoading(false);
     }
-
-    if (response) {
-      HandleResponseUtil(response, null, null);
-      if (response.type === "success") window.location.reload();
-    }
-    setIsLoading(false);
     return;
   }
 
@@ -108,6 +124,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
               {[
                 {
                   Icon: EditIcon,
+                  label: "Edit",
                   className: "text-black dark:text-white",
                   action: () => {
                     handleIconAction("edit", cardData);
@@ -117,6 +134,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
                   Icon: cardData.ContentShareLinkTable?.contentSharehash
                     ? ShareIcon
                     : ShareOffIcon,
+                  label: "Toggle share",
                   className: "text-black dark:text-white",
                   action: () => {
                     handleIconAction("toggleShare", cardData);
@@ -124,6 +142,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
                 },
                 {
                   Icon: DeleteIcon,
+                  label: "Delete",
                   className: "text-red-500",
                   action: () => {
                     handleIconAction("delete", cardData);
@@ -134,6 +153,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
                   ? [
                       {
                         Icon: BrowserIcon,
+                        label: "Open link",
                         className: "text-lime-600 ",
                         action: () => {
                           toast("open link");
@@ -142,12 +162,26 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
                     ]
                   : []),
               ].map((x, idx) => (
-                <div key={idx} onClick={() => x.action()}>
-                  <x.Icon className={x.className} size={14} />
-                </div>
+                <TooltipProvider>
+                  <Tooltip key={idx}>
+                    <TooltipTrigger asChild className="flex">
+                      <button onClick={() => x.action()}>
+                        <x.Icon className={x.className} size={14} />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>{x.label}</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               ))}
             </div>
           </div>
+          {/* render the edit card for the relevant card */}
+          {editCardState && (
+            <Add_Edit_BookMarkCard
+              setOpenAdd_Edit_Card={setEditCardState}
+              presentData={cardData}
+            />
+          )}
         </div>
       )}
     </div>
