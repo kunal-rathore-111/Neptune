@@ -29,12 +29,12 @@ export default function DashboardDataList({
   /*  check sidebar is open or not for no. of cols on the dashboard */
   const { open } = useSidebar();
 
-  /* dashboard bookmarks cardsData grid */
   const [selectedCard, setSelectedCard] =
     useState<null | dashboardFetchDataType>(null);
   const cols = window.innerWidth >= 1000 ? 3 : 2;
   const cardsData = RoundRobinConversion(dashboardData, cols);
   //console.log(cardsData);
+  /* dashboard bookmarks cardsData grid */
   return (
     <div className="my-2 flex flex-col gap-10">
       <div
@@ -69,7 +69,7 @@ export default function DashboardDataList({
         {/* render the card dashboardData on full screen */}
         {selectedCard && (
           <LongContentCard
-            selectedCard={selectedCard}
+            selectedCardData={selectedCard}
             setSelectedCard={setSelectedCard}
           />
         )}

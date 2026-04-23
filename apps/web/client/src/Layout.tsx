@@ -5,6 +5,7 @@ import Signup from "./Pages/Signup";
 const Dashboard = React.lazy(() => import("./Pages/Dashboard"));
 const SharedProfile = React.lazy(() => import("./Pages/SharedProfile"));
 const SharedContent = React.lazy(() => import("./Pages/SharedContent"));
+const UserProfile = React.lazy(() => import("./Pages/UserProfile"));
 import Docs from "./Pages/Docs";
 import ErrorPage from "./Pages/ErrorPage";
 const PrivacyPolicyPage = React.lazy(() => import("./Pages/PrivacyPolicy"));
@@ -30,8 +31,9 @@ export default function Layout() {
               path="/user/public/shared/profile/:profileHash"
               element={<SharedProfile />}
             />
+            <Route path="/user/profile" element={<UserProfile />} />
             <Route
-              path="/user/public/shared/content"
+              path="/user/public/shared/content/:content_share_hash"
               element={<SharedContent />}
             />
             <Route path="/docs" element={<Docs />} />

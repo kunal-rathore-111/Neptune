@@ -1,4 +1,4 @@
-import { FetchDataUrl } from "@/api/backend";
+import { FetchDataUrl } from "@/api/urls";
 import axios from "axios";
 import { HandleError } from "./handleError";
 import type { dashboardFetchDataType } from "@/Types/dashboard";

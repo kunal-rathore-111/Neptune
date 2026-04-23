@@ -1,59 +1,49 @@
-import { BrowserIcon, LoaderIcon } from "@repo/icons";
-import { DeleteIcon } from "@repo/icons";
-import { EditIcon } from "@repo/icons";
-import { ShareIcon } from "@repo/icons";
-import { ShareOffIcon } from "@repo/icons";
+import { CheckIcon, LoaderIcon } from "@repo/icons";
 import Tags from "@/lib/utils/Tags";
 import { LinkIcon } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
-import {
-  Button,
-  toast,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@repo/ui";
+import { toast, Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui";
 import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
-import { deleteBookMarkService } from "@/services/deleteData";
-import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 import { Add_Edit_BookMarkCard } from "./Add_Edit_Bookmark";
+import { ContentShareUrl } from "@/api/urls";
+import { cardEDUB } from "@/lib/constants/content/cardEDUB.Array";
 
 type ContentCardType = {
   cardData: dashboardFetchDataType;
   setSelectedCard: Dispatch<SetStateAction<dashboardFetchDataType | null>>;
 };
-type actionType = "delete" | "edit" | "toggleShare";
 export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
   const Icon = MapCategoryWithIcon(cardData.contentTable.category);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [editCardState, setEditCardState] = useState<boolean>(false);
 
-  // handler for icon clicks like delete edit sharetoggle
-  async function handleIconAction(
-    action: actionType,
-    cardData: dashboardFetchDataType,
-  ) {
-    if (action === "edit") {
-      setEditCardState(true);
-    } else {
-      let response;
-      setIsLoading(true);
-      if (action === "delete") {
-        response = await deleteBookMarkService(cardData.contentTable.id);
-      } else if (action === "toggleShare") {
-        // need to implement toggle share
-      }
-      if (response) {
-        HandleResponseUtil(response, null, null);
-        if (response.type === "success") window.location.reload();
-      }
-      setIsLoading(false);
+  const [copyIconState, setCopyIconState] = useState<boolean>(false);
+  // handler to copy the card's shared url
+  async function handleCopy() {
+    try {
+      const url =
+        ContentShareUrl +
+        `/${cardData.ContentShareLinkTable?.contentSharehash} `;
+      await navigator.clipboard.writeText(url);
+      setCopyIconState(true);
+      toast.success("Link copied successfully", { position: "top-center" });
+      setTimeout(() => {
+        setCopyIconState(false);
+      }, 1500);
+    } catch (error) {
+      toast.error("Link not copied, Something went wrong!!", {
+        position: "top-center",
+      });
     }
-    return;
   }
+
+  const { EDUBArray } = cardEDUB({
+    setIsLoading,
+    setEditCardState,
+    cardData,
+  });
 
   return (
     <div className="relative flex h-auto min-h-30 w-78 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
@@ -64,7 +54,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
       ) : (
         <div>
           {/*  header+content of card */}
-          <div onClick={() => setSelectedCard(cardData)}>
+          <div>
             {/* for the header of card */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -77,13 +67,28 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
               </div>
               <div className="flex items-center gap-1 text-xs">
                 {cardData.ContentShareLinkTable?.contentSharehash ? (
-                  <LinkIcon size={14} />
+                  <button className="flex" onClick={() => handleCopy()}>
+                    {/* if copyIconstate is true means the link is getting copy so show the animated checkIcon */}
+                    {copyIconState ? (
+                      <CheckIcon size={14} />
+                    ) : (
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <LinkIcon size={14} />
+                          <TooltipContent>Copy share link</TooltipContent>
+                        </TooltipTrigger>
+                      </Tooltip>
+                    )}
+                  </button>
                 ) : null}
               </div>
             </div>
 
             {/* Card content the title and description */}
-            <div className="mt-2 flex flex-col gap-2">
+            <div
+              className="mt-2 flex flex-col gap-2"
+              onClick={() => setSelectedCard(cardData)}
+            >
               <div>
                 <div className="max-w-sm text-xs font-semibold">
                   <TruncatedString
@@ -121,57 +126,15 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
             {/* need to change with date */}
             <div>date</div>
             <div className="flex gap-2">
-              {[
-                {
-                  Icon: EditIcon,
-                  label: "Edit",
-                  className: "text-black dark:text-white",
-                  action: () => {
-                    handleIconAction("edit", cardData);
-                  },
-                },
-                {
-                  Icon: cardData.ContentShareLinkTable?.contentSharehash
-                    ? ShareIcon
-                    : ShareOffIcon,
-                  label: "Toggle share",
-                  className: "text-black dark:text-white",
-                  action: () => {
-                    handleIconAction("toggleShare", cardData);
-                  },
-                },
-                {
-                  Icon: DeleteIcon,
-                  label: "Delete",
-                  className: "text-red-500",
-                  action: () => {
-                    handleIconAction("delete", cardData);
-                  },
-                },
-                /* now add BrowserIcon only if link available */
-                ...(cardData.contentTable.link
-                  ? [
-                      {
-                        Icon: BrowserIcon,
-                        label: "Open link",
-                        className: "text-lime-600 ",
-                        action: () => {
-                          toast("open link");
-                        },
-                      },
-                    ]
-                  : []),
-              ].map((x, idx) => (
-                <TooltipProvider>
-                  <Tooltip key={idx}>
-                    <TooltipTrigger asChild className="flex">
-                      <button onClick={() => x.action()}>
-                        <x.Icon className={x.className} size={14} />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>{x.label}</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+              {EDUBArray.map((x, idx) => (
+                <Tooltip key={idx}>
+                  <TooltipTrigger asChild className="flex">
+                    <button onClick={() => x.action()}>
+                      <x.Icon className={x.className} size={14} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>{x.label}</TooltipContent>
+                </Tooltip>
               ))}
             </div>
           </div>

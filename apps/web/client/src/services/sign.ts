@@ -1,4 +1,4 @@
-import { SignInUrl, SignOutUrl, SignUpUrl } from "@/api/backend";
+import { SignInUrl, SignOutUrl, SignUpUrl } from "@/api/urls";
 import type { AuthMode } from "@/components/sign/Sign";
 import axios from "axios";
 import { HandleError, type ServiceResponse } from "./handleError";
