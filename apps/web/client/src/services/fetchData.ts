@@ -7,7 +7,7 @@ type FetchDataType =
   | { type: "error"; message: string }
   | { data: dashboardFetchDataType[]; type: "success"; message: string };
 
-export async function fetchData(): Promise<FetchDataType> {
+export async function fetchDataService(): Promise<FetchDataType> {
   try {
     // console.error("calling fetchdata");
     const response = await axios(FetchDataUrl, {

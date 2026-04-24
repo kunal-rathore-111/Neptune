@@ -1,6 +1,9 @@
 import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 import { deleteBookMarkService } from "@/services/deleteData";
-import { toggleShareService } from "@/services/toggleShare";
+import {
+  toggleShareService,
+  type toggleShareServiceInputType,
+} from "@/services/toggleShare";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import type { SharedContentDataType } from "@/Types/sharedContent";
 
@@ -12,19 +15,32 @@ import {
   ShareOffIcon,
 } from "@repo/icons";
 import { toast } from "@repo/ui";
+import type { UseMutateFunction } from "@tanstack/react-query";
 import type { Dispatch, SetStateAction } from "react";
 
 type actionType = "delete" | "edit" | "toggleShare";
 
+type reactQueryActionsType = {
+  deleteMutate: UseMutateFunction<string, any, string, unknown>;
+  isDeletePending: boolean;
+  toggleShareMutate: UseMutateFunction<
+    string,
+    any,
+    toggleShareServiceInputType,
+    unknown
+  >;
+  isToggleSharePending: boolean;
+};
 type cardEDUBType = {
   cardData: dashboardFetchDataType | SharedContentDataType;
   setEditCardState: Dispatch<SetStateAction<boolean>>;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  reactQueryActions: reactQueryActionsType;
 };
 
 // both types cause using in users dashboard (dashboardFetchDataType) and also in SharedContent LongPageLayout(SharedContentDataType ) and also as longPageOutline(dashboardFetchDataType)
 export function cardEDUB(props: cardEDUBType) {
   // handler for icon clicks like delete edit sharetoggle
+
   async function handleIconAction(
     action: actionType,
     cardData: dashboardFetchDataType,
@@ -32,10 +48,8 @@ export function cardEDUB(props: cardEDUBType) {
     if (action === "edit") {
       props.setEditCardState(true);
     } else {
-      let response;
-      props.setIsLoading(true);
       if (action === "delete") {
-        response = await deleteBookMarkService(cardData.contentTable.id);
+        props.reactQueryActions.deleteMutate(props.cardData.contentTable.id);
       } else if (action === "toggleShare") {
         const data = {
           contentId: cardData.contentTable.id,
@@ -43,13 +57,8 @@ export function cardEDUB(props: cardEDUBType) {
             ? false
             : true, // if shareHash present means revert
         };
-        response = await toggleShareService(data);
+        props.reactQueryActions.toggleShareMutate(data);
       }
-      if (response) {
-        HandleResponseUtil(response, null, null);
-        if (response.type === "success") window.location.reload();
-      }
-      props.setIsLoading(false);
     }
     return;
   }

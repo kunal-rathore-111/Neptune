@@ -2,7 +2,7 @@ import axios from "axios";
 import { HandleError, type ServiceResponse } from "./handleError";
 import { ToggleContentShareUrl } from "@/api/urls";
 
-type toggleShareServiceInputType = {
+export type toggleShareServiceInputType = {
   share: boolean;
   contentId: string;
 };

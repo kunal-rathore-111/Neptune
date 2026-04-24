@@ -29,6 +29,7 @@ async function signInService(
       withCredentials: true,
     });
 
+    console.error(response.data.userData);
     return { message: response.data.message, type: "success" };
   } catch (error) {
     return HandleError(error);
@@ -65,6 +66,7 @@ export async function signOutService(): Promise<ServiceResponse> {
       method: "POST",
       withCredentials: true,
     });
+
     return { message: response.data.message, type: "success" };
   } catch (error) {
     /* here the no error thrown from server code probably cause there is no middleware but still using cause what if there will server is down */

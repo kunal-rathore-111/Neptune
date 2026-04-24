@@ -8,6 +8,8 @@ import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
 import { Add_Edit_BookMarkCard } from "./Add_Edit_Bookmark";
 import { ContentShareUrl } from "@/api/urls";
 import { cardEDUB } from "@/lib/constants/content/cardEDUB.Array";
+import { useDeleteBookmark } from "@/hooks/react-query-hooks/useDeleteBookmark";
+import { useToggleDashboardShare } from "@/hooks/react-query-hooks/useToggleDashboardShare";
 
 type ContentCardType = {
   cardData: dashboardFetchDataType;
@@ -15,7 +17,18 @@ type ContentCardType = {
 };
 export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
   const Icon = MapCategoryWithIcon(cardData.contentTable.category);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { mutate: deleteMutate, isPending: isDeletePending } =
+    useDeleteBookmark();
+  const { mutate: toggleShareMutate, isPending: isToggleSharePending } =
+    useToggleDashboardShare();
+  const reactQueryActions = {
+    // to pass them to edubarray
+    deleteMutate,
+    isDeletePending,
+    toggleShareMutate,
+    isToggleSharePending,
+  };
 
   const [editCardState, setEditCardState] = useState<boolean>(false);
 
@@ -40,14 +53,14 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
   }
 
   const { EDUBArray } = cardEDUB({
-    setIsLoading,
     setEditCardState,
     cardData,
+    reactQueryActions,
   });
 
   return (
     <div className="relative flex h-auto min-h-30 w-78 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
-      {isLoading ? (
+      {isDeletePending || isToggleSharePending ? (
         <div className="flex min-h-30 w-full items-center justify-center">
           <LoaderIcon />
         </div>

@@ -1,6 +1,6 @@
 import { ContentCard } from "./ContentCard";
 import { motion } from "framer-motion";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState } from "react";
 import { LongContentCard } from "./LongContentCard";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSidebar } from "@repo/ui";

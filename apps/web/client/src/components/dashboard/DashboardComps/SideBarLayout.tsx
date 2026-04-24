@@ -182,7 +182,7 @@ function Footer() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuGroup>
+                <DropdownMenuGroup onClick={() => navigate("/user/profile")}>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuItem className="focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black">
                     Profile
