@@ -1,7 +1,7 @@
 const env = import.meta.env;
 
 // --------Backned URLs--------
-const BackendInitalRoute =
+const BackendInitalRoute: string =
   env.VITE_MODE === "dev"
     ? env.VITE_DEV_BACKEND_BASE_URL
     : env.VITE_PROD_BACKEND_BASE_URL;
@@ -23,6 +23,9 @@ export const ToggleContentShareUrl =
 
 export const SharedContentUrl =
   BackendInitalRoute + "/user/share-content/public";
+
+export const FetchUserProfileUrl =
+  BackendInitalRoute + "/user/account/user-profile";
 
 // --------Frontend URLs--------
 

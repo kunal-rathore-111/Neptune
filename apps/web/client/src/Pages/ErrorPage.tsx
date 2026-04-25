@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { BookTextIcon, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function ErrorPage() {
+export default function ErrorPage({ message }: { message?: string }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-6 transition-colors duration-300 dark:bg-black">
       <div className="w-full max-w-md space-y-8 text-center">
@@ -16,31 +16,38 @@ export default function ErrorPage() {
             <BookTextIcon className="h-10 w-10 text-white dark:text-black" />
           </div>
         </motion.div>
+        {message ? (
+          message
+        ) : (
+          <>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <h1 className="mb-2 text-8xl font-bold text-gray-900 transition-colors duration-300 dark:text-white">
+                404
+              </h1>
+              <p className="text-gray-600 transition-colors duration-300 dark:text-gray-400">
+                Page not found
+              </p>
+            </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <h1 className="mb-2 text-8xl font-bold text-gray-900 transition-colors duration-300 dark:text-white">
-            404
-          </h1>
-          <p className="text-gray-600 transition-colors duration-300 dark:text-gray-400">
-            Page not found
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="space-y-3"
-        >
-          <p className="text-lg text-gray-600 transition-colors duration-300 dark:text-gray-400">
-            We couldn't find the page you're looking for. It might have been
-            moved or deleted.
-          </p>
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="space-y-3"
+            >
+              <p className="text-lg text-gray-600 transition-colors duration-300 dark:text-gray-400">
+                <span>
+                  We couldn't find the page you're looking for. It might have
+                  been moved or deleted.
+                </span>
+              </p>
+            </motion.div>
+          </>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

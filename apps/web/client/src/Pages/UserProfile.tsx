@@ -1,12 +1,9 @@
-import { SettingsProfile1 } from "@/components/profileCard";
+import { UserProfile } from "@/components/Profile/profileCard";
 
-export default function UserProfile() {
+export default function UserProfilePage() {
   return (
-    <main>
-      <div>
-        {" "}
-        <SettingsProfile1 />
-      </div>
+    <main className="flex w-screen items-center justify-center">
+      <UserProfile />
     </main>
   );
 }

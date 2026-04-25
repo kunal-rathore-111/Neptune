@@ -18,8 +18,7 @@ import {
   validatePasswordInput,
   validateUsernameInput,
 } from "@repo/validation";
-import { signInUpService } from "@/services/sign";
-import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
+import { useSign } from "@/hooks/react-query-hooks/useSign";
 
 export type AuthMode = "signin" | "signup";
 
@@ -56,12 +55,11 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   const [passwordValidation, setPasswordValidation] = useState<any>();
   const [usernameValidation, setUsernameValidation] = useState<any>();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
 
-  const cardRef = useRef<HTMLDivElement>(null);
+  const { mutate: signMutate, isPending } = useSign();
 
-  const navigate = useNavigate(); // to navigate on user/dashboard on successfull sign
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -107,24 +105,21 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   /* FORM SUBMISSION */
   async function handleSignFormSubmit(e: FormEvent) {
     e.preventDefault();
-    const data =
+    const signData =
       mode === "signin" ? { email, password } : { email, password, username };
     // check zodValidation
     const result =
       mode === "signin"
-        ? signInSchema.safeParse(data)
-        : signUpSchema.safeParse(data);
+        ? signInSchema.safeParse(signData)
+        : signUpSchema.safeParse(signData);
 
     if (!result.success) {
       //console.log(result.error.issues[0]);
       toast.error(result.error.issues[0].message, { position: "top-right" });
       return;
     } else {
-      setIsLoading(true);
-      // backend intergration for signup and signin
-      const response = await signInUpService({ data, mode });
-      HandleResponseUtil(response, "/user/dashboard", navigate);
-      setIsLoading(false);
+      // if all above success then call useSign function to sign-in
+      signMutate({ data: signData, mode });
     }
   }
 
@@ -149,7 +144,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
             </div>
 
             <form onSubmit={handleSignFormSubmit}>
-              <fieldset className="space-y-4" disabled={isLoading}>
+              <fieldset className="space-y-4" disabled={isPending}>
                 {mode === "signup" ? (
                   <div className="space-y-2">
                     {/* Full Name Input */}
@@ -210,10 +205,10 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
                 <button
                   type="submit"
                   className="ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 w-full items-center justify-center rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
-                  disabled={isLoading}
+                  disabled={isPending}
                 >
                   {/* shows button label or loading using state */}
-                  {isLoading ? <LoaderIcon size={22} /> : content.buttonTitle}
+                  {isPending ? <LoaderIcon size={22} /> : content.buttonTitle}
                 </button>
               </fieldset>
             </form>

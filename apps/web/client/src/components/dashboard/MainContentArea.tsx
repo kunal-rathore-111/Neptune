@@ -8,9 +8,9 @@ import {
   toast,
 } from "@repo/ui";
 import { Search } from "lucide-react";
-import DashboardDataList from "./DashboardDataList";
+import DashboardDataList from "./DashboardComps/DashboardDataList";
 import { useEffect, useState } from "react";
-import { Add_Edit_BookMarkCard } from "./Add_Edit_Bookmark";
+import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { LoaderIcon } from "@repo/icons";
 import type { dashboardFetchDataType } from "@/Types/dashboard";

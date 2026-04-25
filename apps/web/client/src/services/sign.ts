@@ -11,7 +11,7 @@ type signUpServiceType = signInServiceType & {
   username: string;
 };
 
-type signInUpFunctionType = {
+export type signInUpFunctionType = {
   data: signInServiceType | signUpServiceType;
   mode: AuthMode;
 };
@@ -29,7 +29,7 @@ async function signInService(
       withCredentials: true,
     });
 
-    console.error(response.data.userData);
+    //console.error(response.data.userData);
     return { message: response.data.message, type: "success" };
   } catch (error) {
     return HandleError(error);

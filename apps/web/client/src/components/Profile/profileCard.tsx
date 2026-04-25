@@ -9,6 +9,8 @@ import {
   FileUploadItemDelete,
   FileUploadList,
   FileUploadTrigger,
+  Switch,
+  ThemeToggleButton,
 } from "@repo/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui";
 import { Button } from "@repo/ui";
@@ -22,8 +24,8 @@ import {
 } from "@repo/ui";
 import { Input } from "@repo/ui";
 import { Label } from "@repo/ui";
-import { Textarea } from "@repo/ui";
 import { cn } from "@repo/libs";
+import { BackToDashboardButton } from "./BackToDashboardButton";
 
 interface ProfileFormData {
   name: string;
@@ -39,7 +41,7 @@ interface SettingsProfile1Props {
   className?: string;
 }
 
-const SettingsProfile1 = ({
+export const UserProfile = ({
   defaultValues = {
     name: "Alex Morgan",
     email: "alex.morgan@email.com",
@@ -65,8 +67,12 @@ const SettingsProfile1 = ({
       : defaultValues.avatar;
 
   return (
-    <UserProfileCard className={cn("w-full max-w-lg", className)}>
-      <UserProfileCardHeader>
+    <UserProfileCard className={cn("w-full max-w-xl px-6", className)}>
+      <div className="flex w-full items-center justify-between">
+        <BackToDashboardButton />
+        <ThemeToggleButton />
+      </div>
+      <UserProfileCardHeader className="text-start">
         <UserProfileCardTitle>Profile</UserProfileCardTitle>
         <UserProfileCardDescription>
           Update your personal information and profile picture
@@ -138,16 +144,7 @@ const SettingsProfile1 = ({
             </FileUploadList>
           )}
         </FileUpload>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              placeholder="Enter your name"
-              defaultValue={defaultValues.name}
-            />
-          </div>
+        <div className="max-h-60 space-y-7 overflow-y-scroll px-4 py-9">
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
             <Input
@@ -156,29 +153,28 @@ const SettingsProfile1 = ({
               defaultValue={defaultValues.username}
             />
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            defaultValue={defaultValues.email}
-          />
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              defaultValue={defaultValues.email}
+            />
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="bio">Bio</Label>
-          <Textarea
-            id="bio"
-            placeholder="Tell us about yourself"
-            rows={4}
-            defaultValue={defaultValues.bio}
-          />
-          <p className="text-muted-foreground text-xs">
-            Brief description for your profile. Max 160 characters.
-          </p>
+          <div className="flex flex-col space-y-2">
+            <Label>Password</Label>
+            <Button>Update Password</Button>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Share Profile</Label>
+              <Switch className="dark: bg-black bg-white" />
+            </div>
+            <Button>Share profile</Button>
+          </div>
         </div>
       </UserProfileCardContent>
       <UserProfileCardFooter className="flex justify-end gap-2">
@@ -188,5 +184,3 @@ const SettingsProfile1 = ({
     </UserProfileCard>
   );
 };
-
-export { SettingsProfile1 };

@@ -115,7 +115,9 @@ export function cardEDUB(props: cardEDUBType) {
       },
     },
     {
-      Icon: props.cardData.contentTable.link ? ShareIcon : ShareOffIcon,
+      Icon: props.cardData.ContentShareLinkTable?.contentSharehash
+        ? ShareIcon
+        : ShareOffIcon,
       className: "text-black dark:text-white",
       label: "Toggle Share",
       action: () => {

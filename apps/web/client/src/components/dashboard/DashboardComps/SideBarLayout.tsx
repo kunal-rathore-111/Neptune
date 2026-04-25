@@ -36,6 +36,7 @@ import {
 } from "@repo/ui";
 import { signOutService } from "@/services/sign";
 import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
+import { useUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
 
 export function AppSideBar() {
   return (
@@ -148,6 +149,8 @@ function CollapseComp({ menuData }: { menuData: SideBarMenuDataTypes }) {
 }
 
 function Footer() {
+  const { data } = useUserProfile(); // already cathced via parent called (the dashboard pages)
+  console.error(data?.type);
   const AnimateRef = useRef<IconHandle>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -170,7 +173,11 @@ function Footer() {
                 <AvatarImage src={""} alt={""} />
                 <AvatarFallback>{""}</AvatarFallback>
               </Avatar>{" "}
-              Username
+              {data?.type === "success" ? (
+                data.userProfileData.username
+              ) : (
+                <p> username</p>
+              )}
             </SidebarMenuButton>
             <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
               <DropdownMenuTrigger asChild>
