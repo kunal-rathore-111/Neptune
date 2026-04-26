@@ -331,7 +331,7 @@ export function Col3Row2() {
           <motion.div className="m-1 flex flex-col gap-2">
             <div className="flex w-full items-center justify-between gap-2 rounded-lg border bg-zinc-200 px-10 py-1 dark:bg-zinc-800">
               <div>Make shareable</div>
-              <Switch className="transition-all duration-800" checked={isOn} />
+              <Switch state={isOn} />
             </div>
             <motion.div className="flex flex-col gap-1 overflow-hidden" layout>
               <AnimatePresence mode="popLayout">

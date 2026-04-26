@@ -27,8 +27,13 @@ export const SharedContentUrl =
 export const FetchUserProfileUrl =
   BackendInitalRoute + "/user/account/user-profile";
 
-// --------Frontend URLs--------
+export const UserProfileShareInitialUrl =
+  BackendInitalRoute + "/user/share-user/public";
 
+export const ToggleUserProfileShareUrl =
+  UserProfileShareInitialUrl + "/toggle-user-share";
+
+// --------Frontend URLs--------
 const FrontendInitalRoute =
   env.VITE_MODE === "dev"
     ? env.VITE_DEV_FRONTEND_BASE_URL

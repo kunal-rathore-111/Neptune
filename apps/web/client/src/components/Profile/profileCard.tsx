@@ -11,6 +11,7 @@ import {
   FileUploadTrigger,
   Switch,
   ThemeToggleButton,
+  toast,
 } from "@repo/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui";
 import { Button } from "@repo/ui";
@@ -26,6 +27,10 @@ import { Input } from "@repo/ui";
 import { Label } from "@repo/ui";
 import { cn } from "@repo/libs";
 import { BackToDashboardButton } from "./BackToDashboardButton";
+import { useToggleUserProfileShare } from "@/hooks/react-query-hooks/useToggleUserProfileShare";
+import { LoaderIcon } from "@repo/icons";
+import { UserProfileShareInitialUrl } from "@/api/urls";
+import { UpdatePasswordComp } from "./UpdatePasswordComp";
 
 interface ProfileFormData {
   name: string;
@@ -68,12 +73,36 @@ export const UserProfile = ({
 
   /* custom states */
   const [isSwitchOn, setIsSwitchOn] = useState<boolean>(false);
+  const [OpenUpdatePasswordComp, setOpenUpdatePasswordComp] =
+    useState<boolean>(false);
+
+  const {
+    data: response,
+    mutate: toggleUserProfileShare,
+    isPending,
+  } = useToggleUserProfileShare();
 
   /* custom handler */
   function handleShareSwitch() {
-    console.log("hiii");
+    // call share profile api then toggleswitch
+    toggleUserProfileShare(!isSwitchOn);
     setIsSwitchOn(!isSwitchOn);
   }
+  async function handleCopyUserShareProfile() {
+    try {
+      if (response?.type === "success") {
+        await navigator.clipboard.writeText(
+          UserProfileShareInitialUrl + `/${response.share_hash}`,
+        );
+        toast.success("Link copied successfully");
+      } else throw new Error();
+    } catch (error) {
+      toast.error("Link not copied, Something went wrong!!", {
+        position: "top-center",
+      });
+    }
+  }
+
   return (
     <UserProfileCard className={cn("w-full max-w-xl px-6", className)}>
       <div className="flex w-full items-center justify-between">
@@ -175,14 +204,24 @@ export const UserProfile = ({
 
           <div className="flex flex-col space-y-2">
             <Label>Password</Label>
-            <Button>Update Password</Button>
+            <Button onClick={() => setOpenUpdatePasswordComp(true)}>
+              Update Password
+            </Button>
+            {OpenUpdatePasswordComp && <UpdatePasswordComp />}
           </div>
           <div className="flex flex-col space-y-2">
             <div className="flex items-center justify-between">
               <Label>Share Profile</Label>
-              <Switch checked={true}></Switch>
+              <button onClick={() => handleShareSwitch()}>
+                <Switch state={isSwitchOn}></Switch>
+              </button>
             </div>
-            <Button>Share profile</Button>
+            <Button
+              disabled={!isSwitchOn}
+              onClick={() => handleCopyUserShareProfile()}
+            >
+              {isPending ? <LoaderIcon /> : <span>Share profile</span>}
+            </Button>
           </div>
         </div>
       </UserProfileCardContent>
