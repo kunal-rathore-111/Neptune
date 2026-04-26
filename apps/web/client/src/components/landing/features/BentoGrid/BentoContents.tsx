@@ -167,13 +167,7 @@ export function Col2Row1() {
             initial={"hidden"}
             animate={"show"}
           >
-            {
-              <Tags
-                tags={tags}
-                childVariant={tagsChildVariant}
-                shouldSlice={false}
-              />
-            }
+            {<Tags tags={tags} childVariant={tagsChildVariant} />}
           </motion.div>
 
           <motion.div

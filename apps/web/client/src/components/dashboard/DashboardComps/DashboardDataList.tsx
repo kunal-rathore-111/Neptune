@@ -5,22 +5,22 @@ import { LongContentCard } from "./LongContentCard";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSidebar } from "@repo/ui";
 import { cn } from "@repo/libs";
+import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 
-export default function DashboardDataList({
-  dashboardData,
-}: {
-  dashboardData: dashboardFetchDataType[];
-}) {
+export default function DashboardDataList() {
+  const { data: response } = useDashboardFetch(); // already cached via maincontentarea.tsx
+
+  if (response && response?.data.length === 0) {
+    return <div>"NoContentPresentComp" </div>;
+  }
+
   // function to convert the [] into [[][][]] to render cards in form of Masonry layout
-  function RoundRobinConversion(
-    dashboardData: dashboardFetchDataType[],
-    cols: number,
-  ) {
+  function RoundRobinConversion(cols: number) {
     const result: dashboardFetchDataType[][] = []; // [][] row col wise
     // put cols according to screen size (cols)
     for (let i = 0; i < cols; i++) result.push([]); // [[], [], []] if col =3
     // traverse the cardsData (backend data) and put col wise
-    dashboardData.forEach((element, i) => {
+    response?.data.forEach((element, i) => {
       result[i % cols].push(element);
     });
     return result;
@@ -32,7 +32,7 @@ export default function DashboardDataList({
   const [selectedCard, setSelectedCard] =
     useState<null | dashboardFetchDataType>(null);
   const cols = window.innerWidth >= 1000 ? 3 : 2;
-  const cardsData = RoundRobinConversion(dashboardData, cols);
+  const cardsData = RoundRobinConversion(cols);
   //console.log(cardsData);
   /* dashboard bookmarks cardsData grid */
   return (

@@ -17,7 +17,6 @@ import { Textarea } from "@repo/ui";
 import { Checkbox } from "@repo/ui";
 import { TagsInputComp } from "@repo/ui";
 import {
-  add_edit_BookMarkService,
   type addBookmarkDataType,
   type editBookmarkDataType,
 } from "@/services/add_edit_Data";
@@ -28,8 +27,8 @@ import {
   validateTitleInput,
 } from "@repo/validation";
 import { InputValidationFeedback } from "@/components/sign/InputValidationFeedback";
-import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
+import { useAdd_EditBookmark } from "@/hooks/react-query-hooks/useAdd_EditBookmark";
 
 interface AddBookMarkCardDTO {
   setOpenAdd_Edit_Card: Dispatch<SetStateAction<boolean>>;
@@ -76,8 +75,8 @@ export function Add_Edit_BookMarkCard({
     setCategory,
   };
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const { mutate: add_edit_MutateFn, isPending: add_edit_isPending } =
+    useAdd_EditBookmark();
   async function handleAdd_Edit_BookMarkFormSubmit(e: FormEvent) {
     e.preventDefault();
 
@@ -97,14 +96,10 @@ export function Add_Edit_BookMarkCard({
     if (!result.success) {
       toast.error(result.error.issues[0].message, { position: "top-right" });
     } else {
-      setIsLoading(true);
       const type = presentData ? "edit" : "add";
 
       /*  service call */
-      const response = await add_edit_BookMarkService(data, type);
-      HandleResponseUtil(response, null, null);
-      setIsLoading(false);
-      if (response.type === "success") window.location.reload(); // refresh page after new data store, can change to index db logic to reduce backend calls but i will make the application too complex and large
+      await add_edit_MutateFn({ data, type });
     }
   }
 
@@ -134,7 +129,7 @@ export function Add_Edit_BookMarkCard({
 
           <div className="overflow-y-auto px-10">
             <form onSubmit={(e) => handleAdd_Edit_BookMarkFormSubmit(e)}>
-              <fieldset className="space-y-6" disabled={isLoading}>
+              <fieldset className="space-y-6" disabled={add_edit_isPending}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Link

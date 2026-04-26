@@ -9,6 +9,8 @@ import type { SharedContentDataType } from "@/Types/sharedContent";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { cardEDUB } from "@/lib/constants/content/cardEDUB.Array";
 import { Add_Edit_BookMarkCard } from "../dashboard/DashboardComps/Add_Edit_Bookmark";
+import { useDeleteBookmark } from "@/hooks/react-query-hooks/useDeleteBookmark";
+import { useToggleShare } from "@/hooks/react-query-hooks/useToggleShare";
 
 type LongCardOutlineCompType = {
   Icon?: typeof XIcon;
@@ -22,20 +24,30 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
     props.selectedCardData.contentTable.category,
   );
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { mutate: deleteMutate, isPending: isDeletePending } =
+    useDeleteBookmark();
+  const { mutate: toggleShareMutate, isPending: isToggleSharePending } =
+    useToggleShare();
+  const reactQueryActions = {
+    // to pass them to edubarray
+    deleteMutate,
+    isDeletePending,
+    toggleShareMutate,
+    isToggleSharePending,
+  };
 
   const [editCardState, setEditCardState] = useState<boolean>(false);
 
   const { BrowserIconArray, EDUBArray } = cardEDUB({
     cardData: props.selectedCardData,
-    setIsLoading,
+    reactQueryActions,
     setEditCardState,
   });
 
   return (
     <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">
-      <div className="relative flex h-fit max-h-[90vh] min-h-50 max-w-200 min-w-90 flex-col rounded-xl border bg-zinc-100 p-7 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
-        {isLoading ? (
+      <div className="relative flex h-fit max-h-[90vh] min-h-50 max-w-200 min-w-90 flex-col rounded-xl border bg-zinc-100 p-7 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90">
+        {isDeletePending || isToggleSharePending ? (
           <div className="flex h-full min-h-50 w-full items-center justify-center">
             <LoaderIcon />
           </div>

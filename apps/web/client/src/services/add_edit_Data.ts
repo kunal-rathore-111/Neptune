@@ -58,11 +58,13 @@ async function editBookMark(
     return HandleError(error);
   }
 }
-
+export type Add_Edit_BookmarkType = {
+  data: addBookmarkDataType | editBookmarkDataType;
+  type: "edit" | "add";
+};
 export async function add_edit_BookMarkService(
-  data: addBookmarkDataType | editBookmarkDataType,
-  type: "edit" | "add",
+  props: Add_Edit_BookmarkType,
 ): Promise<Add_Edit_BookmarkResponseReturnType> {
-  if (type === "add") return await addBookMark(data);
-  else return await editBookMark(data as editBookmarkDataType);
+  if (props.type === "add") return await addBookMark(props.data);
+  else return await editBookMark(props.data as editBookmarkDataType);
 }

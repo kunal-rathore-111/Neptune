@@ -9,7 +9,7 @@ import { Add_Edit_BookMarkCard } from "./Add_Edit_Bookmark";
 import { ContentShareUrl } from "@/api/urls";
 import { cardEDUB } from "@/lib/constants/content/cardEDUB.Array";
 import { useDeleteBookmark } from "@/hooks/react-query-hooks/useDeleteBookmark";
-import { useToggleDashboardShare } from "@/hooks/react-query-hooks/useToggleDashboardShare";
+import { useToggleShare } from "@/hooks/react-query-hooks/useToggleShare";
 
 type ContentCardType = {
   cardData: dashboardFetchDataType;
@@ -21,7 +21,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
   const { mutate: deleteMutate, isPending: isDeletePending } =
     useDeleteBookmark();
   const { mutate: toggleShareMutate, isPending: isToggleSharePending } =
-    useToggleDashboardShare();
+    useToggleShare();
   const reactQueryActions = {
     // to pass them to edubarray
     deleteMutate,
@@ -59,7 +59,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
   });
 
   return (
-    <div className="relative flex h-auto min-h-30 w-78 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
+    <div className="relative flex h-auto min-h-30 w-78 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90">
       {isDeletePending || isToggleSharePending ? (
         <div className="flex min-h-30 w-full items-center justify-center">
           <LoaderIcon />

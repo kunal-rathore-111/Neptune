@@ -5,7 +5,7 @@ import {
 import { toast } from "@repo/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useToggleDashboardShare() {
+export function useToggleShare() {
   const queryClient = useQueryClient();
   const result = useMutation({
     mutationFn: async ({ share, contentId }: toggleShareServiceInputType) => {
@@ -19,7 +19,7 @@ export function useToggleDashboardShare() {
       return;
     },
     onError: (error: any) => {
-      return toast.success(error.message, { position: "top-center" });
+      return toast.error(error.message, { position: "top-center" });
     },
   });
   return result;

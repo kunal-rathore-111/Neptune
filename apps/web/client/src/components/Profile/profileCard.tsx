@@ -66,6 +66,14 @@ export const UserProfile = ({
       ? URL.createObjectURL(avatarFiles[0])
       : defaultValues.avatar;
 
+  /* custom states */
+  const [isSwitchOn, setIsSwitchOn] = useState<boolean>(false);
+
+  /* custom handler */
+  function handleShareSwitch() {
+    console.log("hiii");
+    setIsSwitchOn(!isSwitchOn);
+  }
   return (
     <UserProfileCard className={cn("w-full max-w-xl px-6", className)}>
       <div className="flex w-full items-center justify-between">
@@ -81,6 +89,7 @@ export const UserProfile = ({
       <UserProfileCardContent className="space-y-6">
         {/* Avatar Upload */}
         <FileUpload
+          className="items-center"
           value={avatarFiles}
           onValueChange={setAvatarFiles}
           accept="image/*"
@@ -171,14 +180,13 @@ export const UserProfile = ({
           <div className="flex flex-col space-y-2">
             <div className="flex items-center justify-between">
               <Label>Share Profile</Label>
-              <Switch className="dark: bg-black bg-white" />
+              <Switch checked={true}></Switch>
             </div>
             <Button>Share profile</Button>
           </div>
         </div>
       </UserProfileCardContent>
-      <UserProfileCardFooter className="flex justify-end gap-2">
-        <Button variant="outline">Cancel</Button>
+      <UserProfileCardFooter className="flex justify-center gap-2">
         <Button>Save Changes</Button>
       </UserProfileCardFooter>
     </UserProfileCard>

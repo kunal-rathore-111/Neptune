@@ -5,7 +5,6 @@
     "": {
       "name": "Neptune",
       "dependencies": {
-        "@tanstack/react-query": "^5.100.1",
         "axios": "^1.15.0",
       },
       "devDependencies": {
@@ -26,6 +25,7 @@
         "@repo/ui": "*",
         "@repo/validation": "*",
         "@tailwindcss/vite": "^4.2.1",
+        "@tanstack/react-query": "^5.100.1",
         "add": "^2.0.6",
         "clsx": "^2.1.1",
         "framer-motion": "^12.38.0",
@@ -155,6 +155,7 @@
       "dependencies": {
         "@diceui/tags-input": "^0.7.2",
         "@radix-ui/react-accordion": "^1.2.12",
+        "@radix-ui/react-switch": "^1.2.6",
         "@repo/icons": "*",
         "@repo/libs": "*",
         "class-variance-authority": "^0.7.1",

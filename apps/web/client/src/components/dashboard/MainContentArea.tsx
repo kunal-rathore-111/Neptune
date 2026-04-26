@@ -13,10 +13,9 @@ import { useEffect, useState } from "react";
 import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { LoaderIcon } from "@repo/icons";
-import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { ErrorComp } from "@/components/ErrorComp";
 export function DashboardMainContentArea() {
-  const { data: response, isLoading, error, isError } = useDashboardFetch();
+  const { isLoading, error, isError } = useDashboardFetch();
 
   useEffect(() => {
     if (isError) {
@@ -39,15 +38,14 @@ export function DashboardMainContentArea() {
         </div>
       ) : (
         /*  if no error then show the dashboard section */
-        <DashboardSection data={response?.data ?? []} />
+        <DashboardSection />
       )}
     </section>
   );
 }
 
-function DashboardSection({ data }: { data: dashboardFetchDataType[] }) {
+function DashboardSection() {
   const [addCardState, setOpenAddCard] = useState<boolean>(false);
-
   return (
     <>
       <div className="w-full space-y-10">
@@ -73,11 +71,7 @@ function DashboardSection({ data }: { data: dashboardFetchDataType[] }) {
           </InputGroup>
         </div>
         {/*  list of cards */}
-        {data.length ? (
-          <DashboardDataList dashboardData={data} />
-        ) : (
-          <div>"NoContentPresentComp" </div>
-        )}
+        <DashboardDataList />
       </div>
 
       {/* render the add card on full screen */}
