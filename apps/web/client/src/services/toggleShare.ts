@@ -18,7 +18,6 @@ export async function toggleShareService(
       data: data,
       withCredentials: true,
     });
-    console.error(response);
     return { message: response.data.message, type: "success" };
   } catch (error) {
     return HandleError(error);

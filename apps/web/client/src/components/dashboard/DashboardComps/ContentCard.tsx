@@ -80,7 +80,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
               </div>
               <div className="flex items-center gap-1 text-xs">
                 {cardData.ContentShareLinkTable?.contentSharehash ? (
-                  <button className="flex" onClick={() => handleCopy()}>
+                  <div className="flex" onClick={() => handleCopy()}>
                     {/* if copyIconstate is true means the link is getting copy so show the animated checkIcon */}
                     {copyIconState ? (
                       <CheckIcon size={14} />
@@ -92,7 +92,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
                         </TooltipTrigger>
                       </Tooltip>
                     )}
-                  </button>
+                  </div>
                 ) : null}
               </div>
             </div>

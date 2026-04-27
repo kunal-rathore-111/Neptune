@@ -36,7 +36,7 @@ import {
 } from "@repo/ui";
 import { signOutService } from "@/services/sign";
 import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
-import { useUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
 
 export function AppSideBar() {
   return (
@@ -61,7 +61,7 @@ function Header() {
               navigate("/");
             }}
           >
-            <BookTextIcon size={18} className="inline-block" /> 2nd Mind
+            <BookTextIcon size={18} className="inline-block" /> Neptune
           </button>
           <ThemeToggleButton />
         </div>
@@ -149,8 +149,7 @@ function CollapseComp({ menuData }: { menuData: SideBarMenuDataTypes }) {
 }
 
 function Footer() {
-  const { data } = useUserProfile(); // already cathced via parent called (the dashboard pages)
-  console.error(data?.type);
+  const { data } = useFetchUserProfile(); // already cathced via parent called (the dashboard pages)
   const AnimateRef = useRef<IconHandle>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -170,7 +169,12 @@ function Footer() {
           <SidebarGroup className="flex-row gap-5 px-1 py-2">
             <SidebarMenuButton className="text-xs">
               <Avatar className="mr-1 inline-block h-6 w-6 transition-all duration-200 hover:scale-110">
-                <AvatarImage src={""} alt={""} />
+                <AvatarImage
+                  src={
+                    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar8.jpg"
+                  }
+                  alt={"userProfileImage"}
+                />
                 <AvatarFallback>{""}</AvatarFallback>
               </Avatar>{" "}
               {data?.type === "success" ? (

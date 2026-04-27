@@ -1,12 +1,12 @@
 import { DashboardMainContentArea } from "@/components/dashboard/MainContentArea";
 import { AppSideBar } from "@/components/dashboard/DashboardComps/SideBarLayout";
 import { SidebarProvider, toast } from "@repo/ui";
-import { useUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
 import LoadingPage from "./Loading";
 import ErrorPage from "./ErrorPage";
 
 export default function Dashboard() {
-  const { isLoading, isError, error } = useUserProfile();
+  const { isLoading, isError, error } = useFetchUserProfile();
 
   if (isError) {
     toast.error(error.message, { position: "top-center" });

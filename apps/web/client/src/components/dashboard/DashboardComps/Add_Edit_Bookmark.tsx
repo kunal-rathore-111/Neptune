@@ -99,7 +99,14 @@ export function Add_Edit_BookMarkCard({
       const type = presentData ? "edit" : "add";
 
       /*  service call */
-      await add_edit_MutateFn({ data, type });
+      await add_edit_MutateFn(
+        { data, type },
+        {
+          onSuccess: () => {
+            setOpenAdd_Edit_Card(false);
+          },
+        },
+      );
     }
   }
 
@@ -109,7 +116,7 @@ export function Add_Edit_BookMarkCard({
     return () => {
       document.body.style.overflow = "auto";
     };
-  });
+  }, []);
 
   return (
     <>

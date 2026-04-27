@@ -6,7 +6,11 @@ axiosInstance.interceptors.response.use(
   (response) => response, //if successfull axios then return reponse as it is
   //if fails then
   (error) => {
-    if (error.response.status === 401) {
+    const url = error.config.url ?? "";
+    if (
+      error.response.status === 401 &&
+      !url.includes("update-user-password")
+    ) {
       // redirect to signin
       window.location.href = "/signin";
     }

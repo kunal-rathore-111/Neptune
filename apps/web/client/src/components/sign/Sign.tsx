@@ -19,6 +19,7 @@ import {
   validateUsernameInput,
 } from "@repo/validation";
 import { useSign } from "@/hooks/react-query-hooks/useSign";
+import { PasswordRules, UsernameRules } from "@/lib/constants/content/rules";
 
 export type AuthMode = "signin" | "signup";
 
@@ -74,34 +75,6 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
     setUsernameValidation(validateUsernameInput(username));
   }, [username]);
 
-  /* rules to validate when user entering input */
-  const PasswordRules = [
-    { message: "Password length atleast 6", test: (p: string) => p.length > 5 },
-    {
-      message: "Password has lowercase letter",
-      test: (p: string) => /[a-z]/.test(p),
-    },
-    {
-      message: "Password has uppercase letter",
-      test: (p: string) => /[A-Z]/.test(p),
-    },
-    {
-      message: "Password has one number",
-      test: (p: string) => /[0-9]/.test(p),
-    },
-    {
-      message: "One special character",
-      test: (p: string) => /[&%$#@!]/.test(p),
-    },
-  ];
-
-  const UsernameRules = [
-    {
-      message: "Username length atleast 4",
-      test: (p: string) => p.length > 3,
-    },
-  ];
-
   /* FORM SUBMISSION */
   async function handleSignFormSubmit(e: FormEvent) {
     e.preventDefault();
@@ -120,6 +93,7 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
     } else {
       // if all above success then call useSign function to sign-in
       signMutate({ data: signData, mode });
+      // reset form
     }
   }
 

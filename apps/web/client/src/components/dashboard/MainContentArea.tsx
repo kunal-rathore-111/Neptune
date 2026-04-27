@@ -6,6 +6,7 @@ import {
   InputGroupInput,
   SidebarTrigger,
   toast,
+  useSidebar,
 } from "@repo/ui";
 import { Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
@@ -23,9 +24,15 @@ export function DashboardMainContentArea() {
     }
   }, [error, isError]);
 
+  const { open } = useSidebar();
   return (
     <section className="relative flex min-h-screen w-full flex-col py-10 lg:px-8">
-      <SidebarTrigger className="w-fit p-1" />
+      <SidebarTrigger
+        className={cn(
+          "w-fit p-1",
+          open ? "cursor-w-resize" : "cursor-e-resize",
+        )}
+      />
 
       {/* if loading show loader */}
       {isLoading ? (

@@ -21,7 +21,10 @@ export async function fetchUserProfileService(): Promise<
       method: "GET",
     });
 
-    return { type: "success", userProfileData: response.data.userProfileData };
+    return {
+      type: "success",
+      userProfileData: response.data.userProfileData,
+    };
   } catch (error) {
     return HandleError(error);
   }

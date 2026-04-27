@@ -1,7 +1,7 @@
 "use client";
 
 import { Camera, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   FileUpload,
@@ -31,13 +31,12 @@ import { useToggleUserProfileShare } from "@/hooks/react-query-hooks/useToggleUs
 import { LoaderIcon } from "@repo/icons";
 import { UserProfileShareInitialUrl } from "@/api/urls";
 import { UpdatePasswordComp } from "./UpdatePasswordComp";
+import { useFetchUserShareHash } from "@/hooks/react-query-hooks/useFetchUserShareHash";
 
 interface ProfileFormData {
-  name: string;
   email: string;
   username: string;
   avatar?: string;
-  bio?: string;
 }
 
 interface SettingsProfile1Props {
@@ -48,18 +47,16 @@ interface SettingsProfile1Props {
 
 export const UserProfile = ({
   defaultValues = {
-    name: "Alex Morgan",
     email: "alex.morgan@email.com",
     username: "alexmorgan",
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar8.jpg",
-    bio: "Product designer with 8+ years of experience crafting intuitive digital experiences. Currently focused on design systems and accessibility.",
   },
   className,
 }: SettingsProfile1Props) => {
   const [avatarFiles, setAvatarFiles] = useState<File[]>([]);
 
-  const initials = defaultValues.name
+  const initials = defaultValues.username
     ?.split(" ")
     .map((n) => n[0])
     .join("")
@@ -72,27 +69,51 @@ export const UserProfile = ({
       : defaultValues.avatar;
 
   /* custom states */
-  const [isSwitchOn, setIsSwitchOn] = useState<boolean>(false);
   const [OpenUpdatePasswordComp, setOpenUpdatePasswordComp] =
     useState<boolean>(false);
 
+  /* useFetchUserShare */
   const {
-    data: response,
+    data: useFetchUserShareHashResponse,
+    isPending: isUseFetchUserShareHashPending,
+  } = useFetchUserShareHash();
+
+  // useToggle_FetchUserShare
+  const {
+    data: toggleHashResponse,
     mutate: toggleUserProfileShare,
     isPending,
   } = useToggleUserProfileShare();
 
+  const [hash, setHash] = useState<string | null>(null);
+  const [isHashPresent, setIsHashPresent] = useState<boolean>(false); // for switch toggle
+
+  useEffect(() => {
+    if (useFetchUserShareHashResponse?.type === "success") {
+      setHash(useFetchUserShareHashResponse.hash);
+    }
+  }, [useFetchUserShareHashResponse]);
+
+  useEffect(() => {
+    if (toggleHashResponse?.type === "success") {
+      setHash(toggleHashResponse.share_hash);
+    }
+  }, [toggleHashResponse]);
+
+  useEffect(() => {
+    setIsHashPresent(hash ? true : false);
+  }, [hash]);
+
   /* custom handler */
   function handleShareSwitch() {
     // call share profile api then toggleswitch
-    toggleUserProfileShare(!isSwitchOn);
-    setIsSwitchOn(!isSwitchOn);
+    toggleUserProfileShare(!isHashPresent);
   }
   async function handleCopyUserShareProfile() {
     try {
-      if (response?.type === "success") {
+      if (hash) {
         await navigator.clipboard.writeText(
-          UserProfileShareInitialUrl + `/${response.share_hash}`,
+          UserProfileShareInitialUrl + `/${hash}`,
         );
         toast.success("Link copied successfully");
       } else throw new Error();
@@ -134,7 +155,7 @@ export const UserProfile = ({
                 <Avatar className="size-20">
                   <AvatarImage
                     src={avatarPreview}
-                    alt={defaultValues.name}
+                    alt={defaultValues.username}
                     className="object-cover"
                   />
                   <AvatarFallback className="text-xl font-semibold">
@@ -207,27 +228,32 @@ export const UserProfile = ({
             <Button onClick={() => setOpenUpdatePasswordComp(true)}>
               Update Password
             </Button>
-            {OpenUpdatePasswordComp && <UpdatePasswordComp />}
           </div>
           <div className="flex flex-col space-y-2">
             <div className="flex items-center justify-between">
               <Label>Share Profile</Label>
               <button onClick={() => handleShareSwitch()}>
-                <Switch state={isSwitchOn}></Switch>
+                <Switch state={isHashPresent}></Switch>
               </button>
             </div>
             <Button
-              disabled={!isSwitchOn}
+              disabled={!isHashPresent}
               onClick={() => handleCopyUserShareProfile()}
             >
-              {isPending ? <LoaderIcon /> : <span>Share profile</span>}
+              {isPending || isUseFetchUserShareHashPending ? (
+                <LoaderIcon />
+              ) : (
+                <span>Share profile</span>
+              )}
             </Button>
           </div>
         </div>
       </UserProfileCardContent>
-      <UserProfileCardFooter className="flex justify-center gap-2">
-        <Button>Save Changes</Button>
-      </UserProfileCardFooter>
+      {OpenUpdatePasswordComp && (
+        <UpdatePasswordComp
+          setOpenUpdatePasswordComp={setOpenUpdatePasswordComp}
+        />
+      )}
     </UserProfileCard>
   );
 };

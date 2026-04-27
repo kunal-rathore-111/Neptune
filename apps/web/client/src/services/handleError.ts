@@ -27,7 +27,6 @@ export function HandleError(error: unknown): ErrorServiceResponse {
   let status = 500;
   if (isAxiosError<BackendError>(error)) {
     if (
-      error.response?.status !== 401 && // using interceptor for 401 error so can redirect fast , if use handleerror it was very late in the stack of API calling
       error.response?.data.message &&
       error.response.data.errorType !== "ServerError"
     ) {

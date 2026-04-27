@@ -28,10 +28,16 @@ export const FetchUserProfileUrl =
   BackendInitalRoute + "/user/account/user-profile";
 
 export const UserProfileShareInitialUrl =
-  BackendInitalRoute + "/user/share-user/public";
+  BackendInitalRoute + "/user/share-user";
+
+export const FetchUserProfileShareHashUrl =
+  UserProfileShareInitialUrl + "/get-user-share";
 
 export const ToggleUserProfileShareUrl =
   UserProfileShareInitialUrl + "/toggle-user-share";
+
+export const UpdatePasswordUrl =
+  BackendInitalRoute + "/user/account/update-user-password";
 
 // --------Frontend URLs--------
 const FrontendInitalRoute =

@@ -6,13 +6,10 @@ import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSidebar } from "@repo/ui";
 import { cn } from "@repo/libs";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
+import LoadingPage from "@/Pages/Loading";
 
 export default function DashboardDataList() {
-  const { data: response } = useDashboardFetch(); // already cached via maincontentarea.tsx
-
-  if (response && response?.data.length === 0) {
-    return <div>"NoContentPresentComp" </div>;
-  }
+  const { data: response, isLoading } = useDashboardFetch(); // already cached via maincontentarea.tsx
 
   // function to convert the [] into [[][][]] to render cards in form of Masonry layout
   function RoundRobinConversion(cols: number) {
@@ -29,12 +26,16 @@ export default function DashboardDataList() {
   /*  check sidebar is open or not for no. of cols on the dashboard */
   const { open } = useSidebar();
 
+  if (isLoading) return <LoadingPage />;
+  if (response && response?.data.length === 0) {
+    return <div>"NoContentPresentComp" </div>;
+  }
+
   const [selectedCard, setSelectedCard] =
     useState<null | dashboardFetchDataType>(null);
-  const cols = window.innerWidth >= 1000 ? 3 : 2;
-  const cardsData = RoundRobinConversion(cols);
+  let cols = window.innerWidth >= 1000 ? 3 : 2;
   //console.log(cardsData);
-  /* dashboard bookmarks cardsData grid */
+  const cardsData = RoundRobinConversion(cols);
   return (
     <div className="my-2 flex flex-col gap-10">
       <div
