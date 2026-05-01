@@ -8,7 +8,7 @@ import {
 } from "@/lib/utils/SocialLinks_PolicyDate";
 export const footerLinks = {
   Products: [
-    { name: "Try for free", to: "/signup" },
+    { name: "Try for free", to: "/sign-up" },
     { name: "Blog", to: "#" },
     { name: "Docs", to: "/docs" },
   ],

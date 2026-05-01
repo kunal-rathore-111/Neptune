@@ -94,7 +94,7 @@ export const TipsArray = [
         Create a free account on the{" "}
         <Link
           className="font-bold text-zinc-600 underline dark:text-zinc-400"
-          to={"/signup"}
+          to={"/sign-up"}
         >
           Sign Up page
         </Link>

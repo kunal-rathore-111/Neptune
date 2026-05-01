@@ -89,7 +89,7 @@ export const Nav = () => {
           <div className="h-4 w-px bg-zinc-300 dark:bg-zinc-700" />
           <Button
             variant={"secondary"}
-            onClick={() => navigate("/signin")}
+            onClick={() => navigate("/sign-in")}
             size="sm"
             className="rounded-sm text-xs transition-colors duration-400 hover:bg-zinc-300 hover:text-zinc-900 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
           >
@@ -97,7 +97,7 @@ export const Nav = () => {
           </Button>
 
           <Button
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/sign-up")}
             size="sm"
             className="rounded-sm text-xs transition-colors duration-400"
           >

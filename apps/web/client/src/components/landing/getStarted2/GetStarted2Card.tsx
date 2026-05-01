@@ -55,7 +55,7 @@ export function GetStarted2Card() {
                   className="cursor-pointer"
                   onClick={() => {
                     //console.log("Get started clicked");
-                    navigate("/signup");
+                    navigate("/sign-up");
                   }}
                 >
                   Get started

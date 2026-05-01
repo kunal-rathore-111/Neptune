@@ -30,7 +30,7 @@ const authContent = {
     buttonTitle: "Login",
     alternateText: "Don't have an account? ",
     alternateAction: "Sign up",
-    alternateActionRoute: "/signup",
+    alternateActionRoute: "/sign-up",
   },
 
   signup: {
@@ -39,7 +39,7 @@ const authContent = {
     buttonTitle: "Create Account",
     alternateText: "Already have an account? ",
     alternateAction: "Sign in",
-    alternateActionRoute: "/signin",
+    alternateActionRoute: "/sign-in",
   },
 };
 

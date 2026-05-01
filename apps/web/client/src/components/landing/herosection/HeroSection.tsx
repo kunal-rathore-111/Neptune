@@ -41,7 +41,7 @@ function HeroSection() {
               <Button asChild>
                 <motion.button
                   whileHover={"animate"}
-                  onClick={() => navigate("/signup")}
+                  onClick={() => navigate("/sign-up")}
                 >
                   Get Started Free
                   {<SendIcon />}

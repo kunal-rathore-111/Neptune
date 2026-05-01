@@ -1,4 +1,4 @@
-import { Button, FloatingLabelInput } from "@repo/ui";
+import { Button, FloatingLabelInput, toast } from "@repo/ui";
 import {
   Eye,
   EyeClosed,
@@ -47,15 +47,27 @@ export function UpdatePasswordComp(props: UpdatePasswordInputType) {
   function handleUpdatePassword(e: FormEvent) {
     e.preventDefault();
     // test all inputs if  valid then process else toast
-
-    UpdatePasswordMutate(
-      { email, password: oldPassword, newPassword },
-      {
-        onSuccess: () => {
-          props.setOpenUpdatePasswordComp(false);
+    if (oldPassword === newPassword || oldPassword === confirmNewPassword) {
+      toast.error("Old and new password cannot be same", {
+        position: "top-center",
+      });
+      return;
+    } else if (newPassword === confirmNewPassword) {
+      UpdatePasswordMutate(
+        { email, password: oldPassword, newPassword },
+        {
+          onSuccess: () => {
+            props.setOpenUpdatePasswordComp(false);
+          },
         },
-      },
-    );
+      );
+      return;
+    } else {
+      toast.error("Both new passwords are not same", {
+        position: "top-center",
+      });
+      return;
+    }
   }
   return (
     <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">

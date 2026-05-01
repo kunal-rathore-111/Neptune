@@ -11,30 +11,6 @@ import LoadingPage from "@/Pages/Loading";
 export default function DashboardDataList() {
   const { data: response, isLoading } = useDashboardFetch(); // already cached via maincontentarea.tsx
 
-  // function to convert the [] into [[][][]] to render cards in form of Masonry layout
-  function RoundRobinConversion(cols: number) {
-    const result: dashboardFetchDataType[][] = []; // [][] row col wise
-    // put cols according to screen size (cols)
-    for (let i = 0; i < cols; i++) result.push([]); // [[], [], []] if col =3
-    // traverse the cardsData (backend data) and put col wise
-    response?.data.forEach((element, i) => {
-      result[i % cols].push(element);
-    });
-    return result;
-  }
-
-  /*  check sidebar is open or not for no. of cols on the dashboard */
-  const { open } = useSidebar();
-
-  if (isLoading) return <LoadingPage />;
-  if (response && response?.data.length === 0) {
-    return <div>"NoContentPresentComp" </div>;
-  }
-
-  const [selectedCard, setSelectedCard] =
-    useState<null | dashboardFetchDataType>(null);
-  //console.log(cardsData);
-
   const getCols = (width: number, open: boolean) => {
     if (open) {
       // sidebar open, less space
@@ -48,12 +24,17 @@ export default function DashboardDataList() {
       return 1;
     }
   };
+  const [selectedCard, setSelectedCard] =
+    useState<null | dashboardFetchDataType>(null);
+
+  /*  check sidebar is open or not for no. of cols on the dashboard */
+  const { open } = useSidebar();
 
   const [cols, setCols] = useState<number>(getCols(window.innerWidth, open));
 
   useEffect(() => {
     const handleResizeEvent = () => {
-      console.error(window.innerWidth);
+      //  console.error(window.innerWidth);
       const newCols = getCols(window.innerWidth, open);
       setCols((prev) => (prev === newCols ? prev : newCols)); // it helps to avoid unnecessary renders, cause if width change even one pixel it will render and frontend will lag
     };
@@ -63,6 +44,23 @@ export default function DashboardDataList() {
       window.removeEventListener("resize", handleResizeEvent);
     };
   }, [open]);
+
+  // function to convert the [] into [[][][]] to render cards in form of Masonry layout
+  function RoundRobinConversion(cols: number) {
+    const result: dashboardFetchDataType[][] = []; // [][] row col wise
+    // put cols according to screen size (cols)
+    for (let i = 0; i < cols; i++) result.push([]); // [[], [], []] if col =3
+    // traverse the cardsData (backend data) and put col wise
+    response?.data.forEach((element, i) => {
+      result[i % cols].push(element);
+    });
+    return result;
+  }
+
+  if (isLoading) return <LoadingPage />;
+  if (response && response?.data.length === 0) {
+    return <div>"NoContentPresentComp" </div>;
+  }
 
   const cardsData = RoundRobinConversion(cols);
 

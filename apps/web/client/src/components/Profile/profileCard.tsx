@@ -32,6 +32,7 @@ import { LoaderIcon } from "@repo/icons";
 import { UserProfileShareInitialUrl } from "@/api/urls";
 import { UpdatePasswordComp } from "./UpdatePasswordComp";
 import { useFetchUserShareHash } from "@/hooks/react-query-hooks/useFetchUserShareHash";
+import { OpenAccountDeletionPopUp } from "./OpenAccountDeletionPopUpComp";
 
 interface ProfileFormData {
   email: string;
@@ -71,7 +72,8 @@ export const UserProfile = ({
   /* custom states */
   const [OpenUpdatePasswordComp, setOpenUpdatePasswordComp] =
     useState<boolean>(false);
-
+  const [openAccountDeletionPopUp, setOpenAccountDeletionPopUp] =
+    useState<boolean>(false);
   /* useFetchUserShare */
   const {
     data: useFetchUserShareHashResponse,
@@ -204,31 +206,6 @@ export const UserProfile = ({
           )}
         </FileUpload>
         <div className="max-h-60 space-y-7 overflow-y-scroll px-4 py-9">
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              placeholder="Enter username"
-              defaultValue={defaultValues.username}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              defaultValue={defaultValues.email}
-            />
-          </div>
-
-          <div className="flex flex-col space-y-2">
-            <Label>Password</Label>
-            <Button onClick={() => setOpenUpdatePasswordComp(true)}>
-              Update Password
-            </Button>
-          </div>
           <div className="flex flex-col space-y-2">
             <div className="flex items-center justify-between">
               <Label>Share Profile</Label>
@@ -246,6 +223,17 @@ export const UserProfile = ({
                 <span>Share profile</span>
               )}
             </Button>
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <Label>Password</Label>
+            <Button onClick={() => setOpenUpdatePasswordComp(true)}>
+              Update Password
+            </Button>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <Label>Delete Account</Label>
+            <OpenAccountDeletionPopUp />
           </div>
         </div>
       </UserProfileCardContent>

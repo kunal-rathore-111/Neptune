@@ -24,8 +24,8 @@ export default function Layout() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/sign-in" element={<Signin />} />
+            <Route path="/sign-up" element={<Signup />} />
             <Route path="/user/dashboard" element={<Dashboard />} />
             <Route
               path="/user/public/shared/profile/:profileHash"

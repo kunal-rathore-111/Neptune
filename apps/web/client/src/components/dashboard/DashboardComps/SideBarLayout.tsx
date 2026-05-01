@@ -37,6 +37,7 @@ import {
 import { signOutService } from "@/services/sign";
 import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
 import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import { useSignOut } from "@/hooks/react-query-hooks/useSignOut";
 
 export function AppSideBar() {
   return (
@@ -156,9 +157,9 @@ function Footer() {
   const navigate = useNavigate();
 
   // to singout on clicking signout button in settings
+  const { mutate: signOutMutation } = useSignOut();
   async function signOutHandler() {
-    const response = await signOutService();
-    HandleResponseUtil(response, "/", navigate);
+    signOutMutation();
   }
 
   return (

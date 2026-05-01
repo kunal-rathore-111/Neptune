@@ -39,6 +39,9 @@ export const ToggleUserProfileShareUrl =
 export const UpdatePasswordUrl =
   BackendInitalRoute + "/user/account/update-user-password";
 
+export const DeleteAccountUrl =
+  BackendInitalRoute + "/user/account/delete-user-account";
+
 // --------Frontend URLs--------
 const FrontendInitalRoute =
   env.VITE_MODE === "dev"

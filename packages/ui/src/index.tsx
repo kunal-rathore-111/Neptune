@@ -11,7 +11,7 @@ export * from './components/dropdown-menu';
 export * from './components/Marquee';
 export * from './components/ScrollToTop';
 export * from './components/sheet';
-
+export * from './components/dialog';
 export * from './components/skeleton';
 export * from './components/switch';
 export * from './components/textarea';
