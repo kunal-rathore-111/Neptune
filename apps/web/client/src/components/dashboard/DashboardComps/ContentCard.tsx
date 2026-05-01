@@ -58,6 +58,8 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
     reactQueryActions,
   });
 
+  const date = cardData.contentTable.updatedDate.toString().slice(0, 10);
+
   return (
     <div className="relative flex h-auto min-h-30 w-78 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90">
       {isDeletePending || isToggleSharePending ? (
@@ -71,7 +73,6 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
             {/* for the header of card */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {/* need to map the categroy with icon  */}
                 <Icon
                   size={14}
                   className="rounded-sm border-2 border-black/50 p-1 dark:border-white/50"
@@ -137,7 +138,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
             className={"mt-4 flex w-full items-center justify-between text-xs"}
           >
             {/* need to change with date */}
-            <div>date</div>
+            <div className="text-xs">{date}</div>
             <div className="flex gap-2">
               {EDUBArray.map((x, idx) => (
                 <Tooltip key={idx}>

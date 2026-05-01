@@ -35,6 +35,7 @@ type cardEDUBType = {
   cardData: dashboardFetchDataType | SharedContentDataType;
   setEditCardState: Dispatch<SetStateAction<boolean>>;
   reactQueryActions: reactQueryActionsType;
+  setSelectedCard?: Dispatch<SetStateAction<dashboardFetchDataType | null>>;
 };
 
 // both types cause using in users dashboard (dashboardFetchDataType) and also in SharedContent LongPageLayout(SharedContentDataType ) and also as longPageOutline(dashboardFetchDataType)
@@ -43,13 +44,17 @@ export function cardEDUB(props: cardEDUBType) {
 
   async function handleIconAction(
     action: actionType,
-    cardData: dashboardFetchDataType,
+    cardData: dashboardFetchDataType | SharedContentDataType,
   ) {
     if (action === "edit") {
       props.setEditCardState(true);
     } else {
       if (action === "delete") {
-        props.reactQueryActions.deleteMutate(props.cardData.contentTable.id);
+        props.reactQueryActions.deleteMutate(props.cardData.contentTable.id, {
+          onSuccess: () => {
+            props.setSelectedCard && props.setSelectedCard(null);
+          },
+        });
       } else if (action === "toggleShare") {
         const data = {
           contentId: cardData.contentTable.id,
@@ -57,7 +62,11 @@ export function cardEDUB(props: cardEDUBType) {
             ? false
             : true, // if shareHash present means revert
         };
-        props.reactQueryActions.toggleShareMutate(data);
+        props.reactQueryActions.toggleShareMutate(data, {
+          onSuccess: () => {
+            props.setSelectedCard && props.setSelectedCard(null);
+          },
+        });
       }
     }
     return;
@@ -78,7 +87,7 @@ export function cardEDUB(props: cardEDUBType) {
       }
       window.open(finalUrl.href, "_blank", "noopener,noreferrer");
     } catch (error) {
-      console.log(link);
+      // console.log(link);
       toast.error("Invalid Url", { position: "top-center" });
     }
   }
@@ -87,22 +96,22 @@ export function cardEDUB(props: cardEDUBType) {
 
   const BrowserIconArray = props.cardData.contentTable?.link
     ? [
-        {
-          Icon: BrowserIcon,
-          className: "text-lime-600 ",
-          label: "Open link",
-          action: () => {
-            if (props.cardData.contentTable.link) {
-              handleLinkOpenner(props.cardData.contentTable.link);
-            } else {
-              //even no need of else (the icon will not show if link not present)
-              toast.error("No link found to open", {
-                position: "top-center",
-              });
-            }
-          },
+      {
+        Icon: BrowserIcon,
+        className: "text-lime-600 ",
+        label: "Open link",
+        action: () => {
+          if (props.cardData.contentTable.link) {
+            handleLinkOpenner(props.cardData.contentTable.link);
+          } else {
+            //even no need of else (the icon will not show if link not present)
+            toast.error("No link found to open", {
+              position: "top-center",
+            });
+          }
         },
-      ]
+      },
+    ]
     : null;
   /* array with icons of delete, edit, update and browser */
   const EDUBArray = [

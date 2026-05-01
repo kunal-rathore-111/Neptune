@@ -42,6 +42,7 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
     cardData: props.selectedCardData,
     reactQueryActions,
     setEditCardState,
+    setSelectedCard: props.setSelectedCard,
   });
 
   return (
@@ -88,9 +89,9 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
                       <span className="text-sm">Shared</span>
                     </div>
                   ) : /* else show a themetoggle button if not user's dashboard */
-                  props.ThemeButton ? (
-                    <props.ThemeButton />
-                  ) : null}
+                    props.ThemeButton ? (
+                      <props.ThemeButton />
+                    ) : null}
                 </div>
 
                 {/* Card content the title and description */}

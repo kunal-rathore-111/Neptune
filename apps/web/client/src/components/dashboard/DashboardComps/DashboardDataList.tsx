@@ -1,6 +1,6 @@
 import { ContentCard } from "./ContentCard";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LongContentCard } from "./LongContentCard";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSidebar } from "@repo/ui";
@@ -33,16 +33,48 @@ export default function DashboardDataList() {
 
   const [selectedCard, setSelectedCard] =
     useState<null | dashboardFetchDataType>(null);
-  let cols = window.innerWidth >= 1000 ? 3 : 2;
   //console.log(cardsData);
+
+  const getCols = (width: number, open: boolean) => {
+    if (open) {
+      // sidebar open, less space
+      if (width >= 1400) return 3;
+      if (width >= 1090) return 2;
+      return 1;
+    } else {
+      if (width >= 1500) return 4;
+      if (width >= 1100) return 3;
+      if (width >= 600) return 2;
+      return 1;
+    }
+  };
+
+  const [cols, setCols] = useState<number>(getCols(window.innerWidth, open));
+
+  useEffect(() => {
+    const handleResizeEvent = () => {
+      console.error(window.innerWidth);
+      const newCols = getCols(window.innerWidth, open);
+      setCols((prev) => (prev === newCols ? prev : newCols)); // it helps to avoid unnecessary renders, cause if width change even one pixel it will render and frontend will lag
+    };
+    handleResizeEvent(); // updates when open changes
+    window.addEventListener("resize", handleResizeEvent); // when window resize call handleResizeEvent
+    return () => {
+      window.removeEventListener("resize", handleResizeEvent);
+    };
+  }, [open]);
+
   const cardsData = RoundRobinConversion(cols);
+
   return (
-    <div className="my-2 flex flex-col gap-10">
+    <div className="my-2 flex flex-col items-center gap-10">
       <div
-        className={cn(
-          "grid gap-4",
-          open ? "grid-cols-1 lg:grid-cols-3" : "grid-cols-2 lg:grid-cols-3",
-        )}
+        className={cn("grid gap-10", {
+          "grid-cols-1": cols === 1,
+          "grid-cols-2": cols === 2,
+          "grid-cols-3": cols === 3,
+          "grid-cols-4": cols === 4,
+        })}
       >
         {/* traverse cols- col1 then col2 then col3 */}
         {cardsData.map((cardDataRows, idx) => {
@@ -54,9 +86,9 @@ export default function DashboardDataList() {
                   <motion.div
                     layoutId={cardData.contentTable.id}
                     className="break-inside-avoid"
+                    key={cardData.contentTable.id}
                   >
                     <ContentCard
-                      key={cardData.contentTable.id}
                       cardData={cardData}
                       setSelectedCard={setSelectedCard}
                     />

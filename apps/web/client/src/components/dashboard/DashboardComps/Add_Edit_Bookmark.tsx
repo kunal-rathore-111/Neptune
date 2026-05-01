@@ -29,10 +29,11 @@ import {
 import { InputValidationFeedback } from "@/components/sign/InputValidationFeedback";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useAdd_EditBookmark } from "@/hooks/react-query-hooks/useAdd_EditBookmark";
+import type { SharedContentDataType } from "@/Types/sharedContent";
 
 interface AddBookMarkCardDTO {
   setOpenAdd_Edit_Card: Dispatch<SetStateAction<boolean>>;
-  presentData?: dashboardFetchDataType;
+  presentData?: dashboardFetchDataType | SharedContentDataType;
 }
 
 export function Add_Edit_BookMarkCard({
@@ -97,9 +98,8 @@ export function Add_Edit_BookMarkCard({
       toast.error(result.error.issues[0].message, { position: "top-right" });
     } else {
       const type = presentData ? "edit" : "add";
-
       /*  service call */
-      await add_edit_MutateFn(
+      add_edit_MutateFn(
         { data, type },
         {
           onSuccess: () => {
@@ -308,7 +308,6 @@ function InputSection({ inputs }: { inputs: inputsType }) {
           <Checkbox
             checked={inputs.share}
             onClick={() => {
-              console.error(inputs.share);
               inputs.setIsShareable(!inputs.share);
             }}
             className="inline-block border-black transition-all duration-200 ease-in dark:border-white"

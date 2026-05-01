@@ -1,12 +1,17 @@
 import { MailIcon, UserIcon } from "lucide-react";
-import { FloatingLabelInput, Textarea, ThemeHomeComp } from "@repo/ui";
-import { useState } from "react";
+import { FloatingLabelInput, Textarea, ThemeHomeComp, toast } from "@repo/ui";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
 export default function ContactForm() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  useEffect(() => {
+    toast.info("This feature is underdevelopment", {
+      position: "top-center",
+    });
+  }, []);
   return (
     <div className="flex max-w-100 flex-col rounded-2xl py-6 text-start shadow-lg shadow-zinc-500/40 dark:border-2">
       <div className="flex flex-col gap-7 px-8 py-3">
@@ -34,7 +39,15 @@ export default function ContactForm() {
           </div>
         </div>
 
-        <form className="space-y-4">
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            toast.info("This feature is underdevelopment", {
+              position: "top-center",
+            });
+          }}
+        >
           {/* name */}
           <div className="space-y-2">
             <FloatingLabelInput

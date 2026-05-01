@@ -13,7 +13,7 @@ export const SignUpUrl = BackendInitalRoute + "/sign-up";
 
 export const SignOutUrl = BackendInitalRoute + "/sign-out";
 
-export const FetchDataUrl = BackendInitalRoute + "/user/content/fetch"; // to fetch user data for dashboard
+export const FetchDataUrl = BackendInitalRoute + "/user/content/fetch";
 
 export const AddBookmarkUrl = BackendInitalRoute + "/user/content/add";
 export const DeleteBookmarkUrl = BackendInitalRoute + "/user/content/delete";

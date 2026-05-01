@@ -1,5 +1,14 @@
 import { Button, FloatingLabelInput } from "@repo/ui";
-import { LockIcon, Mail, X } from "lucide-react";
+import {
+  Eye,
+  EyeClosed,
+  EyeIcon,
+  EyeOffIcon,
+  LockIcon,
+  LockKeyhole,
+  Mail,
+  X,
+} from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { InputValidationFeedback } from "../sign/InputValidationFeedback";
 import { validatePasswordInput } from "@repo/validation";
@@ -13,6 +22,7 @@ type UpdatePasswordInputType = {
 export function UpdatePasswordComp(props: UpdatePasswordInputType) {
   const [email, setEmail] = useState<string>("");
   const [oldPassword, setOldPassword] = useState<string>("");
+  const [showOldPassword, setShowOldPassword] = useState<boolean>(false);
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
 
@@ -77,7 +87,15 @@ export function UpdatePasswordComp(props: UpdatePasswordInputType) {
                 {/*  password inputs */}
                 <FloatingLabelInput
                   id="password"
-                  type={"password"}
+                  type={showOldPassword ? "text" : "password"}
+                  rightIcon={
+                    showOldPassword ? (
+                      <EyeIcon size={18} />
+                    ) : (
+                      <EyeOffIcon size={18} />
+                    )
+                  }
+                  onRightIconClick={() => setShowOldPassword(!showOldPassword)}
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
                   placeholder="Plese enter old Password"
@@ -95,7 +113,7 @@ export function UpdatePasswordComp(props: UpdatePasswordInputType) {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Please enter new Password"
-                  icon={<LockIcon size={18} />}
+                  icon={<LockKeyhole size={18} />}
                 />
                 <InputValidationFeedback
                   input={newPassword}
@@ -108,7 +126,7 @@ export function UpdatePasswordComp(props: UpdatePasswordInputType) {
                   value={confirmNewPassword}
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
                   placeholder="Please confirm new Password"
-                  icon={<LockIcon size={18} />}
+                  icon={<LockKeyhole size={18} />}
                 />
                 <InputValidationFeedback
                   input={confirmNewPassword}

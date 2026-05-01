@@ -14,7 +14,7 @@ export async function fetchDataService(): Promise<FetchDataType> {
       method: "GET",
       withCredentials: true,
     });
-    //console.log(response.data);
+    //console.error(response.data);
     return {
       message: response.data.message,
       data: response.data.data,
