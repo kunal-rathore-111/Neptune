@@ -15,7 +15,7 @@ export type dashboardFetchDataType = {
       | "Research"
       | "Design"
       | "Others";
-    tags: string[] | null;
+    tags?: string[];
     userId: string;
     createdDate: Date;
     updatedDate: Date;

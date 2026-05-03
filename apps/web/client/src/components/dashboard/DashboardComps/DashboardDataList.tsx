@@ -1,15 +1,34 @@
 import { ContentCard } from "./ContentCard";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { LongContentCard } from "./LongContentCard";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSidebar } from "@repo/ui";
 import { cn } from "@repo/libs";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import LoadingPage from "@/Pages/Loading";
+import { useSearchParams } from "react-router";
 
 export default function DashboardDataList() {
   const { data: response, isLoading } = useDashboardFetch(); // already cached via maincontentarea.tsx
+
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
+  const tag = searchParams.get("tag");
+  const shared = searchParams.get("shared");
+
+  let categorizedData = response?.data;
+
+  if (category)
+    categorizedData = response?.data.filter(
+      (x) => x.contentTable.category === category,
+    );
+  else if (tag)
+    categorizedData = response?.data.filter((x) =>
+      x.contentTable.tags?.includes(tag),
+    );
+  else if (shared) {
+    categorizedData = response?.data.filter((x) => x.ContentShareLinkTable);
+  }
 
   const getCols = (width: number, open: boolean) => {
     if (open) {
@@ -24,8 +43,6 @@ export default function DashboardDataList() {
       return 1;
     }
   };
-  const [selectedCard, setSelectedCard] =
-    useState<null | dashboardFetchDataType>(null);
 
   /*  check sidebar is open or not for no. of cols on the dashboard */
   const { open } = useSidebar();
@@ -51,7 +68,7 @@ export default function DashboardDataList() {
     // put cols according to screen size (cols)
     for (let i = 0; i < cols; i++) result.push([]); // [[], [], []] if col =3
     // traverse the cardsData (backend data) and put col wise
-    response?.data.forEach((element, i) => {
+    categorizedData?.forEach((element, i) => {
       result[i % cols].push(element);
     });
     return result;
@@ -86,24 +103,13 @@ export default function DashboardDataList() {
                     className="break-inside-avoid"
                     key={cardData.contentTable.id}
                   >
-                    <ContentCard
-                      cardData={cardData}
-                      setSelectedCard={setSelectedCard}
-                    />
+                    <ContentCard cardData={cardData} />
                   </motion.div>
                 );
               })}
             </div>
           );
         })}
-
-        {/* render the card dashboardData on full screen */}
-        {selectedCard && (
-          <LongContentCard
-            selectedCardData={selectedCard}
-            setSelectedCard={setSelectedCard}
-          />
-        )}
       </div>
     </div>
   );

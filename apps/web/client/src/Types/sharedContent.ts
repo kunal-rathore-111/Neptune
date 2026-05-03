@@ -17,6 +17,8 @@ export type SharedContentDataType = {
       | "Others";
     tags: string[] | null;
     userId: string;
+    createdDate: Date;
+    updatedDate: Date;
   };
   ContentShareLinkTable: {
     id: string;

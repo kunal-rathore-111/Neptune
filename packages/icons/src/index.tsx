@@ -11,7 +11,7 @@ export * from './icons/ExamIcon';
 export * from './icons/Globe';
 export * from './icons/HandHeart';
 export * from './icons/Home';
-
+export * from './icons/Neputne';
 export * from './icons/Keyboard';
 export * from './icons/LeftArrow';
 export * from './icons/Link';

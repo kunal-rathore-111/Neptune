@@ -10,13 +10,17 @@ import {
 } from "@repo/ui";
 import { Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { LoaderIcon } from "@repo/icons";
 import { ErrorComp } from "@/components/ErrorComp";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { setAddBookMarkState } from "@/store/uiSlice";
 export function DashboardMainContentArea() {
   const { isLoading, error, isError } = useDashboardFetch();
+  const { open } = useSidebar();
 
   useEffect(() => {
     if (isError) {
@@ -24,7 +28,6 @@ export function DashboardMainContentArea() {
     }
   }, [error, isError]);
 
-  const { open } = useSidebar();
   return (
     <section className="relative flex min-h-screen w-full flex-col py-10 lg:px-8">
       <SidebarTrigger
@@ -52,7 +55,10 @@ export function DashboardMainContentArea() {
 }
 
 function DashboardSection() {
-  const [addCardState, setOpenAddCard] = useState<boolean>(false);
+  const addBookMarkState = useSelector(
+    (state: RootState) => state.ui.addBookMarkState,
+  );
+  const dispatch = useDispatch();
   return (
     <>
       <div className="w-full space-y-10">
@@ -63,7 +69,7 @@ function DashboardSection() {
             <h1 className="text-2xl font-semibold">All Bookmarks</h1>
             <button
               className={cn(ButtonsClass, "h-fit p-2 text-xs")}
-              onClick={() => setOpenAddCard(!addCardState)}
+              onClick={() => dispatch(setAddBookMarkState(true))}
             >
               Add Bookmark
             </button>
@@ -82,9 +88,7 @@ function DashboardSection() {
       </div>
 
       {/* render the add card on full screen */}
-      {addCardState && (
-        <Add_Edit_BookMarkCard setOpenAdd_Edit_Card={setOpenAddCard} />
-      )}
+      {addBookMarkState && <Add_Edit_BookMarkCard type="add" />}
     </>
   );
 }

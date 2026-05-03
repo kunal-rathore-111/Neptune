@@ -1,14 +1,10 @@
-import { BookTextIcon } from "@repo/icons";
+import { NeptunePlanetIcon } from "@repo/icons";
 import { ThemeToggleButton } from "@repo/ui";
 import { PlusIcon } from "@repo/icons";
 import { useRef, useState } from "react";
 import { animateIconUsingRef, type IconHandle } from "@repo/ui";
 import { Button } from "@repo/ui";
-import { ChevronRightIcon } from "lucide-react";
-import {
-  SideBarMenuData,
-  type SideBarMenuDataTypes,
-} from "@/lib/constants/content/DashboardSample";
+import { ChevronRightIcon, LoaderIcon } from "lucide-react";
 import { SettingsIcon } from "@repo/icons";
 import { useNavigate } from "react-router";
 
@@ -28,16 +24,17 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui";
-import { signOutService } from "@/services/sign";
-import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
-import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
 import { useSignOut } from "@/hooks/react-query-hooks/useSignOut";
+import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
+import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
+import { setAddBookMarkState } from "@/store/uiSlice";
+import { useDispatch } from "react-redux";
 
 export function AppSideBar() {
   return (
@@ -52,17 +49,18 @@ export function AppSideBar() {
 function Header() {
   const navigate = useNavigate();
   const AnimateRef = useRef<IconHandle>(null);
+  const dispatch = useDispatch();
   return (
     <SidebarHeader>
       <div className="flex flex-col gap-7 p-3">
         <div className="flex w-full items-center justify-between">
           <button
-            className="flex cursor-pointer items-center justify-center md:gap-1 lg:gap-2"
+            className="flex cursor-pointer items-center justify-center font-medium md:gap-1 lg:gap-2"
             onClick={() => {
               navigate("/");
             }}
           >
-            <BookTextIcon size={18} className="inline-block" /> Neptune
+            <NeptunePlanetIcon size={20} className="inline-block" /> Neptune
           </button>
           <ThemeToggleButton />
         </div>
@@ -71,7 +69,10 @@ function Header() {
           asChild
           {...animateIconUsingRef(AnimateRef)}
         >
-          <div className="flex gap-1">
+          <div
+            className="flex gap-1"
+            onClick={() => dispatch(setAddBookMarkState(true))}
+          >
             <PlusIcon className="inline-block" size={18} ref={AnimateRef} />
             New Bookmark
           </div>
@@ -86,7 +87,6 @@ function Content() {
     <SidebarContent>
       {/* section for library comps like- all , tags etc */}
       <SidebarGroup>
-        <SidebarGroupLabel>Library</SidebarGroupLabel>
         <SidebarGroupContent>
           <SideBar_Menu />
         </SidebarGroupContent>
@@ -96,56 +96,107 @@ function Content() {
 }
 
 function SideBar_Menu() {
+  // loading and error already handled in dashboard.tsx page
+  const { data: response, isLoading } = useDashboardFetch();
+
+  const uniqueTags = [
+    ...new Set(response?.data.flatMap((x) => x.contentTable.tags)),
+  ];
+  const uniqueCategories = [
+    ...new Set(response?.data.flatMap((x) => x.contentTable.category)),
+  ];
+  const navigate = useNavigate();
+  function handleSidebarClick(type: string, value?: string) {
+    if (type === "home") {
+      navigate("?");
+    } else if (type === "shared") {
+      navigate("?shared=share");
+    } else if (type === "category" && value) {
+      navigate(`?category=${value}`);
+    } else if (type === "tag" && value) {
+      navigate(`?tag=${value}`);
+    }
+  }
+  if (isLoading) return <LoaderIcon />;
   return (
     <SidebarMenu className="">
-      {SideBarMenuData.map((menuData) => {
-        return menuData.CollapsedData ? (
-          <CollapseComp
-            key={menuData.SidebarMenuButtonName}
-            menuData={menuData}
-          />
-        ) : (
-          <SidebarMenuItem key={menuData.SidebarMenuButtonName}>
-            <SidebarMenuButton className="text-xs">
-              <menuData.SidebarMenuButtonIcon className="!h-3 !w-4" />
-              {menuData.SidebarMenuButtonName}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        );
-      })}
-    </SidebarMenu>
-  );
-}
-
-function CollapseComp({ menuData }: { menuData: SideBarMenuDataTypes }) {
-  return (
-    <Collapsible defaultOpen className="group/collapsible">
-      <SidebarMenuItem>
-        <CollapsibleTrigger asChild>
-          {/* re creating the MenuButton to keep things simple (two buttons same work one in the SideBar_Menu and one is this-) */}
-          <SidebarMenuButton className="group flex gap-1 text-xs">
-            <menuData.SidebarMenuButtonIcon className="h-3! w-4! text-red-400" />{" "}
-            {menuData.SidebarMenuButtonName}
-            <ChevronRightIcon className="ml-auto h-3! group-data-[state=open]:rotate-90" />
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="flex flex-col items-start justify-between gap-1 px-9 pl-6">
-          {menuData.CollapsedData?.map((x) => {
-            return (
-              <button
-                className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
-                key={x.CollapsedDataButtonName}
-              >
-                {x.CollapsedDataIcon && (
-                  <x.CollapsedDataIcon className="h-3! w-4!" />
-                )}{" "}
-                {x.CollapsedDataButtonName}
-              </button>
-            );
-          })}
-        </CollapsibleContent>
+      {/* for home*/}
+      <SidebarMenuItem key={"home"}>
+        <SidebarMenuButton
+          className="text-xs"
+          onClick={() => handleSidebarClick("home")}
+        >
+          Home
+        </SidebarMenuButton>
       </SidebarMenuItem>
-    </Collapsible>
+      {/* for categories */}
+      <Collapsible defaultOpen className="group/collapsible">
+        <SidebarMenuItem className="space-y-2">
+          <CollapsibleTrigger asChild>
+            {/* re creating the MenuButton to keep things simple (two buttons same work one in the SideBar_Menu and one is this-) */}
+            <SidebarMenuButton className="group flex gap-1 text-xs">
+              Categories
+              <ChevronRightIcon className="ml-auto h-3! group-data-[state=open]:rotate-90" />
+            </SidebarMenuButton>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="flex flex-col items-start justify-between gap-1 px-9 pl-6">
+            {uniqueCategories.map((category) => {
+              const AnimateRef = useRef<IconHandle>(null);
+              const Icon = MapCategoryWithIcon(category);
+              return (
+                <button
+                  onClick={() => handleSidebarClick("category", category)}
+                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
+                  key={category}
+                  {...animateIconUsingRef(AnimateRef)}
+                >
+                  <span className="flex gap-2">
+                    <Icon ref={AnimateRef} className="inline-block" size={16} />{" "}
+                    {category}
+                  </span>
+                </button>
+              );
+            })}
+          </CollapsibleContent>
+        </SidebarMenuItem>
+      </Collapsible>
+
+      {/* for tags */}
+      <Collapsible defaultOpen className="group/collapsible">
+        <SidebarMenuItem>
+          <CollapsibleTrigger asChild>
+            {/* re creating the MenuButton to keep things simple (two buttons same work one in the SideBar_Menu and one is this-) */}
+            <SidebarMenuButton className="group flex gap-1 text-xs">
+              Tags
+              <ChevronRightIcon className="ml-auto h-3! group-data-[state=open]:rotate-90" />
+            </SidebarMenuButton>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="flex flex-col items-start justify-between gap-1 px-9 pl-6">
+            {uniqueTags.map((tag) => {
+              return (
+                <button
+                  onClick={() => handleSidebarClick("tag", tag)}
+                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
+                  key={tag}
+                >
+                  #{tag}
+                </button>
+              );
+            })}
+          </CollapsibleContent>
+        </SidebarMenuItem>
+      </Collapsible>
+
+      {/* for shared*/}
+      <SidebarMenuItem key={"shared"}>
+        <SidebarMenuButton
+          className="text-xs"
+          onClick={() => handleSidebarClick("shared")}
+        >
+          Shared
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 }
 
@@ -171,6 +222,7 @@ function Footer() {
             <SidebarMenuButton className="text-xs">
               <Avatar className="mr-1 inline-block h-6 w-6 transition-all duration-200 hover:scale-110">
                 <AvatarImage
+                  //need to update with userProfile
                   src={
                     "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar8.jpg"
                   }

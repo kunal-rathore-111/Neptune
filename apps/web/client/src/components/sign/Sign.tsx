@@ -20,6 +20,8 @@ import {
 } from "@repo/validation";
 import { useSign } from "@/hooks/react-query-hooks/useSign";
 import { PasswordRules, UsernameRules } from "@/lib/constants/content/rules";
+import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import LoadingPage from "@/Pages/Loading";
 
 export type AuthMode = "signin" | "signup";
 
@@ -48,6 +50,10 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   if (mode !== "signin" && mode !== "signup") {
     return <div>Invalid mode</div>;
   }
+
+  const navigate = useNavigate();
+  const { data: response, isLoading } = useFetchUserProfile();
+
   const content = authContent[mode];
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -96,6 +102,14 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
       // reset form
     }
   }
+
+  /* if userAlready logged in redirect to the dashboardPage */
+  useEffect(() => {
+    if (response && response?.type === "success") navigate("/user/dashboard");
+  }, [response]);
+  if (isLoading) return <LoadingPage />;
+  //hide the sign ui when the page is redirecting to dashboard
+  if (response?.type === "success") return <LoadingPage />;
 
   return (
     <>

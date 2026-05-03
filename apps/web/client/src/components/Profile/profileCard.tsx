@@ -19,11 +19,9 @@ import {
   UserProfileCard,
   UserProfileCardContent,
   UserProfileCardDescription,
-  UserProfileCardFooter,
   UserProfileCardHeader,
   UserProfileCardTitle,
 } from "@repo/ui";
-import { Input } from "@repo/ui";
 import { Label } from "@repo/ui";
 import { cn } from "@repo/libs";
 import { BackToDashboardButton } from "./BackToDashboardButton";
@@ -71,8 +69,6 @@ export const UserProfile = ({
 
   /* custom states */
   const [OpenUpdatePasswordComp, setOpenUpdatePasswordComp] =
-    useState<boolean>(false);
-  const [openAccountDeletionPopUp, setOpenAccountDeletionPopUp] =
     useState<boolean>(false);
   /* useFetchUserShare */
   const {

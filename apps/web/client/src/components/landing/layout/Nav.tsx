@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router";
-import { GithubIcon } from "@repo/icons";
-import { BookTextIcon } from "@repo/icons";
+import { GithubIcon, NeptunePlanetIcon } from "@repo/icons";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { GithubRepo } from "@/lib/utils/SocialLinks_PolicyDate";
@@ -41,7 +40,7 @@ export const Nav = () => {
           >
             <div className="flex items-center gap-1">
               <div className="flex size-6 items-center justify-center rounded-[7px]">
-                <BookTextIcon
+                <NeptunePlanetIcon
                   size={23}
                   className="text-zinc-900 dark:text-zinc-100"
                 />

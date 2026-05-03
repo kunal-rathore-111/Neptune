@@ -1,9 +1,7 @@
-import { HandleResponseUtil } from "@/lib/utils/handleResponseUtil";
-import { deleteBookMarkService } from "@/services/deleteData";
-import {
-  toggleShareService,
-  type toggleShareServiceInputType,
-} from "@/services/toggleShare";
+import { useDeleteBookmark } from "@/hooks/react-query-hooks/useDeleteBookmark";
+import { useToggleShare } from "@/hooks/react-query-hooks/useToggleShare";
+import type { RootState } from "@/store";
+import { setEditCardState, setLongSelectedCard } from "@/store/uiSlice";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import type { SharedContentDataType } from "@/Types/sharedContent";
 
@@ -15,44 +13,39 @@ import {
   ShareOffIcon,
 } from "@repo/icons";
 import { toast } from "@repo/ui";
-import type { UseMutateFunction } from "@tanstack/react-query";
-import type { Dispatch, SetStateAction } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 type actionType = "delete" | "edit" | "toggleShare";
 
-type reactQueryActionsType = {
-  deleteMutate: UseMutateFunction<string, any, string, unknown>;
-  isDeletePending: boolean;
-  toggleShareMutate: UseMutateFunction<
-    string,
-    any,
-    toggleShareServiceInputType,
-    unknown
-  >;
-  isToggleSharePending: boolean;
-};
 type cardEDUBType = {
   cardData: dashboardFetchDataType | SharedContentDataType;
-  setEditCardState: Dispatch<SetStateAction<boolean>>;
-  reactQueryActions: reactQueryActionsType;
-  setSelectedCard?: Dispatch<SetStateAction<dashboardFetchDataType | null>>;
+  type: "edit" | "add" | "sharedContent";
 };
 
 // both types cause using in users dashboard (dashboardFetchDataType) and also in SharedContent LongPageLayout(SharedContentDataType ) and also as longPageOutline(dashboardFetchDataType)
-export function cardEDUB(props: cardEDUBType) {
+export function useCardEDUB(props: cardEDUBType) {
   // handler for icon clicks like delete edit sharetoggle
+
+  const { mutate: deleteMutate, isPending: isDeletePending } =
+    useDeleteBookmark();
+  const { mutate: toggleShareMutate, isPending: isToggleSharePending } =
+    useToggleShare();
+  const longSelectedCardState = useSelector(
+    (state: RootState) => state.ui.longSelectedCard,
+  );
+  const dispatch = useDispatch();
 
   async function handleIconAction(
     action: actionType,
     cardData: dashboardFetchDataType | SharedContentDataType,
   ) {
     if (action === "edit") {
-      props.setEditCardState(true);
+      dispatch(setEditCardState(cardData));
     } else {
       if (action === "delete") {
-        props.reactQueryActions.deleteMutate(props.cardData.contentTable.id, {
+        deleteMutate(props.cardData.contentTable.id, {
           onSuccess: () => {
-            props.setSelectedCard && props.setSelectedCard(null);
+            longSelectedCardState && dispatch(setLongSelectedCard(null));
           },
         });
       } else if (action === "toggleShare") {
@@ -62,9 +55,9 @@ export function cardEDUB(props: cardEDUBType) {
             ? false
             : true, // if shareHash present means revert
         };
-        props.reactQueryActions.toggleShareMutate(data, {
+        toggleShareMutate(data, {
           onSuccess: () => {
-            props.setSelectedCard && props.setSelectedCard(null);
+            setLongSelectedCard && dispatch(setLongSelectedCard(null));
           },
         });
       }
@@ -96,22 +89,22 @@ export function cardEDUB(props: cardEDUBType) {
 
   const BrowserIconArray = props.cardData.contentTable?.link
     ? [
-      {
-        Icon: BrowserIcon,
-        className: "text-lime-600 ",
-        label: "Open link",
-        action: () => {
-          if (props.cardData.contentTable.link) {
-            handleLinkOpenner(props.cardData.contentTable.link);
-          } else {
-            //even no need of else (the icon will not show if link not present)
-            toast.error("No link found to open", {
-              position: "top-center",
-            });
-          }
+        {
+          Icon: BrowserIcon,
+          className: "text-lime-600 ",
+          label: "Open link",
+          action: () => {
+            if (props.cardData.contentTable.link) {
+              handleLinkOpenner(props.cardData.contentTable.link);
+            } else {
+              //even no need of else (the icon will not show if link not present)
+              toast.error("No link found to open", {
+                position: "top-center",
+              });
+            }
+          },
         },
-      },
-    ]
+      ]
     : null;
   /* array with icons of delete, edit, update and browser */
   const EDUBArray = [
@@ -145,5 +138,5 @@ export function cardEDUB(props: cardEDUBType) {
     ...(BrowserIconArray ?? []),
   ];
 
-  return { BrowserIconArray, EDUBArray };
+  return { BrowserIconArray, EDUBArray, isDeletePending, isToggleSharePending };
 }

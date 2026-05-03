@@ -27,19 +27,16 @@ import {
   validateTitleInput,
 } from "@repo/validation";
 import { InputValidationFeedback } from "@/components/sign/InputValidationFeedback";
-import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useAdd_EditBookmark } from "@/hooks/react-query-hooks/useAdd_EditBookmark";
-import type { SharedContentDataType } from "@/Types/sharedContent";
+import { useDispatch, useSelector } from "react-redux";
+import { setAddBookMarkState, setEditCardState } from "@/store/uiSlice";
+import type { RootState } from "@/store";
 
 interface AddBookMarkCardDTO {
-  setOpenAdd_Edit_Card: Dispatch<SetStateAction<boolean>>;
-  presentData?: dashboardFetchDataType | SharedContentDataType;
+  type: "add" | "edit";
 }
 
-export function Add_Edit_BookMarkCard({
-  setOpenAdd_Edit_Card,
-  presentData,
-}: AddBookMarkCardDTO) {
+export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
   const [description, setDescription] = useState<string>("");
   const [link, setLink] = useState<string>("");
   const [title, setTitle] = useState<string>("");
@@ -47,19 +44,22 @@ export function Add_Edit_BookMarkCard({
   const [share, setIsShareable] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("Others");
 
+  const editCardState = useSelector(
+    (state: RootState) => state.ui.editCardState,
+  );
   useEffect(() => {
-    if (presentData) {
-      setDescription(presentData.contentTable.description || "");
-      setLink(presentData.contentTable.link || "");
-      setTitle(presentData.contentTable.title);
-      setTags(presentData.contentTable.tags || []);
+    if (props.type === "edit" && editCardState) {
+      setDescription(editCardState.contentTable.description || "");
+      setLink(editCardState.contentTable.link || "");
+      setTitle(editCardState.contentTable.title);
+      setTags(editCardState.contentTable.tags || []);
       setIsShareable(
-        presentData.ContentShareLinkTable?.contentSharehash ? true : false,
+        editCardState.ContentShareLinkTable?.contentSharehash ? true : false,
       );
-      setCategory(presentData.contentTable.category || "Others");
+      setCategory(editCardState.contentTable.category || "Others");
     }
     // eslint-disable-next-line
-  }, [presentData]);
+  }, []);
 
   const inputs = {
     description,
@@ -76,8 +76,11 @@ export function Add_Edit_BookMarkCard({
     setCategory,
   };
 
+  const dispatch = useDispatch();
+
   const { mutate: add_edit_MutateFn, isPending: add_edit_isPending } =
     useAdd_EditBookmark();
+
   async function handleAdd_Edit_BookMarkFormSubmit(e: FormEvent) {
     e.preventDefault();
 
@@ -85,25 +88,26 @@ export function Add_Edit_BookMarkCard({
       description,
       link,
       title,
-      tags,
+      tags: [...new Set(tags.map((tag) => tag.trim().toLowerCase()))],
       share,
       category,
     };
-    if (presentData) {
-      data = { ...data, id: presentData.contentTable.id };
+    if (props.type === "edit" && editCardState) {
+      data = { ...data, id: editCardState.contentTable.id };
     }
     // full data validation-  description, link, title, tags, share, category
     const result = contentZodSchema.safeParse(data);
     if (!result.success) {
       toast.error(result.error.issues[0].message, { position: "top-right" });
     } else {
-      const type = presentData ? "edit" : "add";
+      const type = props.type === "edit" ? "edit" : "add";
       /*  service call */
       add_edit_MutateFn(
         { data, type },
         {
           onSuccess: () => {
-            setOpenAdd_Edit_Card(false);
+            if (props.type === "add") dispatch(setAddBookMarkState(false));
+            else if (props.type === "edit") dispatch(setEditCardState(null));
           },
         },
       );
@@ -126,7 +130,10 @@ export function Add_Edit_BookMarkCard({
             {
               <XIcon
                 onClick={() => {
-                  setOpenAdd_Edit_Card(false);
+                  if (props.type === "add")
+                    dispatch(setAddBookMarkState(false));
+                  else if (props.type === "edit")
+                    dispatch(setEditCardState(null));
                 }}
                 className="text-zinc-800"
                 size={18}

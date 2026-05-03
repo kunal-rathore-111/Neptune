@@ -1,15 +1,14 @@
-import { useEffect, type Dispatch, type SetStateAction } from "react";
-import type { dashboardFetchDataType } from "@/Types/dashboard";
+import { useEffect } from "react";
 import { LongCardOutlineComp } from "@/components/sharedContent/LongCardOutline";
 import { XIcon } from "@repo/icons";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
-export function LongContentCard({
-  selectedCardData,
-  setSelectedCard,
-}: {
-  selectedCardData: dashboardFetchDataType;
-  setSelectedCard: Dispatch<SetStateAction<dashboardFetchDataType | null>>;
-}) {
+export function LongContentCard({}) {
+  const selectedCardData = useSelector(
+    (state: RootState) => state.ui.longSelectedCard,
+  );
+
   /* effect to toggle the scroll of main page on card open and close */
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -19,10 +18,10 @@ export function LongContentCard({
   }, []);
 
   return (
-    <LongCardOutlineComp
-      selectedCardData={selectedCardData}
-      Icon={XIcon}
-      setSelectedCard={setSelectedCard}
-    />
+    <>
+      {selectedCardData && (
+        <LongCardOutlineComp selectedCardData={selectedCardData} Icon={XIcon} />
+      )}
+    </>
   );
 }

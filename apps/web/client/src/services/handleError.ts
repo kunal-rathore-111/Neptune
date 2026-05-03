@@ -1,4 +1,3 @@
-import { toast } from "@repo/ui";
 import { isAxiosError } from "axios";
 
 export type ServiceResponse =

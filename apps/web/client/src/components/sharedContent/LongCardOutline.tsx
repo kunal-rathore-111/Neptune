@@ -3,18 +3,17 @@ import Tags from "@/lib/utils/Tags";
 
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { LoaderIcon, type XIcon } from "@repo/icons";
-import { ThemeToggleButton } from "@repo/ui";
+import { HomeButton, ThemeToggleButton } from "@repo/ui";
 import { LinkIcon } from "lucide-react";
 import type { SharedContentDataType } from "@/Types/sharedContent";
-import { useState, type Dispatch, type SetStateAction } from "react";
-import { cardEDUB } from "@/lib/constants/content/cardEDUB.Array";
+import { useCardEDUB } from "@/hooks/useCardEDUB.Array";
 import { Add_Edit_BookMarkCard } from "../dashboard/DashboardComps/Add_Edit_Bookmark";
-import { useDeleteBookmark } from "@/hooks/react-query-hooks/useDeleteBookmark";
-import { useToggleShare } from "@/hooks/react-query-hooks/useToggleShare";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { setLongSelectedCard } from "@/store/uiSlice";
 
 type LongCardOutlineCompType = {
   Icon?: typeof XIcon;
-  setSelectedCard?: Dispatch<SetStateAction<dashboardFetchDataType | null>>;
   ThemeButton?: typeof ThemeToggleButton;
   selectedCardData: dashboardFetchDataType | SharedContentDataType;
 };
@@ -24,30 +23,25 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
     props.selectedCardData.contentTable.category,
   );
 
-  const { mutate: deleteMutate, isPending: isDeletePending } =
-    useDeleteBookmark();
-  const { mutate: toggleShareMutate, isPending: isToggleSharePending } =
-    useToggleShare();
-  const reactQueryActions = {
-    // to pass them to edubarray
-    deleteMutate,
-    isDeletePending,
-    toggleShareMutate,
-    isToggleSharePending,
-  };
+  /* redux hook */
+  const editCardState = useSelector(
+    (state: RootState) => state.ui?.editCardState,
+  );
+  const dispatch = useDispatch();
 
-  const [editCardState, setEditCardState] = useState<boolean>(false);
+  const { BrowserIconArray, EDUBArray, isDeletePending, isToggleSharePending } =
+    useCardEDUB({
+      cardData: props.selectedCardData,
+      type: "sharedContent",
+    });
 
-  const { BrowserIconArray, EDUBArray } = cardEDUB({
-    cardData: props.selectedCardData,
-    reactQueryActions,
-    setEditCardState,
-    setSelectedCard: props.setSelectedCard,
-  });
+  const date = props.selectedCardData.contentTable.updatedDate
+    .toString()
+    .slice(0, 10);
 
   return (
-    <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">
-      <div className="relative flex h-fit max-h-[90vh] min-h-50 max-w-200 min-w-90 flex-col rounded-xl border bg-zinc-100 p-7 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90">
+    <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/5 backdrop-blur-[3px]">
+      <div className="relative flex h-fit max-h-[90vh] min-h-50 max-w-200 min-w-90 flex-col rounded-xl border bg-zinc-100 p-7 text-start text-xs shadow-sm shadow-zinc-900 dark:border dark:bg-[#100A10] dark:shadow-zinc-600/90">
         {isDeletePending || isToggleSharePending ? (
           <div className="flex h-full min-h-50 w-full items-center justify-center">
             <LoaderIcon />
@@ -55,10 +49,10 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
         ) : (
           <div>
             {props.Icon ? (
-              <span className="absolute -top-2 -right-2 z-10 rounded-full border-2 bg-zinc-300 p-0.5">
+              <span className="absolute -top-2 -right-2 z-10 rounded-full border bg-zinc-300 p-0.5">
                 <props.Icon
                   onClick={() => {
-                    props.setSelectedCard && props.setSelectedCard(null);
+                    dispatch(setLongSelectedCard(null));
                   }}
                   className="text-zinc-900"
                   size={18}
@@ -89,9 +83,12 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
                       <span className="text-sm">Shared</span>
                     </div>
                   ) : /* else show a themetoggle button if not user's dashboard */
-                    props.ThemeButton ? (
+                  props.ThemeButton ? (
+                    <div className="flex gap-2">
+                      <HomeButton />
                       <props.ThemeButton />
-                    ) : null}
+                    </div>
+                  ) : null}
                 </div>
 
                 {/* Card content the title and description */}
@@ -129,15 +126,19 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
                 className={"flex w-full items-center justify-between text-sm"}
               >
                 {/* need to change to date */}
-                <div>Date: </div>
+                <div>{date} </div>
 
                 {/*  show the icons of edit update and delete only when the card is loaded in users dashboard not when the card was as the sharedCart (which can be identified by themeButton) */}
                 {props.ThemeButton ? (
                   <div>
+                    {/* need to add link here */}
                     {BrowserIconArray?.map((x) => (
-                      <button className="cursor-pointer rounded px-1 py-0.5 underline">
+                      <a
+                        href={x.label}
+                        className="cursor-pointer rounded px-1 py-0.5 underline"
+                      >
                         Link
-                      </button>
+                      </a>
                     ))}
                   </div>
                 ) : (
@@ -151,13 +152,9 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
                 )}
               </div>
             </div>
+
             {/* render the edit card for the relevant card */}
-            {editCardState && (
-              <Add_Edit_BookMarkCard
-                setOpenAdd_Edit_Card={setEditCardState}
-                presentData={props.selectedCardData}
-              />
-            )}
+            {editCardState && <Add_Edit_BookMarkCard type="edit" />}
           </div>
         )}
       </div>

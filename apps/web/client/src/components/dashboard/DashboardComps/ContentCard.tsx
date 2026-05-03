@@ -1,36 +1,28 @@
 import { CheckIcon, LoaderIcon } from "@repo/icons";
 import Tags from "@/lib/utils/Tags";
 import { LinkIcon } from "lucide-react";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState } from "react";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { toast, Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui";
 import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
 import { Add_Edit_BookMarkCard } from "./Add_Edit_Bookmark";
 import { ContentShareUrl } from "@/api/urls";
-import { cardEDUB } from "@/lib/constants/content/cardEDUB.Array";
-import { useDeleteBookmark } from "@/hooks/react-query-hooks/useDeleteBookmark";
-import { useToggleShare } from "@/hooks/react-query-hooks/useToggleShare";
+import { useCardEDUB } from "@/hooks/useCardEDUB.Array";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { setLongSelectedCard } from "@/store/uiSlice";
+import { LongContentCard } from "./LongContentCard";
 
 type ContentCardType = {
   cardData: dashboardFetchDataType;
-  setSelectedCard: Dispatch<SetStateAction<dashboardFetchDataType | null>>;
 };
-export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
+
+export function ContentCard({ cardData }: ContentCardType) {
   const Icon = MapCategoryWithIcon(cardData.contentTable.category);
-
-  const { mutate: deleteMutate, isPending: isDeletePending } =
-    useDeleteBookmark();
-  const { mutate: toggleShareMutate, isPending: isToggleSharePending } =
-    useToggleShare();
-  const reactQueryActions = {
-    // to pass them to edubarray
-    deleteMutate,
-    isDeletePending,
-    toggleShareMutate,
-    isToggleSharePending,
-  };
-
-  const [editCardState, setEditCardState] = useState<boolean>(false);
+  const editCardState = useSelector(
+    (state: RootState) => state.ui.editCardState,
+  );
+  const dispatch = useDispatch();
 
   const [copyIconState, setCopyIconState] = useState<boolean>(false);
   // handler to copy the card's shared url
@@ -51,11 +43,13 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
       });
     }
   }
-
-  const { EDUBArray } = cardEDUB({
-    setEditCardState,
+  const selectedCard = useSelector(
+    (state: RootState) => state.ui.longSelectedCard,
+  );
+  /* custom hook for handling the CRUD operation on each card */
+  const { EDUBArray, isDeletePending, isToggleSharePending } = useCardEDUB({
+    type: "edit",
     cardData,
-    reactQueryActions,
   });
 
   const date = cardData.contentTable.updatedDate.toString().slice(0, 10);
@@ -101,7 +95,7 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
             {/* Card content the title and description */}
             <div
               className="mt-2 flex flex-col gap-2"
-              onClick={() => setSelectedCard(cardData)}
+              onClick={() => dispatch(setLongSelectedCard(cardData))}
             >
               <div>
                 <div className="max-w-sm text-xs font-semibold">
@@ -152,13 +146,12 @@ export function ContentCard({ cardData, setSelectedCard }: ContentCardType) {
               ))}
             </div>
           </div>
+
           {/* render the edit card for the relevant card */}
-          {editCardState && (
-            <Add_Edit_BookMarkCard
-              setOpenAdd_Edit_Card={setEditCardState}
-              presentData={cardData}
-            />
-          )}
+          {editCardState && <Add_Edit_BookMarkCard type="edit" />}
+
+          {/* render the card dashboardData on full screen */}
+          {selectedCard && <LongContentCard />}
         </div>
       )}
     </div>

@@ -1,7 +1,5 @@
 import { Button, FloatingLabelInput, toast } from "@repo/ui";
 import {
-  Eye,
-  EyeClosed,
   EyeIcon,
   EyeOffIcon,
   LockIcon,
