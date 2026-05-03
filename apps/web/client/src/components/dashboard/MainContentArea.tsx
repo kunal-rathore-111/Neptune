@@ -12,6 +12,7 @@ import { Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
 import { useEffect } from "react";
 import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
+import { LongContentCard } from "./DashboardComps/LongContentCard";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { LoaderIcon } from "@repo/icons";
 import { ErrorComp } from "@/components/ErrorComp";
@@ -58,6 +59,12 @@ function DashboardSection() {
   const addBookMarkState = useSelector(
     (state: RootState) => state.ui.addBookMarkState,
   );
+  const editCardState = useSelector(
+    (state: RootState) => state.ui.editCardState,
+  );
+  const selectedCard = useSelector(
+    (state: RootState) => state.ui.longSelectedCard,
+  );
   const dispatch = useDispatch();
   return (
     <>
@@ -89,6 +96,12 @@ function DashboardSection() {
 
       {/* render the add card on full screen */}
       {addBookMarkState && <Add_Edit_BookMarkCard type="add" />}
+
+      {/* render the edit card for the relevant card */}
+      {editCardState && <Add_Edit_BookMarkCard type="edit" />}
+
+      {/* render the card dashboardData on full screen */}
+      {selectedCard && <LongContentCard />}
     </>
   );
 }

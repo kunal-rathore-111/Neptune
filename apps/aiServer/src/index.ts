@@ -1,12 +1,11 @@
 import { Hono } from 'hono';
 
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import { secureHeaders } from 'hono/secure-headers';
 import { magicRoute } from './routes/magic-fill';
 
 const app = new Hono(); // same as express just faster
 
-dotenv.config();
 app.use('*', secureHeaders()); //same as helmet in express
 
 app.route('/magic-fill', magicRoute);

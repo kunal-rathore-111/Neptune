@@ -1,12 +1,18 @@
 import { useNavigate } from "react-router";
 import { GithubIcon, NeptunePlanetIcon } from "@repo/icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { GithubRepo } from "@/lib/utils/SocialLinks_PolicyDate";
-import { Button, ThemeToggleButton } from "@repo/ui";
+import {
+  animateIconUsingRef,
+  Button,
+  type IconHandle,
+  ThemeToggleButton,
+} from "@repo/ui";
 
 export const Nav = () => {
   const navigate = useNavigate();
+  const animateRef = useRef<IconHandle>(null);
   const [hovered, setHovered] = useState<number | null>(null);
 
   const NavFunctionalComps = [
@@ -38,9 +44,13 @@ export const Nav = () => {
               window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
             }
           >
-            <div className="flex items-center gap-1">
+            <div
+              className="flex items-center gap-1"
+              {...animateIconUsingRef(animateRef)}
+            >
               <div className="flex size-6 items-center justify-center rounded-[7px]">
                 <NeptunePlanetIcon
+                  ref={animateRef}
                   size={23}
                   className="text-zinc-900 dark:text-zinc-100"
                 />

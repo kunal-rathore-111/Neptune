@@ -42,6 +42,8 @@ export const UpdatePasswordUrl =
 export const DeleteAccountUrl =
   BackendInitalRoute + "/user/account/delete-user-account";
 
+export const MagicFillUrl = BackendInitalRoute + "/ai/magic-fill";
+
 // --------Frontend URLs--------
 const FrontendInitalRoute =
   env.VITE_MODE === "dev"

@@ -48,6 +48,7 @@ export function AppSideBar() {
 
 function Header() {
   const navigate = useNavigate();
+  const AnimateRefNeptuenIcon = useRef<IconHandle>(null);
   const AnimateRef = useRef<IconHandle>(null);
   const dispatch = useDispatch();
   return (
@@ -55,12 +56,18 @@ function Header() {
       <div className="flex flex-col gap-7 p-3">
         <div className="flex w-full items-center justify-between">
           <button
+            {...animateIconUsingRef(AnimateRefNeptuenIcon)}
             className="flex cursor-pointer items-center justify-center font-medium md:gap-1 lg:gap-2"
             onClick={() => {
               navigate("/");
             }}
           >
-            <NeptunePlanetIcon size={20} className="inline-block" /> Neptune
+            <NeptunePlanetIcon
+              ref={AnimateRefNeptuenIcon}
+              size={20}
+              className="inline-block"
+            />{" "}
+            Neptune
           </button>
           <ThemeToggleButton />
         </div>

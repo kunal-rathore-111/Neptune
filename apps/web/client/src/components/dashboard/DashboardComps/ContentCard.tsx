@@ -5,13 +5,10 @@ import { useState } from "react";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { toast, Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui";
 import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
-import { Add_Edit_BookMarkCard } from "./Add_Edit_Bookmark";
 import { ContentShareUrl } from "@/api/urls";
 import { useCardEDUB } from "@/hooks/useCardEDUB.Array";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/store";
+import { useDispatch } from "react-redux";
 import { setLongSelectedCard } from "@/store/uiSlice";
-import { LongContentCard } from "./LongContentCard";
 
 type ContentCardType = {
   cardData: dashboardFetchDataType;
@@ -19,9 +16,7 @@ type ContentCardType = {
 
 export function ContentCard({ cardData }: ContentCardType) {
   const Icon = MapCategoryWithIcon(cardData.contentTable.category);
-  const editCardState = useSelector(
-    (state: RootState) => state.ui.editCardState,
-  );
+
   const dispatch = useDispatch();
 
   const [copyIconState, setCopyIconState] = useState<boolean>(false);
@@ -43,9 +38,7 @@ export function ContentCard({ cardData }: ContentCardType) {
       });
     }
   }
-  const selectedCard = useSelector(
-    (state: RootState) => state.ui.longSelectedCard,
-  );
+
   /* custom hook for handling the CRUD operation on each card */
   const { EDUBArray, isDeletePending, isToggleSharePending } = useCardEDUB({
     type: "edit",
@@ -147,11 +140,7 @@ export function ContentCard({ cardData }: ContentCardType) {
             </div>
           </div>
 
-          {/* render the edit card for the relevant card */}
-          {editCardState && <Add_Edit_BookMarkCard type="edit" />}
 
-          {/* render the card dashboardData on full screen */}
-          {selectedCard && <LongContentCard />}
         </div>
       )}
     </div>
