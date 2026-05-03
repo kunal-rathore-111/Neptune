@@ -23,10 +23,5 @@
     "apps/*/*",
     "packages/*"
   ],
-  "dependencies": {
-    "@reduxjs/toolkit": "^2.11.2",
-    "axios": "^1.15.0",
-    "react-redux": "^9.2.0",
-    "s": "./apps/web/client"
-  }
+  "dependencies": {}
 }
