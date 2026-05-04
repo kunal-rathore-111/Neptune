@@ -8,8 +8,6 @@ const app = new Hono(); // same as express just faster
 
 app.use('*', secureHeaders()); //same as helmet in express
 
-app.route('/magic-fill', magicRoute);
-
 app.get('/', (c) => {
   return c.json(
     {
@@ -18,6 +16,8 @@ app.get('/', (c) => {
     200,
   );
 });
+
+app.route('/magic-fill', magicRoute);
 
 // bun modern way to run server as hono don't provide app.listen()
 export default {

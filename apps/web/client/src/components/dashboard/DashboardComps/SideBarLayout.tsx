@@ -102,6 +102,8 @@ function Content() {
   );
 }
 
+
+
 function SideBar_Menu() {
   // loading and error already handled in dashboard.tsx page
   const { data: response, isLoading } = useDashboardFetch();
@@ -124,6 +126,28 @@ function SideBar_Menu() {
       navigate(`?tag=${value}`);
     }
   }
+
+
+
+  function MapCategoryWithIconComp({ category }: { category: typeof uniqueCategories[0] }) {
+
+    const AnimateRef = useRef<IconHandle>(null);
+    const Icon = MapCategoryWithIcon(category);
+    return (
+      <button
+        onClick={() => handleSidebarClick("category", category)}
+        className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
+        key={category}
+        {...animateIconUsingRef(AnimateRef)}
+      >
+        <span className="flex gap-2">
+          <Icon ref={AnimateRef} className="inline-block" size={16} />{" "}
+          {category}
+        </span>
+      </button>
+    );
+  }
+
   if (isLoading) return <LoaderIcon />;
   return (
     <SidebarMenu className="">
@@ -148,21 +172,7 @@ function SideBar_Menu() {
           </CollapsibleTrigger>
           <CollapsibleContent className="flex flex-col items-start justify-between gap-1 px-9 pl-6">
             {uniqueCategories.map((category) => {
-              const AnimateRef = useRef<IconHandle>(null);
-              const Icon = MapCategoryWithIcon(category);
-              return (
-                <button
-                  onClick={() => handleSidebarClick("category", category)}
-                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
-                  key={category}
-                  {...animateIconUsingRef(AnimateRef)}
-                >
-                  <span className="flex gap-2">
-                    <Icon ref={AnimateRef} className="inline-block" size={16} />{" "}
-                    {category}
-                  </span>
-                </button>
-              );
+              return <div key={category}><MapCategoryWithIconComp category={category} /></div>
             })}
           </CollapsibleContent>
         </SidebarMenuItem>
@@ -183,7 +193,7 @@ function SideBar_Menu() {
               return (
                 <button
                   onClick={() => handleSidebarClick("tag", tag)}
-                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
+                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 text-start font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
                   key={tag}
                 >
                   #{tag}

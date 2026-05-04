@@ -13,7 +13,7 @@ export function useMagicFill() {
       {
         throw new Error(response.message);
       }
-      console.error(response);
+      //  console.error(response);
       return response;
     },
     onError: (error: any) => {

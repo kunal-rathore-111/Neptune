@@ -99,7 +99,7 @@ export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
             inputs.setDescription(data.description);
             inputs.setTags(data.tags);
           }
-        }
+        },
       });
     }
   }
@@ -259,7 +259,7 @@ function InputSection({ inputs }: { inputs: inputsType }) {
   const [linkValidation, setLinkValidation] = useState<any>();
   const [titleValidation, setTitleValidation] = useState<any>();
 
-  useEffect(() => { }, [inputs.share]);
+  useEffect(() => {}, [inputs.share]);
 
   useEffect(() => {
     setLinkValidation(validateLinkInput(inputs.link));
@@ -339,12 +339,17 @@ function InputSection({ inputs }: { inputs: inputsType }) {
             Category
           </label>
           <select
+            value={inputs.category}
             name="category"
             id="category"
             onChange={handleCategorySelection}
           >
             {filteredCategoryArray.map((category) => {
-              return <option value={category}>{category}</option>;
+              return (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              );
             })}
           </select>
         </div>
