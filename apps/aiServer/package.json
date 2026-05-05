@@ -13,13 +13,15 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@langchain/google-genai": "^2.1.30",
     "@langchain/groq": "^1.2.0",
+    "@repo/libs": "*",
+    "cheerio": "^1.2.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "hono": "^4.12.16",
     "langchain": "^1.3.5",
     "nodemon": "^3.1.14",
-    "zod": "^4.4.2",
-    "@repo/libs": "*"
+    "zod": "^4.4.2"
   }
 }

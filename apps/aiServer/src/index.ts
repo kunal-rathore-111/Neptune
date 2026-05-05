@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import 'dotenv/config';
 import { secureHeaders } from 'hono/secure-headers';
 import { magicRoute } from './routes/magic-fill';
+import { embedding } from './routes/embedding';
 
 const app = new Hono(); // same as express just faster
 
@@ -18,6 +19,7 @@ app.get('/', (c) => {
 });
 
 app.route('/magic-fill', magicRoute);
+app.route('/embedding', embedding);
 
 // bun modern way to run server as hono don't provide app.listen()
 export default {
