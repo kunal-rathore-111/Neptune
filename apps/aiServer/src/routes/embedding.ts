@@ -3,8 +3,8 @@ import { embeddingGeneratorForData, embeddingGeneratorForQuery } from "../contro
 
 
 
-export const embedding = new Hono();
+export const embeddingRoute = new Hono();
 
 
-embedding.post('/generate-for-data', embeddingGeneratorForData)
-embedding.post('/generate-for-query', embeddingGeneratorForQuery)
+embeddingRoute.post('/generate-for-data', embeddingGeneratorForData)
+embeddingRoute.post('/generate-for-query', embeddingGeneratorForQuery)

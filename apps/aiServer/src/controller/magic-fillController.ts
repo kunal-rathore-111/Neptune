@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import * as cheerio from "cheerio"
-import { structuredLM } from "../models/groqModels";
+import { structuredLMForMagicFill } from "../models/groqModels";
 
 
 
@@ -43,7 +43,7 @@ Meta Description: ${metaDesc}
 Content: ${cleanedBody}
 `;
 
-        const aiResponse = await structuredLM.invoke(prompt);
+        const aiResponse = await structuredLMForMagicFill.invoke([prompt]);
         console.log('AI Response on magic fill-- ', aiResponse);
         return c.json(
             {
