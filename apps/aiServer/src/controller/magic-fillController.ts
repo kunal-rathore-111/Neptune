@@ -1,34 +1,8 @@
-import { ChatGroq } from "@langchain/groq";
 import type { Context } from "hono";
-import z from "zod";
 import * as cheerio from "cheerio"
+import { structuredLM } from "../models/groqModels";
 
-const groqAPI = process.env.GROQ_API;
-if (!groqAPI) throw new Error('GROQ_API not found in environment config');
 
-const model = new ChatGroq({
-    model: 'llama-3.3-70b-versatile',
-    apiKey: groqAPI, temperature: 0
-});
-const schemaForOutput = z.object({
-    title: z.string().describe('A clean, short title for the webpage relevant to the title').min(4).max(1000),
-    description: z.string().describe('A 1 to 2 sentence summary of the webpage relevant to the post').min(4).max(3000),
-    category: z.enum([
-        'Development',
-        'Finance',
-        'Study',
-        'Social',
-        'GitHub',
-        'Exams',
-        'AI',
-        'Research',
-        'Design',
-        'Others',
-    ]).describe("The category of the webpage. You MUST pick from the list. If it doesn't fit perfectly, use 'Others'."),
-    tags: z.array(z.string().max(50)).describe('An array of 2 to 4 relevant tags'),
-});
-
-const structuredLM = model.withStructuredOutput(schemaForOutput);
 
 export const magicFillController = async (c: Context) => {
     try {

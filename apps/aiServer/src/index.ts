@@ -9,6 +9,8 @@ const app = new Hono(); // same as express just faster
 
 app.use('*', secureHeaders()); //same as helmet in express
 
+
+
 app.get('/', (c) => {
   return c.json(
     {

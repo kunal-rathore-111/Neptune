@@ -154,7 +154,7 @@ function TruncatedString({
   str: string;
   type: "description" | "title";
 }) {
-  const maxLength = type === "title" ? 30 : 45;
+  const maxLength = type === "title" ? 45 : 30;
   if (str.length <= maxLength) return <p>{str}</p>;
-  return <p>{str.slice(0, maxLength)}....</p>;
+  return <p>{str.slice(0, maxLength)}...</p>;
 }

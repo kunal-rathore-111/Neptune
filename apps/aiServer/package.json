@@ -13,9 +13,10 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@repo/libs": "*",
+    "@repo/validation": "*",
     "@langchain/google-genai": "^2.1.30",
     "@langchain/groq": "^1.2.0",
-    "@repo/libs": "*",
     "cheerio": "^1.2.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

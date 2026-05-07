@@ -1,21 +1,16 @@
-import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import type { Context } from "hono";
+import { embeddingModel } from "../models/embeddingModel";
+import { chatQueryValidator } from "@repo/validation"
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
-if (!GOOGLE_API_KEY) throw new Error("GOOGLE_API_KEY not found in environment config")
-
-
-const embeddingModel = new GoogleGenerativeAIEmbeddings({
-    model: "gemini-embedding-2",
-    apiKey: GOOGLE_API_KEY,
-})
-
-export const embeddingController = async (c: Context) => {
+export const embeddingGeneratorForData = async (c: Context) => {
 
     try {
         const body = await c.req.json(); // convert the req in json
         const { title, url, description, tags } = body;
+
         // can use even contentZod (need)
+        // server will validate the query present or not
+        //but validating again for saftey
         if (!title && !url) return c.json({ message: "Title and url is required for embedding", type: "error" }, 404);
 
         const safeDescription = description ?? "";
@@ -29,7 +24,7 @@ export const embeddingController = async (c: Context) => {
 
         const slicedVector = vectorResponse.slice(0, 768);// using 768 dimensions in database
 
-
+        console.error(slicedVector)
         return c.json({
             type: "success",
             message: "Embedding generated successfully",
@@ -38,9 +33,47 @@ export const embeddingController = async (c: Context) => {
 
     } catch (error) {
 
-        console.error("Embedding Error- ", error)
+        console.error("Embedding Error in embeddingGeneratorForData---", error)
 
-        return c.json({ message: "Failed to generate embedding", type: "error" }, 500)
+        return c.json({ message: "Failed to generate embedding for Data", type: "error" }, 500)
     }
 
+}
+
+
+
+export const embeddingGeneratorForQuery = async (c: Context) => {
+
+    try {
+
+        const { query }: { query: string } = await c.req.json();
+        if (!query) return c.json({ type: "error", message: "Query not found" }, 404)
+        // server will validate the query present or not
+        //but validating again for saftey
+        const result = chatQueryValidator(query);
+
+
+        if (!result.success) {
+            const message = result.error.issues[0]?.message || "Invalid query"
+            console.error(message);
+            return c.json({ message, type: "error" }, 400);
+        }
+
+        // now generate embedds for the query
+        const vectorResponse = await embeddingModel.embedQuery(`userQuery:${query}`);
+
+        const slicedVector = vectorResponse.slice(0, 768); //using 768 dimension in content table in db
+
+        console.error(slicedVector);
+
+        return c.json({ type: "success", message: "Query embedd generated successfully", embeddingVector: slicedVector }, 200)
+
+
+    } catch (error) {
+
+
+        console.error("Embedding Error in embeddingGeneratorForQuery---", error)
+
+        return c.json({ type: "error", message: "Failed to generate embedding for Query" }, 500)
+    }
 }
