@@ -5,6 +5,7 @@ import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
 import LoadingPage from "./Loading";
 import ErrorPage from "./ErrorPage";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
+import { ChatBotIcon } from "@repo/icons";
 
 export default function Dashboard() {
   const { isLoading, isError, error } = useFetchUserProfile();
@@ -30,6 +31,7 @@ export default function Dashboard() {
         <AppSideBar></AppSideBar>
         <main className="flex w-screen">
           <DashboardMainContentArea />
+          <ChatBotIcon />
         </main>
       </SidebarProvider>
     </>
