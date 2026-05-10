@@ -9,7 +9,7 @@ export function useAdd_EditBookmark() {
   const queryClient = useQueryClient();
   const result = useMutation({
     mutationFn: async (props: Add_Edit_BookmarkType) => {
-      console.error(props.data.category);
+      //console.error(props.data.category);
       const response = await add_edit_BookMarkService(props);
       if (response.type === "error") {
         throw new Error(response.message);

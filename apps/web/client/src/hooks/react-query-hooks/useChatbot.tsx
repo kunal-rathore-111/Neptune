@@ -1,7 +1,6 @@
 import { chatService } from "@/services/chatService";
 import { toast } from "@repo/ui";
-import { useMutation } from "@tanstack/react-query";
-
+import { useMutation } from "@tanstack/react-query"
 
 
 

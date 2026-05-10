@@ -23,5 +23,7 @@
     "apps/*/*",
     "packages/*"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "neptune": "./apps/web/client"
+  }
 }

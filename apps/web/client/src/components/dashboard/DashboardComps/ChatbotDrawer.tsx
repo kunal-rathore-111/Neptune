@@ -1,6 +1,7 @@
 import { useChatbot } from "@/hooks/react-query-hooks/useChatbot";
+import ReactMarkdown from "react-markdown";
+
 import { ChatBotIcon, LoaderIcon, SendIcon } from "@repo/icons";
-import { cn } from "@repo/libs";
 import {
   animateIconUsingRef,
   Drawer,
@@ -12,6 +13,7 @@ import {
   DrawerTrigger,
   InputGroup,
   Textarea,
+  toast,
   type IconHandle,
 } from "@repo/ui";
 import { X, User } from "lucide-react";
@@ -40,11 +42,15 @@ export function ChatBotDrawerComp() {
 
   function handleChatBot(e: FormEvent) {
     e.preventDefault();
-    console.error("Before- ", chatHistory.length);
 
+    // need to add queryzod
+    if (!message) {
+      toast.error("Message is empty!!", { position: "top-right" });
+      return;
+    }
     setChatHistory((prev) => [...prev, { role: "user", content: message }]);
 
-    console.error("AFter- ", chatHistory.length);
+    //console.error("AFter- ", chatHistory.length);
     chatBotMutate(message, {
       onSuccess: (response) => {
         setChatHistory((prev) => [
@@ -57,9 +63,10 @@ export function ChatBotDrawerComp() {
     console.error("- ", chatHistory.length);
   }
 
+
   return (
     <div className="absolute right-10 bottom-10 transition-all duration-300 hover:scale-110">
-      <Drawer direction="right">
+      <Drawer direction="right" >
         <DrawerTrigger asChild {...animateIconUsingRef(animateRef)}>
           {/* icon to open chat drawer */}
           <ChatBotIcon ref={animateRef} />
@@ -79,7 +86,7 @@ export function ChatBotDrawerComp() {
           </DrawerHeader>
           <div
             ref={scrollRef}
-            className="no-scrollbar mx-4 flex-1 overflow-y-auto rounded-sm border-2 px-2 py-1 dark:border-white"
+            className="no-scrollbar select-text  mx-4 flex-1 overflow-y-auto rounded-sm border-2 px-2 py-1 dark:border-white"
           >
             {chatHistory.map((chat) => {
               return (
@@ -91,7 +98,7 @@ export function ChatBotDrawerComp() {
           </div>
           <DrawerFooter>
             <fieldset disabled={isPending}>
-              <InputGroup className="gap-2 border-2 dark:border-white">
+              <InputGroup className="gap-2 border-2 items-start dark:border-white">
                 <Textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -99,7 +106,7 @@ export function ChatBotDrawerComp() {
                   className="resize-none"
                 />
 
-                <div className="flex items-center px-2">
+                <div className=" px-3 py-5">
                   {isPending ? (
                     <LoaderIcon size={19} />
                   ) : (
@@ -151,13 +158,18 @@ function RenderChatComp({ chat }: { chat: RenderChatCompType }) {
           </span>
 
           <div
-            className={`rounded-2xl px-4 py-2.5 text-xs leading-relaxed font-medium shadow-sm ${
-              isBot
-                ? "bg-muted/50 text-foreground border-border/50 rounded-tl-none border"
-                : "bg-primary text-primary-foreground rounded-tr-none shadow-md"
-            } `}
+            className={`rounded-2xl px-4 py-2.5 text-xs leading-relaxed font-medium shadow-sm ${isBot
+              ? "bg-muted/50 text-foreground border-border/50 rounded-tl-none border"
+              : "bg-primary text-primary-foreground rounded-tr-none shadow-md"
+              } `}
           >
-            {chat.content}
+            {isBot ? (
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <ReactMarkdown>{chat.content}</ReactMarkdown>
+              </div>
+            ) : (
+              chat.content
+            )}
           </div>
         </div>
       </div>

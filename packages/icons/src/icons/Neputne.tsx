@@ -78,7 +78,7 @@ const NeptunePlanetIcon = forwardRef<
             animate: {
               rotate: -20,
               opacity: [0.6, 1, 0.6],
-              transition: { duration: 0.8 },
+              transition: { duration: 0.8, repeat: Infinity },
             },
           }}
           style={{ transformOrigin: "12px 12px", transformBox: "fill-box" }}
@@ -91,10 +91,14 @@ const NeptunePlanetIcon = forwardRef<
           r="7"
           animate={controls}
           variants={{
-            normal: { scale: 1 },
+            normal: { scale: 1, rotate: 0 },
             animate: {
               scale: [1, 1.05, 1],
-              transition: { duration: 0.6, ease: "easeInOut" },
+              rotate: [0, 360],
+              transition: {
+                scale: { duration: 0.8, ease: "easeInOut", repeat: Infinity },
+                rotate: { duration: 3, ease: "linear", repeat: Infinity },
+              },
             },
           }}
           style={{ transformOrigin: "12px 12px", transformBox: "fill-box" }}
@@ -115,7 +119,7 @@ const NeptunePlanetIcon = forwardRef<
             animate: {
               rotate: -20,
               opacity: [1, 0.8, 1],
-              transition: { duration: 0.8 },
+              transition: { duration: 0.8, repeat: Infinity },
             },
           }}
           style={{ transformOrigin: "12px 12px", transformBox: "fill-box" }}
@@ -140,9 +144,10 @@ const NeptunePlanetIcon = forwardRef<
               x: [-11, 0, 11, 0, -11],
               y: [-2, 4, -2, -4, -2],
               transition: {
-                duration: 1.4,
+                duration: 1.8,
                 ease: "linear",
                 times: [0, 0.25, 0.5, 0.75, 1],
+                repeat: Infinity,
               },
             },
           }}
