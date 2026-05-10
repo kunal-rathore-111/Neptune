@@ -4,7 +4,7 @@ import z from "zod";
 
 export const chatQuerySchema = z.object({
     query: z.string()
-        .min(5, { message: "Please increase query length at least 5" })
+        .min(2, { message: "Please increase query length at least 2" })
         .max(1000, { message: "Please decrease query length at most 1000" })
 });
 

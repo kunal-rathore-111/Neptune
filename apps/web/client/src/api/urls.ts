@@ -44,6 +44,8 @@ export const DeleteAccountUrl =
 
 export const MagicFillUrl = BackendInitalRoute + "/ai/magic-fill";
 
+export const ChatUrl = BackendInitalRoute + "/ai/global-chat";
+
 // --------Frontend URLs--------
 const FrontendInitalRoute =
   env.VITE_MODE === "dev"
