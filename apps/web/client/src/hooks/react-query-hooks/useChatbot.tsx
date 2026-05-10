@@ -1,4 +1,4 @@
-import { chatService } from "@/services/chatService";
+import { chatService, type chatServiceInputType } from "@/services/chatService";
 import { toast } from "@repo/ui";
 import { useMutation } from "@tanstack/react-query"
 
@@ -6,9 +6,9 @@ import { useMutation } from "@tanstack/react-query"
 
 export function useChatbot() {
     const result = useMutation({
-        mutationFn: async (userQuery: string) => {
-            const response = await chatService(userQuery)
-            if (response.type === "error") throw new Error();
+        mutationFn: async (props: chatServiceInputType) => {
+            const response = await chatService(props)
+            if (response.type === "error") throw new Error(response.message);
             return response;
         }
         , onSuccess: () => {

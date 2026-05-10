@@ -24,7 +24,8 @@ export function ChatBotDrawerComp() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<string>("");
 
-  const [chatHistory, setChatHistory] = useState<
+
+  const [chat, setChat] = useState<
     { role: "user" | "bot"; content: string }[]
   >([{ role: "bot", content: "Hi, I'm Neputne ai. How can I assist you?" }]);
 
@@ -38,7 +39,7 @@ export function ChatBotDrawerComp() {
         behavior: "smooth",
       });
     }
-  }, [chatHistory]);
+  }, [chat]);
 
   function handleChatBot(e: FormEvent) {
     e.preventDefault();
@@ -48,19 +49,21 @@ export function ChatBotDrawerComp() {
       toast.error("Message is empty!!", { position: "top-right" });
       return;
     }
-    setChatHistory((prev) => [...prev, { role: "user", content: message }]);
+    setChat((prev) => [...prev, { role: "user", content: message }]);
 
-    //console.error("AFter- ", chatHistory.length);
-    chatBotMutate(message, {
+    // console.error("AFter- ", chat);
+
+    const props = { userQuery: message, chatHistory: chat.slice(-20) }
+    chatBotMutate(props, {
       onSuccess: (response) => {
-        setChatHistory((prev) => [
+        setChat((prev) => [
           ...prev,
           { role: "bot", content: response.response },
         ]);
         setMessage(""); // now clear the current input
       },
     });
-    console.error("- ", chatHistory.length);
+    console.error("- ", chat.length);
   }
 
 
@@ -79,7 +82,7 @@ export function ChatBotDrawerComp() {
             </div>
             <DrawerClose
               asChild
-              className="rounded-xl border-2 p-1 dark:border-white"
+              className="rounded-xl border-2 p-1 hover:scale-110 transition duration-400 dark:border-white"
             >
               <X size={29} />
             </DrawerClose>
@@ -88,7 +91,7 @@ export function ChatBotDrawerComp() {
             ref={scrollRef}
             className="no-scrollbar select-text  mx-4 flex-1 overflow-y-auto rounded-sm border-2 px-2 py-1 dark:border-white"
           >
-            {chatHistory.map((chat) => {
+            {chat.map((chat) => {
               return (
                 <p className="style-lyra:mb-2 style-lyra:leading-relaxed mb-4 leading-normal">
                   <RenderChatComp chat={chat} />
@@ -104,13 +107,15 @@ export function ChatBotDrawerComp() {
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Enter message"
                   className="resize-none"
+                  onKeyDown={(e) => { if (e.key === "Enter") handleChatBot(e) }}
                 />
 
                 <div className=" px-3 py-5">
                   {isPending ? (
                     <LoaderIcon size={19} />
                   ) : (
-                    <button onClick={(e) => handleChatBot(e)}>
+                    <button onClick={(e) => handleChatBot(e)}
+                    >
                       <SendIcon size={15} />
                     </button>
                   )}
@@ -152,19 +157,19 @@ function RenderChatComp({ chat }: { chat: RenderChatCompType }) {
         </div>
 
         {/* Message Content Section */}
-        <div className={`flex flex-col ${isBot ? "items-start" : "items-end"}`}>
-          <span className="text-muted-foreground/70 mb-1 px-1 text-[10px] font-bold tracking-widest uppercase">
+        <div className={`flex flex-col flex-1 min-w-0 ${isBot ? "items-start" : "items-end"}`}>
+          <span className="text-muted-foreground/70 mb-1 px-1 text-[10px] font-bold tracking-widest uppercase ">
             {isBot ? "Neptune AI" : "You"}
           </span>
 
           <div
-            className={`rounded-2xl px-4 py-2.5 text-xs leading-relaxed font-medium shadow-sm ${isBot
+            className={`rounded-2xl px-4 py-2.5 text-xs leading-relaxed font-medium shadow-sm break-words whitespace-pre-wrap overflow-hidden w-full ${isBot
               ? "bg-muted/50 text-foreground border-border/50 rounded-tl-none border"
               : "bg-primary text-primary-foreground rounded-tr-none shadow-md"
               } `}
           >
             {isBot ? (
-              <div className="prose prose-sm dark:prose-invert max-w-none">
+              <div className="prose prose-sm dark:prose-invert max-w-none prose-ol:list-decimal prose-ul:list-disc prose-ol:pl-4 prose-ul:pl-4 prose-li:marker:text-foreground/80">
                 <ReactMarkdown>{chat.content}</ReactMarkdown>
               </div>
             ) : (

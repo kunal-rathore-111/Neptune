@@ -40,16 +40,23 @@ export const embeddingGeneratorForData = async (c: Context) => {
 
 }
 
-
+type embeddingGeneratorForQueryRequestInputType = {
+    query: string,
+    chatHistory: string
+}
 
 export const embeddingGeneratorForQuery = async (c: Context) => {
 
     try {
 
-        const { query }: { query: string } = await c.req.json();
+        const { query, chatHistory }: embeddingGeneratorForQueryRequestInputType = await c.req.json();
+
+
         if (!query) return c.json({ type: "error", message: "Query not found" }, 404)
         // server will validate the query present or not
+        if (!chatHistory) return c.json({ type: "error", message: "chat chatHistory not found" }, 404)
         //but validating again for saftey
+
         const result = chatQueryValidator(query);
 
 
@@ -60,11 +67,12 @@ export const embeddingGeneratorForQuery = async (c: Context) => {
         }
 
         // now generate embedds for the query
-        const vectorResponse = await embeddingModel.embedQuery(`userQuery:${query}`);
+        const vectorResponse = await embeddingModel.embedQuery(`userQuery:${query} chatHistory: ${chatHistory}`);
 
         const slicedVector = vectorResponse.slice(0, 768); //using 768 dimension in content table in db
 
-        console.error(slicedVector);
+        //  console.error(slicedVector);
+        console.error("Vectory sliced embeddingGeneratorForQuery");
 
         return c.json({ type: "success", message: "Query embedd generated successfully", embeddingVector: slicedVector }, 200)
 
