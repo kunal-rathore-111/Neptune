@@ -32,6 +32,7 @@ export const chat = async (c: Context) => {
         1. **Don't Repeat Yourself**: Do not list the "Top 5 Bookmarks" in every message. Only list them if the user asks or if it is the very first interaction.
         2. **Be Direct**: Answer immediately. Avoid repetitive greetings.
         3. **Context Awareness**: Use the chat history to stay in flow.
+        4. **Brevity**: Your response MUST be concise. Whatever happens, do NOT exceed 200 words in a single reply.
 
         ### DATA CONTEXT:
         - Relevant Library Items: ${context}

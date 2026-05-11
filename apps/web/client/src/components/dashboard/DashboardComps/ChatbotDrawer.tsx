@@ -1,7 +1,7 @@
 import { useChatbot } from "@/hooks/react-query-hooks/useChatbot";
 import ReactMarkdown from "react-markdown";
 
-import { ChatBotIcon, LoaderIcon, SendIcon } from "@repo/icons";
+import { ChatBotIcon, LoaderIcon, SendIcon, UserIcon } from "@repo/icons";
 import {
   animateIconUsingRef,
   Drawer,
@@ -16,7 +16,7 @@ import {
   toast,
   type IconHandle,
 } from "@repo/ui";
-import { X, User } from "lucide-react";
+import { X } from "lucide-react";
 import { useRef, useState, useEffect, type FormEvent } from "react";
 
 export function ChatBotDrawerComp() {
@@ -53,7 +53,7 @@ export function ChatBotDrawerComp() {
 
     // console.error("AFter- ", chat);
 
-    const props = { userQuery: message, chatHistory: chat.slice(-20) }
+    const props = { userQuery: message, chatHistory: chat.slice(-3) }
     chatBotMutate(props, {
       onSuccess: (response) => {
         setChat((prev) => [
@@ -68,9 +68,11 @@ export function ChatBotDrawerComp() {
 
 
   return (
-    <div className="absolute right-10 bottom-10 transition-all duration-300 hover:scale-110">
+    <div className="fixed right-10 bottom-10 z-50 ">
       <Drawer direction="right" >
-        <DrawerTrigger asChild {...animateIconUsingRef(animateRef)}>
+        <DrawerTrigger
+          className="bg-zinc-900 dark:bg-zinc-300 p-3 rounded-full text-white dark:text-black"
+          asChild {...animateIconUsingRef(animateRef)}>
           {/* icon to open chat drawer */}
           <ChatBotIcon ref={animateRef} />
         </DrawerTrigger>
@@ -151,7 +153,7 @@ function RenderChatComp({ chat }: { chat: RenderChatCompType }) {
             </div>
           ) : (
             <div className="bg-secondary border-border flex h-8 w-8 items-center justify-center rounded-full border shadow-sm">
-              <User size={16} className="text-muted-foreground" />
+              <UserIcon size={16} className="text-muted-foreground" />
             </div>
           )}
         </div>

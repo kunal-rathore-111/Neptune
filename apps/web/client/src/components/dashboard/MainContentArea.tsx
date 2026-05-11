@@ -10,7 +10,7 @@ import {
 } from "@repo/ui";
 import { Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
 import { LongContentCard } from "./DashboardComps/LongContentCard";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
@@ -19,6 +19,9 @@ import { ErrorComp } from "@/components/ErrorComp";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { setAddBookMarkState } from "@/store/uiSlice";
+import type { dashboardFetchDataType } from "@/Types/dashboard";
+import { useSearchParams } from "react-router";
+import { useFetchSharedBookmark } from "@/hooks/react-query-hooks/useFetchSharedBookmark";
 export function DashboardMainContentArea() {
   const { isLoading, error, isError } = useDashboardFetch();
   const { open } = useSidebar();
@@ -66,6 +69,47 @@ function DashboardSection() {
     (state: RootState) => state.ui.longSelectedCard,
   );
   const dispatch = useDispatch();
+  const { data: dashboardData } = useDashboardFetch();
+  const [searchString, setSearchString] = useState<string>("");
+
+
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
+  const tag = searchParams.get("tag");
+  const shared = searchParams.get("shared");
+
+  let categorizedData = dashboardData?.data;
+
+  if (category)
+    categorizedData = dashboardData?.data.filter(
+      (x) => x.contentTable.category === category,
+    );
+  else if (tag)
+    categorizedData = dashboardData?.data.filter((x) =>
+      x.contentTable.tags?.includes(tag),
+    );
+  else if (shared) {
+    categorizedData = dashboardData?.data.filter((x) => x.ContentShareLinkTable);
+  }
+
+
+  const cleanSearchString = searchString.toLowerCase().trim();
+
+  const finalDisplayData = categorizedData && searchString ? categorizedData.filter(data => {
+    const { title, category, description, link, tags } = data.contentTable;
+    return (
+      title.toLowerCase().includes(cleanSearchString) ||
+      description?.toLowerCase().includes(cleanSearchString) ||
+      category?.toLowerCase().includes(cleanSearchString) ||
+      link?.toLowerCase().includes(cleanSearchString) ||
+      tags?.some(x => x.toLowerCase().includes(cleanSearchString))
+    )
+  }) : categorizedData;
+
+
+
+
+
   return (
     <>
       <div className="w-full space-y-10">
@@ -83,15 +127,20 @@ function DashboardSection() {
           </div>
 
           <InputGroup className="sm:max-w-xs lg:max-w-sm">
-            <InputGroupInput placeholder="Search here..." />
+            <InputGroupInput
+              value={searchString}
+              onChange={(e) => {
+                setSearchString(e.target.value)
+              }}
+              placeholder="Search here..." />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
-            <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+            <InputGroupAddon align="inline-end">{finalDisplayData?.length} results</InputGroupAddon>
           </InputGroup>
         </div>
         {/*  list of cards */}
-        <DashboardDataList />
+        <DashboardDataList finalDisplayData={finalDisplayData} />
       </div>
 
       {/* render the add card on full screen */}

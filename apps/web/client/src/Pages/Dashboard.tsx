@@ -31,7 +31,7 @@ export default function Dashboard() {
     <>
       <SidebarProvider className="[--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]">
         <AppSideBar></AppSideBar>
-        <main className="flex w-screen relative">
+        <main className="flex w-screen ">
           <DashboardMainContentArea />
           {/* handles the chatbot icon+the side drawer */}
           <ChatBotDrawerComp />

@@ -11,10 +11,7 @@ export function useChatbot() {
             if (response.type === "error") throw new Error(response.message);
             return response;
         }
-        , onSuccess: () => {
-            //needs to put data in a global array
-
-        },
+        ,
         onError: (error) => {
             toast.error(error.message || "Something went wrong", { position: "top-center" })
         }
