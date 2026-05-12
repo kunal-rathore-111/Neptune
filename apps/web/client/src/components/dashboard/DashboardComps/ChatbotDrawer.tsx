@@ -23,6 +23,16 @@ export function ChatBotDrawerComp() {
   const animateRef = useRef<IconHandle>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<string>("");
+  const [isNewChat, setIsNewChat] = useState<boolean>(true);
+
+  const options = [
+    "Deep search in my bookmarks for the content ",
+    "What are the main categories of things I've saved?",
+    "Summarize my most recent bookmarks",
+    "Find links related to my coding projects",
+    "Suggest a reading path based on my library",
+  ];
+
 
 
   const [chat, setChat] = useState<
@@ -63,8 +73,13 @@ export function ChatBotDrawerComp() {
         setMessage(""); // now clear the current input
       },
     });
-    console.error("- ", chat.length);
+    //  console.error("- ", chat.length);
   }
+
+  useEffect(() => {
+    if (chat.length > 1 && isNewChat) setIsNewChat(false);
+  }, [chat])
+
 
 
   return (
@@ -91,15 +106,24 @@ export function ChatBotDrawerComp() {
           </DrawerHeader>
           <div
             ref={scrollRef}
-            className="no-scrollbar select-text  mx-4 flex-1 overflow-y-auto rounded-sm border-2 px-2 py-1 dark:border-white"
+            className="no-scrollbar select-text relative  mx-4 flex-1 overflow-y-auto rounded-sm border-2 px-2 py-1 dark:border-white"
           >
-            {chat.map((chat) => {
+            {chat.map((chat, index) => {
               return (
-                <p className="style-lyra:mb-2 style-lyra:leading-relaxed mb-4 leading-normal">
+                <div key={index} className="mb-4">
                   <RenderChatComp chat={chat} />
-                </p>
+                </div>
               );
             })}
+
+            {/* options/ideas for new chat */}
+            {isNewChat &&
+              <div className="absolute bottom-2">
+                Suggested Queries
+                <div className="flex flex-wrap gap-1">
+                  {options.map(option => <span key={option} onClick={() => setMessage(option)} className="text-xs  cursor-pointer border-2 shadow-xs shadow-black p-1 rounded">{option} </span>)}
+                </div>
+              </div>}
           </div>
           <DrawerFooter>
             <fieldset disabled={isPending}>
@@ -127,7 +151,7 @@ export function ChatBotDrawerComp() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-    </div>
+    </div >
   );
 }
 

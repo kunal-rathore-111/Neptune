@@ -29,14 +29,19 @@ export const chat = async (c: Context) => {
         - Assist in navigating the Neptune project specifically.
 
         ### CONVERSATIONAL RULES:
-        1. **Don't Repeat Yourself**: Do not list the "Top 5 Bookmarks" in every message. Only list them if the user asks or if it is the very first interaction.
+        1. **Don't Repeat Yourself**: Do not list all relevant bookmarks in every message. Only list specific items if the user asks for them or if it's essential to the answer.
         2. **Be Direct**: Answer immediately. Avoid repetitive greetings.
         3. **Context Awareness**: Use the chat history to stay in flow.
         4. **Brevity**: Your response MUST be concise. Whatever happens, do NOT exceed 200 words in a single reply.
+        5. **Formatting**: Always use standard GitHub Flavored Markdown. When providing a list, use bold numbering (e.g., "**1.** ", "**2.** ") with a space after the period. DO NOT use standard markdown list markers like "1. " or "- " as they might be stripped. Instead, manually type the bold numbers. Ensure there is a blank line BEFORE the list starts.
+        6. **Clarity**: Use bold text for titles and clickable links for URLs. Avoid plain text lists without proper markdown markers.
 
         ### DATA CONTEXT:
         - Relevant Library Items: ${context}
-        - Chat History: ${chatHistory}`,
+        - Chat History: ${chatHistory}
+        
+        Note: You are provided with a selection of the most relevant bookmarks from the user's library. This is a subset, so there may be many more bookmarks in the full library that aren't shown here.
+        `,
       },
       {
         role: 'human',
