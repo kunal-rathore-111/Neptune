@@ -77,18 +77,18 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
                   </div>
                   {/* show only if shareHash present + in users Dashboard using themeButton as condition */}
                   {props.selectedCardData.ContentShareLinkTable
-                    ?.contentSharehash && !props.ThemeButton ? (
+                    ?.shareHash && !props.ThemeButton ? (
                     <div className="flex items-center gap-1 text-sm">
                       <LinkIcon size={16} />
                       <span className="text-sm">Shared</span>
                     </div>
                   ) : /* else show a themetoggle button if not user's dashboard */
-                  props.ThemeButton ? (
-                    <div className="flex gap-2">
-                      <HomeButton />
-                      <props.ThemeButton />
-                    </div>
-                  ) : null}
+                    props.ThemeButton ? (
+                      <div className="flex gap-2">
+                        <HomeButton />
+                        <props.ThemeButton />
+                      </div>
+                    ) : null}
                 </div>
 
                 {/* Card content the title and description */}

@@ -55,3 +55,15 @@ if (!FrontendInitalRoute) throw Error("No Base URL found for FRONTEND");
 
 export const ContentShareUrl =
   FrontendInitalRoute + "/user/public/shared/content";
+
+
+
+// -----------Extra URLs/Social
+export const GithubRepoUrl = 'https://github.com/kunal-rathore-111/Neptune';
+export const EmailLink =
+  "https://mail.google.com/mail/?view=cm&fs=1&to=kunalworkspace111@gmail.com";
+
+export const GithubProfile = "https://github.com/kunal-rathore-111";
+"https://github.com/kunal-rathore-111/2ndMind-frontend";
+
+export const Twitter = "";

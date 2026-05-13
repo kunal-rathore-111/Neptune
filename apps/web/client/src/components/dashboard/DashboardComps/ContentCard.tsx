@@ -9,6 +9,7 @@ import { ContentShareUrl } from "@/api/urls";
 import { useCardEDUB } from "@/hooks/useCardEDUB.Array";
 import { useDispatch } from "react-redux";
 import { setLongSelectedCard } from "@/store/uiSlice";
+import { motion } from "framer-motion";
 
 type ContentCardType = {
   cardData: dashboardFetchDataType;
@@ -19,13 +20,15 @@ export function ContentCard({ cardData }: ContentCardType) {
 
   const dispatch = useDispatch();
 
+  const [shouldShowEDUB, setShouldShowEDUB] = useState<boolean>(false);
+
   const [copyIconState, setCopyIconState] = useState<boolean>(false);
   // handler to copy the card's shared url
   async function handleCopy() {
     try {
       const url =
         ContentShareUrl +
-        `/${cardData.ContentShareLinkTable?.contentSharehash} `;
+        `/${cardData.ContentShareLinkTable?.shareHash} `;
       await navigator.clipboard.writeText(url);
       setCopyIconState(true);
       toast.success("Link copied successfully", { position: "top-center" });
@@ -48,7 +51,10 @@ export function ContentCard({ cardData }: ContentCardType) {
   const date = cardData.contentTable.updatedDate.toString().slice(0, 10);
 
   return (
-    <div className="relative flex h-auto min-h-30 w-78 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90">
+    <div className="relative flex h-auto min-h-40 w-78 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90"
+      onMouseEnter={() => setShouldShowEDUB(true)}
+      onMouseLeave={() => setShouldShowEDUB(false)}>
+
       {isDeletePending || isToggleSharePending ? (
         <div className="flex min-h-30 w-full items-center justify-center">
           <LoaderIcon />
@@ -67,7 +73,7 @@ export function ContentCard({ cardData }: ContentCardType) {
                 <h5 className="text-xs">{cardData.contentTable.category}</h5>
               </div>
               <div className="flex items-center gap-1 text-xs">
-                {cardData.ContentShareLinkTable?.contentSharehash ? (
+                {cardData.ContentShareLinkTable?.shareHash ? (
                   <div className="flex" onClick={() => handleCopy()}>
                     {/* if copyIconstate is true means the link is getting copy so show the animated checkIcon */}
                     {copyIconState ? (
@@ -126,18 +132,24 @@ export function ContentCard({ cardData }: ContentCardType) {
           >
             {/* need to change with date */}
             <div className="text-xs">{date}</div>
-            <div className="flex gap-2">
-              {EDUBArray.map((x, idx) => (
-                <Tooltip key={idx}>
-                  <TooltipTrigger asChild className="flex">
-                    <button onClick={() => x.action()}>
-                      <x.Icon className={x.className} size={14} />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>{x.label}</TooltipContent>
-                </Tooltip>
-              ))}
-            </div>
+            {
+              shouldShowEDUB &&
+              <motion.div className="flex gap-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: .6 }}>
+                {EDUBArray.map((x, idx) => (
+                  <Tooltip key={idx}>
+                    <TooltipTrigger asChild className="flex">
+                      <button onClick={() => x.action()}>
+                        <x.Icon className={x.className} size={14} />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>{x.label}</TooltipContent>
+                  </Tooltip>
+                ))}
+              </motion.div>
+            }
           </div>
 
 

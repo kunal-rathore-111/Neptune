@@ -1,11 +1,7 @@
+import { EmailLink, GithubRepoUrl, Twitter } from "@/api/urls";
 import { GithubIcon } from "@repo/icons";
 import { TwitterIcon } from "@repo/icons";
 import { MailCheckIcon } from "@repo/icons";
-import {
-  EmailLink,
-  GithubRepo,
-  Twitter,
-} from "@/lib/utils/SocialLinks_PolicyDate";
 export const footerLinks = {
   Products: [
     { name: "Try for free", to: "/sign-up" },
@@ -23,7 +19,7 @@ export const socialLinks = [
   {
     label: "Github",
     icon: GithubIcon,
-    href: GithubRepo,
+    href: GithubRepoUrl,
   },
   {
     label: "Twitter",

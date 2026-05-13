@@ -8,9 +8,9 @@ import {
   toast,
   useSidebar,
 } from "@repo/ui";
-import { Search } from "lucide-react";
+import { CircleX, Hand, Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
 import { LongContentCard } from "./DashboardComps/LongContentCard";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
@@ -19,9 +19,8 @@ import { ErrorComp } from "@/components/ErrorComp";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { setAddBookMarkState } from "@/store/uiSlice";
-import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSearchParams } from "react-router";
-import { useFetchSharedBookmark } from "@/hooks/react-query-hooks/useFetchSharedBookmark";
+import { useInView } from "framer-motion";
 export function DashboardMainContentArea() {
   const { isLoading, error, isError } = useDashboardFetch();
   const { open } = useSidebar();
@@ -69,8 +68,23 @@ function DashboardSection() {
     (state: RootState) => state.ui.longSelectedCard,
   );
   const dispatch = useDispatch();
-  const { data: dashboardData } = useDashboardFetch();
+  const { data: dashboardData, fetchNextPage, isFetchingNextPage, hasNextPage } = useDashboardFetch();
+
+  const allContent = dashboardData?.pages.flatMap((page) => page.type === "success" ? page.data : []) // convert all subarray into single array
+
   const [searchString, setSearchString] = useState<string>("");
+
+
+  // for sentinal (auto fetch on reaching end)
+  const endRef = useRef(null);
+  const isEndReach = useInView(endRef);
+
+
+  useEffect(() => {
+    if (isEndReach && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [isEndReach])
 
 
   const [searchParams] = useSearchParams();
@@ -78,18 +92,19 @@ function DashboardSection() {
   const tag = searchParams.get("tag");
   const shared = searchParams.get("shared");
 
-  let categorizedData = dashboardData?.data;
+
+  let categorizedData = allContent;
 
   if (category)
-    categorizedData = dashboardData?.data.filter(
+    categorizedData = allContent?.filter(
       (x) => x.contentTable.category === category,
     );
   else if (tag)
-    categorizedData = dashboardData?.data.filter((x) =>
+    categorizedData = allContent?.filter((x) =>
       x.contentTable.tags?.includes(tag),
     );
   else if (shared) {
-    categorizedData = dashboardData?.data.filter((x) => x.ContentShareLinkTable);
+    categorizedData = allContent?.filter((x) => x.ContentShareLinkTable);
   }
 
 
@@ -105,10 +120,6 @@ function DashboardSection() {
       tags?.some(x => x.toLowerCase().includes(cleanSearchString))
     )
   }) : categorizedData;
-
-
-
-
 
   return (
     <>
@@ -136,11 +147,26 @@ function DashboardSection() {
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
-            <InputGroupAddon align="inline-end">{finalDisplayData?.length} results</InputGroupAddon>
+            <InputGroupAddon align="inline-end">
+
+              {searchString
+                &&
+                <CircleX className="cursor-pointer " onClick={() => setSearchString('')} />
+              }
+
+              {finalDisplayData?.length} results
+            </InputGroupAddon>
           </InputGroup>
         </div>
         {/*  list of cards */}
         <DashboardDataList finalDisplayData={finalDisplayData} />
+
+        {/* sentinal comp for showing loading on end */}
+        {
+          <div ref={endRef} className=" flex items-center justify-center">
+            {isEndReach && hasNextPage && isFetchingNextPage && <LoaderIcon />}
+          </div>
+        }
       </div>
 
       {/* render the add card on full screen */}

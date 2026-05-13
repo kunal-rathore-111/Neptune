@@ -108,14 +108,16 @@ function SideBar_Menu() {
   // loading and error already handled in dashboard.tsx page
   const { data: response, isLoading } = useDashboardFetch();
 
+  const allContent = response?.pages.flatMap((page) => page.type === "success" ? page.data : []);
+
   const uniqueTags = [
-    ...new Set(response?.data.flatMap((x) => x.contentTable.tags)),
+    ...new Set(allContent?.flatMap((x) => x.contentTable.tags)),
   ];
   const uniqueCategories = [
-    ...new Set(response?.data.flatMap((x) => x.contentTable.category)),
+    ...new Set(allContent?.flatMap((x) => x.contentTable.category)),
   ];
   const navigate = useNavigate();
-  function handleSidebarClick(type: string, value?: string) {
+  function handleSidebarClick(type: string, value?: string | null) {
     if (type === "home") {
       navigate("?");
     } else if (type === "shared") {

@@ -55,7 +55,7 @@ export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
       setTitle(editCardState.contentTable.title);
       setTags(editCardState.contentTable.tags || []);
       setIsShareable(
-        editCardState.ContentShareLinkTable?.contentSharehash ? true : false,
+        editCardState.ContentShareLinkTable?.shareHash ? true : false,
       );
       setCategory(editCardState.contentTable.category || "Others");
     }
@@ -259,7 +259,7 @@ function InputSection({ inputs }: { inputs: inputsType }) {
   const [linkValidation, setLinkValidation] = useState<any>();
   const [titleValidation, setTitleValidation] = useState<any>();
 
-  useEffect(() => {}, [inputs.share]);
+  useEffect(() => { }, [inputs.share]);
 
   useEffect(() => {
     setLinkValidation(validateLinkInput(inputs.link));

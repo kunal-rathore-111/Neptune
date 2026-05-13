@@ -1,6 +1,7 @@
 import { BookTextIcon } from "@repo/icons";
 import { footerLinks, socialLinks } from "@/lib/constants/content/Footer";
 import { Link } from "react-router";
+import { GithubRepoUrl } from "@/api/urls";
 export const Footer = () => {
   return (
     <footer className="mt-0 border-t px-4">
@@ -64,12 +65,12 @@ export const Footer = () => {
           <div className="flex flex-col items-center justify-center lg:flex-row lg:justify-between">
             <span className="text-center text-gray-500 dark:text-gray-400">
               ©{" "}
-              <Link
-                to="#"
+              <a
+                href={GithubRepoUrl}
                 className="hover:text-red-500 dark:hover:text-indigo-400"
               >
-                2026 2nd Mind.
-              </Link>{" "}
+                2026 Neptune.
+              </a>{" "}
               All rights reserved.
             </span>
             <div className="flex gap-5">

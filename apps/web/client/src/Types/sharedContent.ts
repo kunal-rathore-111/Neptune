@@ -5,16 +5,16 @@ export type SharedContentDataType = {
     description: string | null;
     link: string | null;
     category:
-      | "Development"
-      | "Finance"
-      | "Study"
-      | "Social"
-      | "GitHub"
-      | "Exams"
-      | "AI"
-      | "Research"
-      | "Design"
-      | "Others";
+    | "Development"
+    | "Finance"
+    | "Study"
+    | "Social"
+    | "GitHub"
+    | "Exams"
+    | "AI"
+    | "Research"
+    | "Design"
+    | "Others";
     tags: string[] | null;
     userId: string;
     createdDate: Date;
@@ -22,7 +22,7 @@ export type SharedContentDataType = {
   };
   ContentShareLinkTable: {
     id: string;
-    contentSharehash: string;
+    shareHash: string;
     contentId: string;
   };
 };
