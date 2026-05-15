@@ -9,7 +9,6 @@ export default function App() {
   const [showLayout, setShowLayout] = useState<boolean>(false);
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log("hey")
       setShowLayout(true);
     }, (2000));
 

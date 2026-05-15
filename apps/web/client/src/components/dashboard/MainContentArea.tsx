@@ -4,11 +4,10 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  SidebarTrigger,
+  ThemeToggleButton,
   toast,
-  useSidebar,
 } from "@repo/ui";
-import { CircleX, Hand, Search } from "lucide-react";
+import { CircleX, Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
 import { useEffect, useRef, useState } from "react";
 import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
@@ -21,9 +20,11 @@ import type { RootState } from "@/store";
 import { setAddBookMarkState } from "@/store/uiSlice";
 import { useSearchParams } from "react-router";
 import { useInView } from "framer-motion";
+import { useFetchSharedProfile } from "@/hooks/react-query-hooks/useFetchSharedProfile";
 export function DashboardMainContentArea() {
-  const { isLoading, error, isError } = useDashboardFetch();
-  const { open } = useSidebar();
+
+  const isSharedProfileRouteHash = useSelector((state: RootState) => state.ui.isSharedProfileRouteHash)
+  const { isLoading, error, isError } = isSharedProfileRouteHash ? useFetchSharedProfile(isSharedProfileRouteHash) : useDashboardFetch();
 
   useEffect(() => {
     if (isError) {
@@ -33,12 +34,7 @@ export function DashboardMainContentArea() {
 
   return (
     <section className="relative flex min-h-screen w-full flex-col py-10 lg:px-8">
-      <SidebarTrigger
-        className={cn(
-          "w-fit p-1",
-          open ? "cursor-w-resize" : "cursor-e-resize",
-        )}
-      />
+
 
       {/* if loading show loader */}
       {isLoading ? (
@@ -129,12 +125,15 @@ function DashboardSection() {
           {/* Header: justify-between spreads the H1 and Button */}
           <div className="flex w-full items-center justify-between">
             <h1 className="text-2xl font-semibold">All Bookmarks</h1>
-            <button
-              className={cn(ButtonsClass, "h-fit p-2 text-xs")}
-              onClick={() => dispatch(setAddBookMarkState(true))}
-            >
-              Add Bookmark
-            </button>
+            <div className="flex gap-4 items-center ">
+              <button
+                className={cn(ButtonsClass, "h-fit p-2 text-xs")}
+                onClick={() => dispatch(setAddBookMarkState(true))}
+              >
+                Add Bookmark
+              </button>
+              <ThemeToggleButton className="p-2" />
+            </div>
           </div>
 
           <InputGroup className="sm:max-w-xs lg:max-w-sm">

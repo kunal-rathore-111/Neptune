@@ -27,7 +27,7 @@ import { cn } from "@repo/libs";
 import { BackToDashboardButton } from "./BackToDashboardButton";
 import { useToggleUserProfileShare } from "@/hooks/react-query-hooks/useToggleUserProfileShare";
 import { LoaderIcon } from "@repo/icons";
-import { UserProfileShareInitialUrl } from "@/api/urls";
+import { UserSharedProfileUrl } from "@/api/urls";
 import { UpdatePasswordComp } from "./UpdatePasswordComp";
 import { useFetchUserShareHash } from "@/hooks/react-query-hooks/useFetchUserShareHash";
 import { OpenAccountDeletionPopUp } from "./OpenAccountDeletionPopUpComp";
@@ -111,7 +111,7 @@ export const UserProfile = ({
     try {
       if (hash) {
         await navigator.clipboard.writeText(
-          UserProfileShareInitialUrl + `/${hash}`,
+          UserSharedProfileUrl + `/${hash}`,
         );
         toast.success("Link copied successfully");
       } else throw new Error();

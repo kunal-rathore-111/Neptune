@@ -8,9 +8,9 @@ export function SplashScreenPage() {
         if (animateIcon) animateIcon.current?.startAnimation();
 
     }, [])
-    return <main className="fixed inset-0 dark:bg-black bg-zinc-300 flex items-center justify-center z-50 gap-1 ">
-        <span className="flex gap-1 items-center justify-center text-2xl">
-            <NeptunePlanetIcon size={34} ref={animateIcon} /> Neptune
+    return <main className="fixed inset-0 bg-zinc-200 dark:bg-black flex items-center justify-center z-50 gap-1 ">
+        <span className="flex gap-2 items-center justify-center text-2xl">
+            <NeptunePlanetIcon size={35} ref={animateIcon} /> Neptune
         </span>
     </main>
 }

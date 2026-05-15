@@ -1,7 +1,7 @@
 import { fetchUserProfileService } from "@/services/fetchUserProfile";
 import { useQuery } from "@tanstack/react-query";
 
-export function useFetchUserProfile() {
+export function useFetchUserProfile(options = {}) {
   const result = useQuery({
     queryKey: ["useProfileData"],
     queryFn: async () => {
@@ -12,6 +12,7 @@ export function useFetchUserProfile() {
       // 401 do nothing (already redirected using the axiosInstance interceptor)
       return response;
     },
+    ...options
   });
   return result;
 }
