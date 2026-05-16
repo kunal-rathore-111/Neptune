@@ -9,7 +9,7 @@ export const contentZodSchema = z.object({
   title: z
     .string()
     .min(4, { message: 'Please increase title length to atleast 4 letters' })
-    .max(100, { message: 'Please decrease title length to atmax 100 letters' }),
+    .max(1000, { message: 'Please decrease title length to atmax 1000 letters' }),
   link: z
     .string()
     .min(4, { message: 'Please increase link length to atleast 4 letters' })
@@ -18,7 +18,7 @@ export const contentZodSchema = z.object({
   description: z
     .string()
     .min(4, { message: 'Please increase description length to atleast 4 letters' })
-    .max(1000, { message: 'Please decrease description length to atmax 1000 letters' })
+    .max(3000, { message: 'Please decrease description length to atmax 3000 letters' })
     .or(z.literal(''))
     .optional(),
   tags: z

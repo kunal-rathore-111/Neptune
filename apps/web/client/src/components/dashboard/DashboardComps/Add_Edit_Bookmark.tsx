@@ -11,7 +11,7 @@ import {
 import { LinkIcon } from "@repo/icons";
 import { KeyboardIcon } from "@repo/icons";
 import { XIcon } from "@repo/icons";
-import { Field, FieldGroup, FieldLabel, toast } from "@repo/ui";
+import { Button, Field, FieldGroup, FieldLabel, toast } from "@repo/ui";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@repo/ui";
 import { Textarea } from "@repo/ui";
 import { Checkbox } from "@repo/ui";
@@ -31,6 +31,7 @@ import { useAdd_EditBookmark } from "@/hooks/react-query-hooks/useAdd_EditBookma
 import { useDispatch, useSelector } from "react-redux";
 import { setAddBookMarkState, setEditCardState } from "@/store/uiSlice";
 import type { RootState } from "@/store";
+import { useMagicFill } from "@/hooks/react-query-hooks/useMagicFill";
 
 interface AddBookMarkCardDTO {
   type: "add" | "edit";
@@ -54,7 +55,7 @@ export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
       setTitle(editCardState.contentTable.title);
       setTags(editCardState.contentTable.tags || []);
       setIsShareable(
-        editCardState.ContentShareLinkTable?.contentSharehash ? true : false,
+        editCardState.ContentShareLinkTable?.shareHash ? true : false,
       );
       setCategory(editCardState.contentTable.category || "Others");
     }
@@ -77,11 +78,32 @@ export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
   };
 
   const dispatch = useDispatch();
+  const { mutate: useMagicFillMutation, isPending: isMagicFillPending } =
+    useMagicFill();
 
   const { mutate: add_edit_MutateFn, isPending: add_edit_isPending } =
     useAdd_EditBookmark();
 
-  async function handleAdd_Edit_BookMarkFormSubmit(e: FormEvent) {
+  function handleMagicFill() {
+    if (!inputs.link.includes(".")) {
+      toast.error("Invalid URL", { position: "top-center" });
+    } else {
+      // the url cleaning is doing in backend in the magicFill controller
+      // call backend to get data
+      useMagicFillMutation(inputs.link, {
+        onSuccess: (useMagicFillResponse) => {
+          if (useMagicFillResponse && useMagicFillResponse.type === "success") {
+            const data = useMagicFillResponse.data;
+            inputs.setTitle(data.title);
+            inputs.setCategory(data.category);
+            inputs.setDescription(data.description);
+            inputs.setTags(data.tags);
+          }
+        },
+      });
+    }
+  }
+  function handleAdd_Edit_BookMarkFormSubmit(e: FormEvent) {
     e.preventDefault();
 
     let data: addBookmarkDataType | editBookmarkDataType = {
@@ -150,8 +172,24 @@ export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
                       size={26}
                       className="rounded-sm border-2 border-black/50 p-1 dark:border-white/50"
                     />
-                    <h5 className="text-sm">Add Bookmark</h5>
+                    <h5 className="text-sm">
+                      {props.type === "add" ? "Add" : "Edit"} Bookmark
+                    </h5>
                   </div>
+                  {inputs.link && (
+                    <Button
+                      size={"xs"}
+                      variant={"outline"}
+                      className="p-3 dark:border-white"
+                      onClick={() => {
+                        handleMagicFill();
+                      }}
+                      type="button"
+                      disabled={isMagicFillPending}
+                    >
+                      {isMagicFillPending ? "Filling..." : "Magic-Fill"}
+                    </Button>
+                  )}
                 </div>
 
                 {/* Input bars section */}
@@ -221,7 +259,7 @@ function InputSection({ inputs }: { inputs: inputsType }) {
   const [linkValidation, setLinkValidation] = useState<any>();
   const [titleValidation, setTitleValidation] = useState<any>();
 
-  useEffect(() => {}, [inputs.share]);
+  useEffect(() => { }, [inputs.share]);
 
   useEffect(() => {
     setLinkValidation(validateLinkInput(inputs.link));
@@ -301,12 +339,17 @@ function InputSection({ inputs }: { inputs: inputsType }) {
             Category
           </label>
           <select
+            value={inputs.category}
             name="category"
             id="category"
             onChange={handleCategorySelection}
           >
             {filteredCategoryArray.map((category) => {
-              return <option value={category}>{category}</option>;
+              return (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              );
             })}
           </select>
         </div>

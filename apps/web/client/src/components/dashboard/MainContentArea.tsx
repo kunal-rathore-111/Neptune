@@ -4,23 +4,27 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  SidebarTrigger,
+  ThemeToggleButton,
   toast,
-  useSidebar,
 } from "@repo/ui";
-import { Search } from "lucide-react";
+import { CircleX, Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
+import { LongContentCard } from "./DashboardComps/LongContentCard";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { LoaderIcon } from "@repo/icons";
 import { ErrorComp } from "@/components/ErrorComp";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { setAddBookMarkState } from "@/store/uiSlice";
+import { useSearchParams } from "react-router";
+import { useInView } from "framer-motion";
+import { useFetchSharedProfile } from "@/hooks/react-query-hooks/useFetchSharedProfile";
 export function DashboardMainContentArea() {
-  const { isLoading, error, isError } = useDashboardFetch();
-  const { open } = useSidebar();
+
+  const isSharedProfileRouteHash = useSelector((state: RootState) => state.ui.isSharedProfileRouteHash)
+  const { isLoading, error, isError } = isSharedProfileRouteHash ? useFetchSharedProfile(isSharedProfileRouteHash) : useDashboardFetch();
 
   useEffect(() => {
     if (isError) {
@@ -30,12 +34,7 @@ export function DashboardMainContentArea() {
 
   return (
     <section className="relative flex min-h-screen w-full flex-col py-10 lg:px-8">
-      <SidebarTrigger
-        className={cn(
-          "w-fit p-1",
-          open ? "cursor-w-resize" : "cursor-e-resize",
-        )}
-      />
+
 
       {/* if loading show loader */}
       {isLoading ? (
@@ -58,7 +57,66 @@ function DashboardSection() {
   const addBookMarkState = useSelector(
     (state: RootState) => state.ui.addBookMarkState,
   );
+  const editCardState = useSelector(
+    (state: RootState) => state.ui.editCardState,
+  );
+  const selectedCard = useSelector(
+    (state: RootState) => state.ui.longSelectedCard,
+  );
   const dispatch = useDispatch();
+  const { data: dashboardData, fetchNextPage, isFetchingNextPage, hasNextPage } = useDashboardFetch();
+
+  const allContent = dashboardData?.pages.flatMap((page) => page.type === "success" ? page.data : []) // convert all subarray into single array
+
+  const [searchString, setSearchString] = useState<string>("");
+
+
+  // for sentinal (auto fetch on reaching end)
+  const endRef = useRef(null);
+  const isEndReach = useInView(endRef);
+
+
+  useEffect(() => {
+    if (isEndReach && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [isEndReach])
+
+
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
+  const tag = searchParams.get("tag");
+  const shared = searchParams.get("shared");
+
+
+  let categorizedData = allContent;
+
+  if (category)
+    categorizedData = allContent?.filter(
+      (x) => x.contentTable.category === category,
+    );
+  else if (tag)
+    categorizedData = allContent?.filter((x) =>
+      x.contentTable.tags?.includes(tag),
+    );
+  else if (shared) {
+    categorizedData = allContent?.filter((x) => x.ContentShareLinkTable);
+  }
+
+
+  const cleanSearchString = searchString.toLowerCase().trim();
+
+  const finalDisplayData = categorizedData && searchString ? categorizedData.filter(data => {
+    const { title, category, description, link, tags } = data.contentTable;
+    return (
+      title.toLowerCase().includes(cleanSearchString) ||
+      description?.toLowerCase().includes(cleanSearchString) ||
+      category?.toLowerCase().includes(cleanSearchString) ||
+      link?.toLowerCase().includes(cleanSearchString) ||
+      tags?.some(x => x.toLowerCase().includes(cleanSearchString))
+    )
+  }) : categorizedData;
+
   return (
     <>
       <div className="w-full space-y-10">
@@ -67,28 +125,57 @@ function DashboardSection() {
           {/* Header: justify-between spreads the H1 and Button */}
           <div className="flex w-full items-center justify-between">
             <h1 className="text-2xl font-semibold">All Bookmarks</h1>
-            <button
-              className={cn(ButtonsClass, "h-fit p-2 text-xs")}
-              onClick={() => dispatch(setAddBookMarkState(true))}
-            >
-              Add Bookmark
-            </button>
+            <div className="flex gap-4 items-center ">
+              <button
+                className={cn(ButtonsClass, "h-fit p-2 text-xs")}
+                onClick={() => dispatch(setAddBookMarkState(true))}
+              >
+                Add Bookmark
+              </button>
+              <ThemeToggleButton className="p-2" />
+            </div>
           </div>
 
           <InputGroup className="sm:max-w-xs lg:max-w-sm">
-            <InputGroupInput placeholder="Search here..." />
+            <InputGroupInput
+              value={searchString}
+              onChange={(e) => {
+                setSearchString(e.target.value)
+              }}
+              placeholder="Search here..." />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
-            <InputGroupAddon align="inline-end">12 results</InputGroupAddon>
+            <InputGroupAddon align="inline-end">
+
+              {searchString
+                &&
+                <CircleX className="cursor-pointer " onClick={() => setSearchString('')} />
+              }
+
+              {finalDisplayData?.length} results
+            </InputGroupAddon>
           </InputGroup>
         </div>
         {/*  list of cards */}
-        <DashboardDataList />
+        <DashboardDataList finalDisplayData={finalDisplayData} />
+
+        {/* sentinal comp for showing loading on end */}
+        {
+          <div ref={endRef} className=" flex items-center justify-center">
+            {isEndReach && hasNextPage && isFetchingNextPage && <LoaderIcon />}
+          </div>
+        }
       </div>
 
       {/* render the add card on full screen */}
       {addBookMarkState && <Add_Edit_BookMarkCard type="add" />}
+
+      {/* render the edit card for the relevant card */}
+      {editCardState && <Add_Edit_BookMarkCard type="edit" />}
+
+      {/* render the card dashboardData on full screen */}
+      {selectedCard && <LongContentCard />}
     </>
   );
 }

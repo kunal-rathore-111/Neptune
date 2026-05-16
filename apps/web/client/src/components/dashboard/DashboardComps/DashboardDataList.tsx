@@ -4,31 +4,16 @@ import { useEffect, useState } from "react";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSidebar } from "@repo/ui";
 import { cn } from "@repo/libs";
-import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
-import LoadingPage from "@/Pages/Loading";
-import { useSearchParams } from "react-router";
 
-export default function DashboardDataList() {
-  const { data: response, isLoading } = useDashboardFetch(); // already cached via maincontentarea.tsx
+type DashboardDataListInput = {
+  finalDisplayData: dashboardFetchDataType[] | undefined,
+}
 
-  const [searchParams] = useSearchParams();
-  const category = searchParams.get("category");
-  const tag = searchParams.get("tag");
-  const shared = searchParams.get("shared");
+export default function DashboardDataList({ finalDisplayData }: DashboardDataListInput) {
 
-  let categorizedData = response?.data;
+  /*  check sidebar is open or not for no. of cols on the dashboard */
+  const { open } = useSidebar();
 
-  if (category)
-    categorizedData = response?.data.filter(
-      (x) => x.contentTable.category === category,
-    );
-  else if (tag)
-    categorizedData = response?.data.filter((x) =>
-      x.contentTable.tags?.includes(tag),
-    );
-  else if (shared) {
-    categorizedData = response?.data.filter((x) => x.ContentShareLinkTable);
-  }
 
   const getCols = (width: number, open: boolean) => {
     if (open) {
@@ -44,10 +29,8 @@ export default function DashboardDataList() {
     }
   };
 
-  /*  check sidebar is open or not for no. of cols on the dashboard */
-  const { open } = useSidebar();
-
   const [cols, setCols] = useState<number>(getCols(window.innerWidth, open));
+
 
   useEffect(() => {
     const handleResizeEvent = () => {
@@ -68,14 +51,13 @@ export default function DashboardDataList() {
     // put cols according to screen size (cols)
     for (let i = 0; i < cols; i++) result.push([]); // [[], [], []] if col =3
     // traverse the cardsData (backend data) and put col wise
-    categorizedData?.forEach((element, i) => {
+    finalDisplayData?.forEach((element, i) => {
       result[i % cols].push(element);
     });
     return result;
   }
 
-  if (isLoading) return <LoadingPage />;
-  if (response && response?.data.length === 0) {
+  if (finalDisplayData && finalDisplayData.length === 0) {
     return <div>"NoContentPresentComp" </div>;
   }
 

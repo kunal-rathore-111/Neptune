@@ -6,12 +6,14 @@ type initalStatesType = {
   addBookMarkState: boolean;
   longSelectedCard: dashboardFetchDataType | SharedContentDataType | null;
   editCardState: dashboardFetchDataType | SharedContentDataType | null;
+  isSharedProfileRouteHash: string | null
 };
 
 const initialStates: initalStatesType = {
   addBookMarkState: false,
   editCardState: null,
   longSelectedCard: null,
+  isSharedProfileRouteHash: null,
 };
 
 export const uiSlice = createSlice({
@@ -37,9 +39,10 @@ export const uiSlice = createSlice({
     ) => {
       state.longSelectedCard = action.payload;
     },
+    setIsSharedProfileRouteHash: (state, action: PayloadAction<string | null>) => { state.isSharedProfileRouteHash = action.payload }
   },
 });
 
-export const { setAddBookMarkState, setLongSelectedCard, setEditCardState } =
+export const { setAddBookMarkState, setLongSelectedCard, setEditCardState, setIsSharedProfileRouteHash } =
   uiSlice.actions;
 export default uiSlice.reducer;

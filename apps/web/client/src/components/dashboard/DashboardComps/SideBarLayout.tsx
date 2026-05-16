@@ -1,5 +1,5 @@
 import { NeptunePlanetIcon } from "@repo/icons";
-import { ThemeToggleButton } from "@repo/ui";
+import { SidebarTrigger } from "@repo/ui";
 import { PlusIcon } from "@repo/icons";
 import { useRef, useState } from "react";
 import { animateIconUsingRef, type IconHandle } from "@repo/ui";
@@ -36,18 +36,22 @@ import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
 import { setAddBookMarkState } from "@/store/uiSlice";
 import { useDispatch } from "react-redux";
 
-export function AppSideBar() {
+type propsType = {
+  isSharedDashboard?: boolean
+}
+export function AppSideBar({ isSharedDashboard }: propsType) {
   return (
     <Sidebar className="dark:bg-stone-950">
-      <Header />
+      <Header isSharedDashboard={isSharedDashboard} />
       <Content />
-      <Footer />
+      <Footer isSharedDashboard={isSharedDashboard} />
     </Sidebar>
   );
 }
 
-function Header() {
+function Header(props: propsType) {
   const navigate = useNavigate();
+  const AnimateRefNeptuenIcon = useRef<IconHandle>(null);
   const AnimateRef = useRef<IconHandle>(null);
   const dispatch = useDispatch();
   return (
@@ -55,28 +59,37 @@ function Header() {
       <div className="flex flex-col gap-7 p-3">
         <div className="flex w-full items-center justify-between">
           <button
+            {...animateIconUsingRef(AnimateRefNeptuenIcon)}
             className="flex cursor-pointer items-center justify-center font-medium md:gap-1 lg:gap-2"
             onClick={() => {
               navigate("/");
             }}
           >
-            <NeptunePlanetIcon size={20} className="inline-block" /> Neptune
+            <NeptunePlanetIcon
+              ref={AnimateRefNeptuenIcon}
+              size={20}
+              className="inline-block"
+            />{" "}
+            Neptune
           </button>
-          <ThemeToggleButton />
+          <SidebarTrigger />
         </div>
-        <Button
-          className="border-2 border-zinc-500/40 bg-transparent text-xs text-zinc-600 shadow-lg shadow-black/10 hover:bg-zinc-200 hover:text-black dark:text-zinc-400 dark:shadow-white/5 hover:dark:bg-zinc-800 dark:hover:text-white"
-          asChild
-          {...animateIconUsingRef(AnimateRef)}
-        >
-          <div
-            className="flex gap-1"
-            onClick={() => dispatch(setAddBookMarkState(true))}
+        {
+          /* do not show the add button on sharedDasbhoard  */
+          !props.isSharedDashboard && <Button
+            className="border-2 border-zinc-500/40 bg-transparent text-xs text-zinc-600 shadow-lg shadow-black/10 hover:bg-zinc-200 hover:text-black dark:text-zinc-400 dark:shadow-white/5 hover:dark:bg-zinc-800 dark:hover:text-white"
+            asChild
+            {...animateIconUsingRef(AnimateRef)}
           >
-            <PlusIcon className="inline-block" size={18} ref={AnimateRef} />
-            New Bookmark
-          </div>
-        </Button>
+            <div
+              className="flex gap-1"
+              onClick={() => dispatch(setAddBookMarkState(true))}
+            >
+              <PlusIcon className="inline-block" size={18} ref={AnimateRef} />
+              New Bookmark
+            </div>
+          </Button>
+        }
       </div>
     </SidebarHeader>
   );
@@ -95,18 +108,22 @@ function Content() {
   );
 }
 
+
+
 function SideBar_Menu() {
   // loading and error already handled in dashboard.tsx page
   const { data: response, isLoading } = useDashboardFetch();
 
+  const allContent = response?.pages.flatMap((page) => page.type === "success" ? page.data : []);
+
   const uniqueTags = [
-    ...new Set(response?.data.flatMap((x) => x.contentTable.tags)),
+    ...new Set(allContent?.flatMap((x) => x.contentTable.tags)),
   ];
   const uniqueCategories = [
-    ...new Set(response?.data.flatMap((x) => x.contentTable.category)),
+    ...new Set(allContent?.flatMap((x) => x.contentTable.category)),
   ];
   const navigate = useNavigate();
-  function handleSidebarClick(type: string, value?: string) {
+  function handleSidebarClick(type: string, value?: string | null) {
     if (type === "home") {
       navigate("?");
     } else if (type === "shared") {
@@ -117,6 +134,28 @@ function SideBar_Menu() {
       navigate(`?tag=${value}`);
     }
   }
+
+
+
+  function MapCategoryWithIconComp({ category }: { category: typeof uniqueCategories[0] }) {
+
+    const AnimateRef = useRef<IconHandle>(null);
+    const Icon = MapCategoryWithIcon(category);
+    return (
+      <button
+        onClick={() => handleSidebarClick("category", category)}
+        className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
+        key={category}
+        {...animateIconUsingRef(AnimateRef)}
+      >
+        <span className="flex gap-2">
+          <Icon ref={AnimateRef} className="inline-block" size={16} />{" "}
+          {category}
+        </span>
+      </button>
+    );
+  }
+
   if (isLoading) return <LoaderIcon />;
   return (
     <SidebarMenu className="">
@@ -141,21 +180,7 @@ function SideBar_Menu() {
           </CollapsibleTrigger>
           <CollapsibleContent className="flex flex-col items-start justify-between gap-1 px-9 pl-6">
             {uniqueCategories.map((category) => {
-              const AnimateRef = useRef<IconHandle>(null);
-              const Icon = MapCategoryWithIcon(category);
-              return (
-                <button
-                  onClick={() => handleSidebarClick("category", category)}
-                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
-                  key={category}
-                  {...animateIconUsingRef(AnimateRef)}
-                >
-                  <span className="flex gap-2">
-                    <Icon ref={AnimateRef} className="inline-block" size={16} />{" "}
-                    {category}
-                  </span>
-                </button>
-              );
+              return <div key={category}><MapCategoryWithIconComp category={category} /></div>
             })}
           </CollapsibleContent>
         </SidebarMenuItem>
@@ -176,7 +201,7 @@ function SideBar_Menu() {
               return (
                 <button
                   onClick={() => handleSidebarClick("tag", tag)}
-                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
+                  className="flex w-full gap-1 rounded border border-transparent px-3 py-1 text-start font-sans text-xs text-zinc-500 transition-colors duration-200 hover:border-zinc-600 hover:text-black dark:text-zinc-400 hover:dark:text-white"
                   key={tag}
                 >
                   #{tag}
@@ -200,7 +225,7 @@ function SideBar_Menu() {
   );
 }
 
-function Footer() {
+function Footer(props: propsType) {
   const { data } = useFetchUserProfile(); // already cathced via parent called (the dashboard pages)
   const AnimateRef = useRef<IconHandle>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -236,38 +261,43 @@ function Footer() {
                 <p> username</p>
               )}
             </SidebarMenuButton>
-            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  className="flex w-fit items-center justify-center border"
-                  {...animateIconUsingRef(AnimateRef)}
-                >
-                  <SettingsIcon ref={AnimateRef} />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup onClick={() => navigate("/user/profile")}>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuItem className="focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black">
-                    Profile
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuGroup>
-                  <DropdownMenuItem
-                    className="w-full focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black"
-                    asChild
+
+            {/* do not show settings on sharedProfileDashboard page */}
+            {
+              !props.isSharedDashboard && <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    className="flex w-fit items-center justify-center border"
+                    {...animateIconUsingRef(AnimateRef)}
                   >
-                    <button
-                      onClick={() => {
-                        signOutHandler();
-                      }}
+                    <SettingsIcon ref={AnimateRef} />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuGroup onClick={() => navigate("/user/profile")}>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuItem className="focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black">
+                      Profile
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      className="w-full focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black"
+                      asChild
                     >
-                      Logout
-                    </button>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                      <button
+                        onClick={() => {
+                          signOutHandler();
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            }
+
           </SidebarGroup>
         </SidebarMenuItem>
       </SidebarMenu>

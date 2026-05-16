@@ -1,17 +1,23 @@
 import { useNavigate } from "react-router";
 import { GithubIcon, NeptunePlanetIcon } from "@repo/icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { GithubRepo } from "@/lib/utils/SocialLinks_PolicyDate";
-import { Button, ThemeToggleButton } from "@repo/ui";
+import {
+  animateIconUsingRef,
+  Button,
+  type IconHandle,
+  ThemeToggleButton,
+} from "@repo/ui";
+import { GithubRepoUrl } from "@/api/urls";
 
 export const Nav = () => {
   const navigate = useNavigate();
+  const animateRef = useRef<IconHandle>(null);
   const [hovered, setHovered] = useState<number | null>(null);
 
   const NavFunctionalComps = [
     { label: "Features", action: () => handleScrollTo("features") },
-    { label: "Blog", action: () => {} },
+    { label: "Blog", action: () => { } },
     { label: "Docs", action: () => navigate("/docs") },
     // will update later after comletion of dashboard page to only when authenticated
     { label: "Dashboard", action: () => navigate("/user/dashboard") },
@@ -38,9 +44,13 @@ export const Nav = () => {
               window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
             }
           >
-            <div className="flex items-center gap-1">
+            <div
+              className="flex items-center gap-1"
+              {...animateIconUsingRef(animateRef)}
+            >
               <div className="flex size-6 items-center justify-center rounded-[7px]">
                 <NeptunePlanetIcon
+                  ref={animateRef}
                   size={23}
                   className="text-zinc-900 dark:text-zinc-100"
                 />
@@ -78,7 +88,7 @@ export const Nav = () => {
           <ThemeToggleButton />
           <div className="h-4 w-px bg-zinc-300 dark:bg-zinc-700" />
           <a
-            href={GithubRepo}
+            href={GithubRepoUrl}
             target="_blank"
             rel="noreferrer"
             className="flex size-7 items-center justify-center rounded-sm text-zinc-400 transition-all duration-400 hover:bg-zinc-200 hover:text-zinc-700 dark:text-zinc-500 hover:dark:bg-zinc-800 hover:dark:text-zinc-200"

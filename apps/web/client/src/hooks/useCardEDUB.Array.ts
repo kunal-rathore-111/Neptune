@@ -51,7 +51,7 @@ export function useCardEDUB(props: cardEDUBType) {
       } else if (action === "toggleShare") {
         const data = {
           contentId: cardData.contentTable.id,
-          share: cardData.ContentShareLinkTable?.contentSharehash
+          share: cardData.ContentShareLinkTable?.shareHash
             ? false
             : true, // if shareHash present means revert
         };
@@ -89,22 +89,22 @@ export function useCardEDUB(props: cardEDUBType) {
 
   const BrowserIconArray = props.cardData.contentTable?.link
     ? [
-        {
-          Icon: BrowserIcon,
-          className: "text-lime-600 ",
-          label: "Open link",
-          action: () => {
-            if (props.cardData.contentTable.link) {
-              handleLinkOpenner(props.cardData.contentTable.link);
-            } else {
-              //even no need of else (the icon will not show if link not present)
-              toast.error("No link found to open", {
-                position: "top-center",
-              });
-            }
-          },
+      {
+        Icon: BrowserIcon,
+        className: "text-lime-600 ",
+        label: "Open link",
+        action: () => {
+          if (props.cardData.contentTable.link) {
+            handleLinkOpenner(props.cardData.contentTable.link);
+          } else {
+            //even no need of else (the icon will not show if link not present)
+            toast.error("No link found to open", {
+              position: "top-center",
+            });
+          }
         },
-      ]
+      },
+    ]
     : null;
   /* array with icons of delete, edit, update and browser */
   const EDUBArray = [
@@ -117,7 +117,7 @@ export function useCardEDUB(props: cardEDUBType) {
       },
     },
     {
-      Icon: props.cardData.ContentShareLinkTable?.contentSharehash
+      Icon: props.cardData.ContentShareLinkTable?.shareHash
         ? ShareIcon
         : ShareOffIcon,
       className: "text-black dark:text-white",

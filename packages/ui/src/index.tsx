@@ -46,3 +46,4 @@ export * from './components/custom_buttons/MoveUpButton';
 export * from './components/custom_buttons/BackToHomeButton';
 export * from './components/file-upload';
 export * from './components/userProfileCard/userProfilecardComps';
+export * from './components/drawer/drawer';

@@ -1,28 +1,18 @@
 export type dashboardFetchDataType = {
   contentTable: {
     id: string;
-    title: string;
-    description: string | null;
-    link: string | null;
-    category:
-      | "Development"
-      | "Finance"
-      | "Study"
-      | "Social"
-      | "GitHub"
-      | "Exams"
-      | "AI"
-      | "Research"
-      | "Design"
-      | "Others";
-    tags?: string[];
     userId: string;
+    title: string;
+    link: string | null;
+    description: string | null;
+    category: "Development" | "Finance" | "Study" | "Social" | "GitHub" | "Exams" | "AI" | "Research" | "Design" | "Others";
+    tags: string[] | null;
     createdDate: Date;
     updatedDate: Date;
   };
   ContentShareLinkTable: {
     id: string;
-    contentSharehash: string;
+    shareHash: string;
     contentId: string;
   } | null;
-};
+}

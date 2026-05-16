@@ -1,6 +1,5 @@
 import { GithubIcon } from "@repo/icons";
 
-import { EmailLink, GithubRepo } from "@/lib/utils/SocialLinks_PolicyDate";
 import { HelpCircle, MailIcon } from "lucide-react";
 import {
   FeaturesArray,
@@ -15,6 +14,7 @@ import {
   Button,
   BackToHome_MoveUpComp,
 } from "@repo/ui";
+import { EmailLink, GithubRepoUrl } from "@/api/urls";
 
 export default function Docs() {
   return (
@@ -88,7 +88,7 @@ export default function Docs() {
                 {
                   title: "View on Github",
                   icon: GithubIcon,
-                  link: `${GithubRepo}/issues`,
+                  link: `${GithubRepoUrl}/issues`,
                 },
                 { title: "Contact us", icon: HelpCircle, link: "/contact" },
               ].map((x, idx) => {

@@ -1,15 +1,19 @@
-import { BookTextIcon } from "@repo/icons";
+import { NeptunePlanetIcon } from "@repo/icons";
 import { footerLinks, socialLinks } from "@/lib/constants/content/Footer";
 import { Link } from "react-router";
+import { GithubRepoUrl } from "@/api/urls";
+import { useRef } from "react";
+import { animateIconUsingRef, type IconHandle } from "@repo/ui";
 export const Footer = () => {
+  const animateRef = useRef<IconHandle>(null);
   return (
     <footer className="mt-0 border-t px-4">
       <div className="">
         <div className="grid grid-cols-2 py-8 max-sm:mx-auto max-sm:max-w-sm md:grid-cols-5">
           <div className="col-span-full mb-10 flex w-full flex-col items-center md:col-span-3 md:mb-0 md:items-start">
-            <div className="flex items-center gap-1">
-              <BookTextIcon size={22} className="inline-block" />
-              <span className="font-semibold">2nd Mind</span>
+            <div className="flex items-center gap-2 justify-center">
+              <NeptunePlanetIcon ref={animateRef} size={22} className="inline-block" />
+              <span className="font-semibold" {...animateIconUsingRef(animateRef)}>Neptune</span>
             </div>
             <p className="max-w-55 py-4 text-sm wrap-break-word text-black/40 md:text-start lg:mx-0 lg:text-left dark:text-zinc-300/40">
               A premium bookmark manager for people who think in links.
@@ -17,14 +21,16 @@ export const Footer = () => {
             <div className="flex gap-4 pt-2">
               {socialLinks.map((x, idx) => {
                 return (
-                  <Link
+                  <a
                     key={idx}
                     aria-label={x.label}
-                    to={x.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={x.href}
                     className="flex items-center justify-center rounded-sm border border-zinc-200 bg-zinc-100 p-1 text-zinc-600 shadow-[0_1px_0_rgba(0,0,0,0.12)] transition-all duration-300 hover:scale-102 hover:border-zinc-300 hover:text-zinc-900 hover:shadow-[0_3px_0_rgba(0,0,0,0.18)] dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
                   >
                     <x.icon size={18} />
-                  </Link>
+                  </a>
                 );
               })}
             </div>
@@ -64,12 +70,12 @@ export const Footer = () => {
           <div className="flex flex-col items-center justify-center lg:flex-row lg:justify-between">
             <span className="text-center text-gray-500 dark:text-gray-400">
               ©{" "}
-              <Link
-                to="#"
+              <a
+                href={GithubRepoUrl}
                 className="hover:text-red-500 dark:hover:text-indigo-400"
               >
-                2026 2nd Mind.
-              </Link>{" "}
+                2026 Neptune.
+              </a>{" "}
               All rights reserved.
             </span>
             <div className="flex gap-5">

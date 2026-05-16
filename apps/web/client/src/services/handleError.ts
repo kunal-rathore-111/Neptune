@@ -3,9 +3,9 @@ import { isAxiosError } from "axios";
 export type ServiceResponse =
   | { message: string; type: "error" }
   | {
-      message: string;
-      type: "success";
-    };
+    message: string;
+    type: "success";
+  };
 
 export type ErrorServiceResponse = {
   message: string;
@@ -25,13 +25,8 @@ export function HandleError(error: unknown): ErrorServiceResponse {
   let message = "Something went wrong";
   let status = 500;
   if (isAxiosError<BackendError>(error)) {
-    if (
-      error.response?.data.message &&
-      error.response.data.errorType !== "ServerError"
-    ) {
-      message = error.response.data.message;
-      status = error.response.status;
-    }
+    message = error.response?.data.message ?? message;
+    status = error.response?.status ?? status;
   }
   return { message, type: "error", status };
 }
