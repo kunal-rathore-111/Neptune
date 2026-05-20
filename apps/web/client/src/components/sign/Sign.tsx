@@ -8,7 +8,7 @@ import {
   MailIcon,
   UserIcon,
 } from "lucide-react";
-import { GithubIcon, GoogleIcon, LoaderIcon } from "@repo/icons";
+import { LoaderIcon } from "@repo/icons";
 import { Button, FloatingLabelInput, toast } from "@repo/ui";
 import { ThemeHomeComp } from "@repo/ui";
 import { InputValidationFeedback } from "./InputValidationFeedback";
@@ -200,51 +200,19 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
                 </button>
               </fieldset>
             </form>
+          </div>
 
-            {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <span className="border-border w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="text-muted-foreground bg-white px-2 dark:bg-black">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            {/* Social Login */}
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                type="button"
-                asChild
-                className="border-2 border-dashed border-zinc-900/90 bg-zinc-300/20 text-black transition-colors duration-600 hover:bg-zinc-400/70 dark:border-zinc-300/60 dark:text-white"
+          {/* Footer */}
+          <div className="mt-6 text-center text-sm">
+            <span className="text-muted-foreground">
+              {content.alternateText}{" "}
+              <Link
+                to={content.alternateActionRoute}
+                className="hover:text-primary underline underline-offset-4 transition-colors"
               >
-                <span className="flex">
-                  <GithubIcon />
-                  <span className="ml-2">GitHub</span>
-                </span>
-              </Button>
-              <Button type="button" asChild>
-                <span className="flex">
-                  <GoogleIcon />
-                  <span className="ml-2">Google</span>
-                </span>
-              </Button>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">
-                {content.alternateText}{" "}
-                <Link
-                  to={content.alternateActionRoute}
-                  className="hover:text-primary underline underline-offset-4 transition-colors"
-                >
-                  {content.alternateAction}
-                </Link>
-              </span>
-            </div>
+                {content.alternateAction}
+              </Link>
+            </span>
           </div>
         </div>
       </div>
