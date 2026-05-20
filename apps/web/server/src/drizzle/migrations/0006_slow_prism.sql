@@ -1,0 +1,1 @@
+ALTER TABLE "contentTable" ALTER COLUMN "description" SET DATA TYPE text;
