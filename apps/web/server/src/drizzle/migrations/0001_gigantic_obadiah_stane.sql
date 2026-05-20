@@ -1,0 +1,1 @@
+ALTER TABLE "linkTable" ALTER COLUMN "linkhash" SET DATA TYPE varchar(130);
