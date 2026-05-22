@@ -3,7 +3,7 @@ export type dashboardFetchDataType = {
     id: string;
     userId: string;
     title: string;
-    link: string | null;
+    link: string;
     description: string | null;
     category: "Development" | "Finance" | "Study" | "Social" | "GitHub" | "Exams" | "AI" | "Research" | "Design" | "Others";
     tags: string[] | null;

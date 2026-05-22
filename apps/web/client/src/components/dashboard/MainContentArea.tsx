@@ -4,6 +4,8 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
+  Sheet,
+  SheetContent,
   ThemeToggleButton,
   toast,
 } from "@repo/ui";
@@ -17,7 +19,7 @@ import { LoaderIcon } from "@repo/icons";
 import { ErrorComp } from "@/components/ErrorComp";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { setAddBookMarkState } from "@/store/uiSlice";
+import { setAddBookMarkState, setEditCardState, setLongSelectedCard } from "@/store/uiSlice";
 import { useSearchParams } from "react-router";
 import { useInView } from "framer-motion";
 import { useFetchSharedProfile } from "@/hooks/react-query-hooks/useFetchSharedProfile";
@@ -169,13 +171,31 @@ function DashboardSection() {
       </div>
 
       {/* render the add card on full screen */}
-      {addBookMarkState && <Add_Edit_BookMarkCard type="add" />}
+      {addBookMarkState && (
+        <Sheet open={addBookMarkState} onOpenChange={() => dispatch(setAddBookMarkState(false))}>
+          <SheetContent className="border-none! bg-transparent! shadow-none! p-0! flex! items-center justify-center w-full! max-w-full! h-full! inset-0!" showCloseButton={false}>
+            <Add_Edit_BookMarkCard type="add" />
+          </SheetContent>
+        </Sheet>
+      )}
 
       {/* render the edit card for the relevant card */}
-      {editCardState && <Add_Edit_BookMarkCard type="edit" />}
+      {editCardState && (
+        <Sheet open={!!editCardState} onOpenChange={() => dispatch(setEditCardState(null))}>
+          <SheetContent className="border-none! bg-transparent! shadow-none! p-0! flex! items-center justify-center w-full! max-w-full! h-full! inset-0!" showCloseButton={false}>
+            <Add_Edit_BookMarkCard type="edit" />
+          </SheetContent>
+        </Sheet>
+      )}
 
       {/* render the card dashboardData on full screen */}
-      {selectedCard && <LongContentCard />}
+      {selectedCard && (
+        <Sheet open={!!selectedCard} onOpenChange={() => dispatch(setLongSelectedCard(null))}>
+          <SheetContent className="border-none! bg-transparent! shadow-none! p-0! flex! items-center justify-center w-full! max-w-full! h-full! inset-0!" showCloseButton={false}>
+            <LongContentCard />
+          </SheetContent>
+        </Sheet>
+      )}
     </>
   );
 }

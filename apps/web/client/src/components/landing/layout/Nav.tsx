@@ -17,14 +17,9 @@ export const Nav = () => {
 
   const NavFunctionalComps = [
     { label: "Features", action: () => handleScrollTo("features") },
-    { label: "Blog", action: () => { } },
     { label: "Docs", action: () => navigate("/docs") },
     // will update later after comletion of dashboard page to only when authenticated
     { label: "Dashboard", action: () => navigate("/user/dashboard") },
-    {
-      label: "SharedProfile",
-      action: () => navigate("/user/public/shared/profile"),
-    },
   ];
 
   const handleScrollTo = (id: string) => {

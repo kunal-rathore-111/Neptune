@@ -23,7 +23,6 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
     props.selectedCardData.contentTable.category,
   );
 
-  /* redux hook */
   const editCardState = useSelector(
     (state: RootState) => state.ui?.editCardState,
   );
@@ -38,6 +37,7 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
   const date = props.selectedCardData.contentTable.updatedDate
     .toString()
     .slice(0, 10);
+
 
   return (
     <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/5 backdrop-blur-[3px]">
@@ -72,6 +72,7 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
                       className="rounded-sm border-2 border-black/50 p-1 dark:border-white/50"
                     />
                     <h5 className="text-sm">
+
                       {props.selectedCardData.contentTable.category}
                     </h5>
                   </div>
@@ -131,15 +132,14 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
                 {/*  show the icons of edit update and delete only when the card is loaded in users dashboard not when the card was as the sharedCart (which can be identified by themeButton) */}
                 {props.ThemeButton ? (
                   <div>
-                    {/* need to add link here */}
-                    {BrowserIconArray?.map((x) => (
-                      <a
-                        href={x.label}
-                        className="cursor-pointer rounded px-1 py-0.5 underline"
-                      >
-                        Link
-                      </a>
-                    ))}
+                    <a
+                      href={props.selectedCardData.contentTable.link}
+                      rel="noopener norefferer"
+                      target="_blank"
+                      className="cursor-pointer rounded px-1 py-0.5 underline"
+                    >
+                      Link
+                    </a>
                   </div>
                 ) : (
                   <div className="flex gap-3">

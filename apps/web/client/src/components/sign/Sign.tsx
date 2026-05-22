@@ -9,7 +9,7 @@ import {
   UserIcon,
 } from "lucide-react";
 import { LoaderIcon } from "@repo/icons";
-import { Button, FloatingLabelInput, toast } from "@repo/ui";
+import { FloatingLabelInput, toast } from "@repo/ui";
 import { ThemeHomeComp } from "@repo/ui";
 import { InputValidationFeedback } from "./InputValidationFeedback";
 import {

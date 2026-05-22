@@ -1,4 +1,3 @@
-import { ClapIcon } from "@repo/icons";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { SendIcon } from "@repo/icons";
@@ -53,10 +52,10 @@ function HeroSection() {
                 className="border border-amber-900/40 bg-white/10 shadow-sm hover:bg-gray-300/30 dark:border-white/30 dark:hover:bg-zinc-300/14"
                 asChild
               >
-                <motion.button whileHover={"animate"}>
+                {/* <motion.button whileHover={"animate"}>
                   View demo
                   {<ClapIcon />}
-                </motion.button>
+                </motion.button> */}
               </Button>
             </div>
           </div>
