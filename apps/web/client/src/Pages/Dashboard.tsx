@@ -1,5 +1,5 @@
 import { DashboardMainContentArea } from "@/components/dashboard/MainContentArea";
-import { AppSideBar } from "@/components/dashboard/DashboardComps/SideBarLayout";
+import { AppSideBar } from "@/components/dashboard/DashboardComps/sidebar/SideBarLayout";
 import { SidebarProvider, toast } from "@repo/ui";
 import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
 import LoadingPage from "./Loading";

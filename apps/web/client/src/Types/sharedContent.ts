@@ -3,7 +3,7 @@ export type SharedContentDataType = {
     id: string;
     title: string;
     description: string | null;
-    link: string | null;
+    link: string;
     category:
     | "Development"
     | "Finance"

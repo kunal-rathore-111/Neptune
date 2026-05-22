@@ -50,7 +50,7 @@ export const dataByContentShareLinkFunc = async (content_share_Hash: string) => 
         title: ContentTable.title,
         description: ContentTable.description,
         link: ContentTable.link,
-        category: ContentTable.link,
+        category: ContentTable.category,
         tags: ContentTable.tags,
         createdDate: ContentTable.createdDate,
         updatedDate: ContentTable.updatedDate
