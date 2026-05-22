@@ -100,7 +100,7 @@ flowchart TD
 | **Frontend** | **React 19**, **Vite 8**, **Redux Toolkit**, **Tanstack Query v5**, **Tailwind CSS v4**, **Framer Motion** | • Redux handles UI/Sidebar collapsing transitions.<br>• Tanstack Query controls caching, optimistic UI updates, and loading states.<br>• Tailwind CSS v4 and Framer Motion provide fluid micro-animations. |
 | **Backend** | **Node.js (Bun)**, **Express v5**, **Drizzle ORM**, **Zod** | • Express v5 handles fast routes and native promise rejections.<br>• Drizzle ORM provides complete SQL-level type safety.<br>• Zod guarantees request body sanitization at the gateway level. |
 | **AI Microservice** | **Bun**, **Hono**, **Langchain**, **Cheerio**, **Google GenAI & Groq** | • Hono is an ultra-fast web framework optimized for edge-runtimes.<br>• Bun runtime ensures lightning-fast script cold starts.<br>• Cheerio provides low-overhead server-side scraping without spawning heavy browser instances. |
-| **Database** | **PostgreSQL (Supabase)**, **pgvector** | • Full relational schema with cascading deletions.<br>• HNSW vector index using `vector_cosine_ops` to enable rapid semantic matching. |
+| **Database** | **PostgreSQL**, **pgvector** | • Full relational schema with cascading deletions.<br>• HNSW vector index using `vector_cosine_ops` to enable rapid semantic matching. |
 | **DevOps / Monorepo** | **Turborepo**, **Prettier**, **ESLint**, Shared Workspace Packages | • Standardized package exports for icons, validation rules, typescript presets, and shared component libraries. |
 
 ---
