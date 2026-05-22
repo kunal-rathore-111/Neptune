@@ -28,7 +28,7 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
   );
   const dispatch = useDispatch();
 
-  const { BrowserIconArray, EDUBArray, isDeletePending, isToggleSharePending } =
+  const { EDUBArray, isDeletePending, isToggleSharePending } =
     useCardEDUB({
       cardData: props.selectedCardData,
       type: "sharedContent",
