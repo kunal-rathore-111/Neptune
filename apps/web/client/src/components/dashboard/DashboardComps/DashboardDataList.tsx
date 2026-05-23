@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { useSidebar } from "@repo/ui";
 import { cn } from "@repo/libs";
+import { NoContentPresentComp } from "./NoContentComp";
 
 type DashboardDataListInput = {
   finalDisplayData: dashboardFetchDataType[] | undefined,
@@ -58,7 +59,9 @@ export default function DashboardDataList({ finalDisplayData }: DashboardDataLis
   }
 
   if (finalDisplayData && finalDisplayData.length === 0) {
-    return <div>"NoContentPresentComp" </div>;
+    return <div className="items-center justify-center flex">
+      <NoContentPresentComp />
+    </div>;
   }
 
   const cardsData = RoundRobinConversion(cols);
