@@ -3,11 +3,5 @@
   "bunVersion": "1.x",
   "installCommand": "cd ../.. && bun install",
   "buildCommand": "cd ../.. && bun run build --filter=neptune",
-  "outputDirectory": "dist",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "outputDirectory": "dist"
 }
