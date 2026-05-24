@@ -3,7 +3,12 @@
 import * as TagsInput from '@diceui/tags-input';
 import { RefreshCcw, X } from 'lucide-react';
 
-export function TagsInputComp({ tricks, setTricks }) {
+interface TagsInputCompProps {
+  tricks: string[];
+  setTricks: (tricks: string[]) => void;
+}
+
+export function TagsInputComp({ tricks, setTricks }: TagsInputCompProps) {
   return (
     <TagsInput.TagsInputRoot
       value={tricks}

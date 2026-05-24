@@ -53,8 +53,12 @@ app.route('/magic-fill', magicRoute);
 app.route('/embedding', embeddingRoute);
 app.route('/chat', chatRouter);
 
-// bun modern way to run server on hono do not provide app.listen() like express
-export default {
-  port: 3002,
-  fetch: app.fetch,
-};
+if (process.env.VERCEL !== 'true') {
+  Bun.serve({
+    port: 3002,
+    fetch: app.fetch,
+  });
+  console.log('aiServer started at port 3002');
+}
+
+export default app;

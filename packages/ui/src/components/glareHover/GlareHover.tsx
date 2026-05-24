@@ -41,10 +41,15 @@ export function GlareHover({
     const b = parseInt(hex.slice(4, 6), 16);
     rgba = `rgba(${r}, ${g}, ${b}, ${glareOpacity})`;
   } else if (/^[\dA-Fa-f]{3}$/.test(hex)) {
-    const r = parseInt(hex[0] + hex[0], 16);
-    const g = parseInt(hex[1] + hex[1], 16);
-    const b = parseInt(hex[2] + hex[2], 16);
-    rgba = `rgba(${r}, ${g}, ${b}, ${glareOpacity})`;
+    const rChar = hex[0];
+    const gChar = hex[1];
+    const bChar = hex[2];
+    if (rChar && gChar && bChar) {
+      const r = parseInt(rChar + rChar, 16);
+      const g = parseInt(gChar + gChar, 16);
+      const b = parseInt(bChar + bChar, 16);
+      rgba = `rgba(${r}, ${g}, ${b}, ${glareOpacity})`;
+    }
   }
 
   const overlayRef = useRef<HTMLDivElement | null>(null);

@@ -1,12 +1,12 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json",
-    "bunVersion": "1.x",
-    "installCommand": "cd ../.. && bun install",
-    "buildCommand": "cd ../.. && bun run build --filter=Neptune-Server",
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "src/index.ts"
-        }
-    ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "bunVersion": "1.x",
+  "installCommand": "cd ../.. && bun install",
+  "buildCommand": "cd ../.. && bun run build --filter=Neptune-Server",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.ts"
+    }
+  ]
 }
