@@ -23,20 +23,21 @@ app.use(morgan('dev'));
 
 const origins = [process.env.Frontend_URL, 'http://localhost:5173'];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // allow for postman and mobileapps
-      if (origins.includes(origin))
-        return callback(null, true); // allow the defined domains in origins array to access the server
-      else return callback(new AppError('Invalid Origin', 500, 'CorsError')); // if any other origin then return with error
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    maxAge: 24 * 60 * 60, // 24 hours browser keep cache the cors so no options request for next 24 hrs again
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }),
-);
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin) return callback(null, true); // allow for postman and mobileapps
+    if (origins.includes(origin))
+      return callback(null, true); // allow the defined domains in origins array to access the server
+    else return callback(new AppError('Invalid Origin', 500, 'CorsError')); // if any other origin then return with error
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  maxAge: 24 * 60 * 60, // 24 hours browser keep cache the cors so no options request for next 24 hrs again
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -48,6 +49,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/app/v3', requestIdMiddleware, indexRoute);
+app.use('/', requestIdMiddleware, indexRoute);
 
 app.use(errorMiddleware); // catches all errors, apperror -- if we put it at top then all request will be considered as error
 
