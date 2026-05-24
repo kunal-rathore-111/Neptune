@@ -7,6 +7,8 @@
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%20%26%20pgvector-4169E1?style=for-the-badge&logo=postgresql)](https://www.postgresql.org/)
 [![Drizzle ORM](https://img.shields.io/badge/ORM-Drizzle%20ORM-C5F74F?style=for-the-badge&logo=drizzle)](https://orm.drizzle.team/)
 
+🌐 **Live Demo:** [neptune-frontend-beta.vercel.app](https://neptune-frontend-beta.vercel.app/)
+
 Neptune is a premium, high-performance **Retrieval-Augmented Generation (RAG)** knowledge curation platform and intelligent bookmarking engine. Built for users who live in the browser, Neptune eliminates manual information curation by leveraging an asynchronous AI microservices architecture to scrape, categorize, tag, and chat with saved web contents semantically.
 
 ---
