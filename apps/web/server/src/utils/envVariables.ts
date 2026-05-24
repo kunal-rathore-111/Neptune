@@ -12,8 +12,8 @@ export const DATABASE_URL = process.env.DATABASE_URL;
 
 
 
-if (!process.env.NODE_ENV) throw new Error('DATABASE_URL is not found in Environment');
+if (!process.env.NODE_ENV) throw new Error('NODE_ENV is not found in Environment');
 else if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'development')
     throw new Error('NODE_ENV is not configured correctly in Environment');
 
-export const NODE_ENV = process.env.DATABASE_URL; 
+export const NODE_ENV = process.env.NODE_ENV; 
