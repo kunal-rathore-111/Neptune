@@ -32,6 +32,7 @@
     "morgan": "^1.10.1",
     "nodemon": "^3.1.10",
     "postgres": "^3.4.7",
+    "serverless-http": "^4.0.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {

@@ -66,7 +66,6 @@ export function NoContentPresentComp() {
                         ease: "easeInOut",
                     }}
                 />
-
                 {/* Inner glassmorphic circle with custom icon */}
                 <motion.div
                     className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/40 bg-white/60 shadow-lg shadow-zinc-200/50 backdrop-blur-md dark:border-zinc-700/50 dark:bg-[#150F18]/80 dark:shadow-none"
@@ -97,7 +96,6 @@ export function NoContentPresentComp() {
                 variants={itemVariants}
             >
                 <span className=" text-zinc-500 dark:text-zinc-500">
-
                     Your space is{" "}
                 </span>
                 <span >
