@@ -2,7 +2,7 @@ import rateLimit from "express-rate-limit";
 
 
 const defaultArgs = {
-    message: "Your limit is reached, Please try after again after minutes",
+    message: "Rate limit reached. Please try again after a few minutes.",
     statusCode: 429,
     standardHeaders: true,
     legacyHeaders: false,
