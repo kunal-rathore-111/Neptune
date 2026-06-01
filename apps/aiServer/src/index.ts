@@ -11,30 +11,24 @@ const app = new Hono(); // same as express just faster
 
 app.use('*', secureHeaders()); //same as helmet in express
 
-const origins = [process.env.Frontend_URL, 'http://localhost:5173'].filter((origin): origin is string =>
-  Boolean(origin),
+const BACKEND_URL = process.env.BACKEND_URL;
+
+if (!BACKEND_URL) throw new Error("BACKEND_URL not found in aiServer");
+
+const origins = [process.env.BACKEND_URL, 'http://localhost:5173'].filter(
+  (o): o is string => Boolean(o),
 );
-
-app.use('*', async (c, next) => {
-  const origin = c.req.header('origin');
-
-  if (origin && !origins.includes(origin)) {
-    return c.json({ message: 'Invalid Origin' }, 500);
-  }
-
-  await next();
-});
 
 app.use(
   '*',
   cors({
     origin: (origin) => {
-      if (!origin) return '';
-      if (origins.includes(origin)) return origin;
-      return '';
+      if (!origin) return origin; // allow Postman
+      if (origins.includes(origin)) return origin; // allow known origins
+      return ''; // block everything else
     },
     credentials: true,
-    allowMethods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     maxAge: 24 * 60 * 60,
     allowHeaders: ['Content-Type', 'Authorization'],
   }),
