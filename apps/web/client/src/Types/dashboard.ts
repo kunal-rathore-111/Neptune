@@ -1,3 +1,5 @@
+import type { CategoryType } from "@repo/libs";
+
 export type dashboardFetchDataType = {
   contentTable: {
     id: string;
@@ -5,7 +7,7 @@ export type dashboardFetchDataType = {
     title: string;
     link: string;
     description: string | null;
-    category: "Development" | "Finance" | "Study" | "Social" | "GitHub" | "Exams" | "AI" | "Research" | "Design" | "Others";
+    category: CategoryType;
     tags: string[] | null;
     createdDate: Date;
     updatedDate: Date;
@@ -15,4 +17,4 @@ export type dashboardFetchDataType = {
     shareHash: string;
     contentId: string;
   } | null;
-}
+};

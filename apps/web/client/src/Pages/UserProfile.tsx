@@ -1,5 +1,5 @@
 import { UserProfile } from "@/components/Profile/profileCard";
-import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import { useFetchUserProfile } from "@/hooks/react-query-hooks/useFetchUserProfile";
 import ErrorPage from "./ErrorPage";
 import { toast } from "@repo/ui";
 import LoadingPage from "./Loading";

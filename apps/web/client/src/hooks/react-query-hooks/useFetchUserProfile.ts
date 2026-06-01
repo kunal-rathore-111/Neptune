@@ -6,12 +6,12 @@ export function useFetchUserProfile(options = {}) {
     queryKey: ["useProfileData"],
     queryFn: async () => {
       const response = await fetchUserProfileService();
-      if (response.type === "error" && response.status !== 401) {
+      if (response.type === "error") {
         throw new Error(response.message);
       }
       // 401 do nothing (already redirected using the axiosInstance interceptor)
       return response;
-    },
+    }, retry: 0,
     ...options
   });
   return result;

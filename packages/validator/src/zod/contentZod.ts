@@ -1,9 +1,7 @@
 import { z } from 'zod';
+import { CATEGORIES } from '@repo/libs';
 
-const contentCategoryZod = z.enum(
-  ['Development', 'Finance', 'Study', 'Social', 'GitHub', 'Exams', 'AI', 'Research', 'Design', 'Others'],
-  { message: 'Invalid categroy' },
-);
+const contentCategoryZod = z.enum(CATEGORIES, { message: 'Invalid category' });
 
 export const contentZodSchema = z.object({
   title: z

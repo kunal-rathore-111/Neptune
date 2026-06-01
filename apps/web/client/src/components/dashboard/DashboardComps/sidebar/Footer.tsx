@@ -21,7 +21,7 @@ import {
   useSidebar,
 } from "@repo/ui";
 import { useSignOut } from "@/hooks/react-query-hooks/useSignOut";
-import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import { useFetchUserProfile } from "@/hooks/react-query-hooks/useFetchUserProfile";
 
 type propsType = {
   isSharedDashboard?: boolean
@@ -60,7 +60,7 @@ export function SideBarFooterComp(props: propsType) {
             <div className="py-2 flex items-center justify-center w-full">
               <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
                 <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton 
+                  <SidebarMenuButton
                     className="flex h-10 w-10 items-center justify-center rounded-md hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
                     tooltip="Profile & Settings"
                   >

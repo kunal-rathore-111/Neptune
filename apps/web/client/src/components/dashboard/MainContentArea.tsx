@@ -7,8 +7,8 @@ import {
   Sheet,
   SheetContent,
   ThemeToggleButton,
-  toast,
 } from "@repo/ui";
+import type { dashboardFetchDataType } from "@/Types/dashboard";
 import { CircleX, Search } from "lucide-react";
 import DashboardDataList from "./DashboardComps/DashboardDataList";
 import { useEffect, useRef, useState } from "react";
@@ -16,41 +16,22 @@ import { Add_Edit_BookMarkCard } from "./DashboardComps/Add_Edit_Bookmark";
 import { LongContentCard } from "./DashboardComps/LongContentCard";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { LoaderIcon } from "@repo/icons";
-import { ErrorComp } from "@/components/ErrorComp";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { setAddBookMarkState, setEditCardState, setLongSelectedCard } from "@/store/uiSlice";
 import { useSearchParams } from "react-router";
 import { useInView } from "framer-motion";
 import { useFetchSharedProfile } from "@/hooks/react-query-hooks/useFetchSharedProfile";
+import { all } from "axios";
+
+
 export function DashboardMainContentArea() {
 
-  const isSharedProfileRouteHash = useSelector((state: RootState) => state.ui.isSharedProfileRouteHash)
-  const { isLoading, error, isError } = isSharedProfileRouteHash ? useFetchSharedProfile(isSharedProfileRouteHash) : useDashboardFetch();
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(error.message, { position: "top-center" });
-    }
-  }, [error, isError]);
 
   return (
     <section className="relative flex min-h-screen w-full flex-col py-10 lg:px-8">
-
-
-      {/* if loading show loader */}
-      {isLoading ? (
-        <div className="flex h-full w-full items-center justify-center">
-          <LoaderIcon />
-        </div>
-      ) : isError ? (
-        <div className="flex h-full w-full items-center justify-center">
-          {<ErrorComp message={error.message} />}
-        </div>
-      ) : (
-        /*  if no error then show the dashboard section */
-        <DashboardSection />
-      )}
+      <DashboardSection />
     </section>
   );
 }
@@ -65,13 +46,29 @@ function DashboardSection() {
   const selectedCard = useSelector(
     (state: RootState) => state.ui.longSelectedCard,
   );
-  const dispatch = useDispatch();
-  const { data: dashboardData, fetchNextPage, isFetchingNextPage, hasNextPage } = useDashboardFetch();
 
-  const allContent = dashboardData?.pages.flatMap((page) => page.type === "success" ? page.data : []) // convert all subarray into single array
+  const isSharedProfileRouteHash = useSelector((state: RootState) => state.ui.isSharedProfileRouteHash)
+
+  const dispatch = useDispatch();
+
+  const DashboardData = useDashboardFetch({ enabled: !isSharedProfileRouteHash });
+
+  const SharedProfileData = useFetchSharedProfile(isSharedProfileRouteHash || "", { enabled: !!isSharedProfileRouteHash });
+
+
+  const { data: dashboardData, fetchNextPage, isFetchingNextPage, hasNextPage } = isSharedProfileRouteHash ? SharedProfileData : DashboardData;
 
   const [searchString, setSearchString] = useState<string>("");
 
+  const allContent: dashboardFetchDataType[] | undefined = dashboardData?.pages.flatMap((page): dashboardFetchDataType[] => {
+    if (page.type !== "success") return [];
+    if (isSharedProfileRouteHash) {
+      return (page.data as dashboardFetchDataType["contentTable"][]).map(
+        (item) => ({ contentTable: item, ContentShareLinkTable: null }),
+      );
+    }
+    return page.data as dashboardFetchDataType[];
+  });
 
   // for sentinal (auto fetch on reaching end)
   const endRef = useRef(null);
@@ -115,7 +112,7 @@ function DashboardSection() {
       description?.toLowerCase().includes(cleanSearchString) ||
       category?.toLowerCase().includes(cleanSearchString) ||
       link?.toLowerCase().includes(cleanSearchString) ||
-      tags?.some(x => x.toLowerCase().includes(cleanSearchString))
+      tags?.some((x: any) => x.toLowerCase().includes(cleanSearchString))
     )
   }) : categorizedData;
 
@@ -128,12 +125,13 @@ function DashboardSection() {
           <div className="flex w-full items-center justify-between">
             <h1 className="text-2xl font-semibold">All Bookmarks</h1>
             <div className="flex gap-4 items-center ">
-              <button
-                className={cn(ButtonsClass, "h-fit p-2 text-xs")}
-                onClick={() => dispatch(setAddBookMarkState(true))}
-              >
-                Add Bookmark
-              </button>
+              {!isSharedProfileRouteHash &&
+                <button
+                  className={cn(ButtonsClass, "h-fit p-2 text-xs")}
+                  onClick={() => dispatch(setAddBookMarkState(true))}
+                >
+                  Add Bookmark
+                </button>}
               <ThemeToggleButton className="p-2" />
             </div>
           </div>

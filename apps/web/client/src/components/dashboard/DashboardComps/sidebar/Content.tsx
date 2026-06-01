@@ -14,6 +14,10 @@ import {
 } from "@repo/ui";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { useFetchSharedProfile } from "@/hooks/react-query-hooks/useFetchSharedProfile";
+import type { sharedProfileDataType } from "@/services/fetchSharedProfileService";
 
 export function SideBarContentComp() {
   return (
@@ -29,10 +33,23 @@ export function SideBarContentComp() {
 }
 
 function SideBar_Menu() {
+  const dispatch = useDispatch();
+  const isSharedProfileRouteHash = useSelector((state: RootState) => state.ui.isSharedProfileRouteHash)
   // loading and error already handled in dashboard.tsx page
-  const { data: response, isLoading } = useDashboardFetch();
+  const DashboardData = useDashboardFetch({ enabled: isSharedProfileRouteHash ? false : true });
+  const SharedData = useFetchSharedProfile(isSharedProfileRouteHash || "", { enabled: isSharedProfileRouteHash ? true : false });
 
-  const allContent = response?.pages.flatMap((page) => page.type === "success" ? page.data : []);
+  const { data: response, isLoading } = isSharedProfileRouteHash ? SharedData : DashboardData;
+
+  const allContent = response?.pages.flatMap((page) => {
+    if (page.type !== 'success') return [];
+    if (isSharedProfileRouteHash) {
+      // shared profile returns flat items — wrap them into { contentTable } shape
+      return (page.data as sharedProfileDataType[])
+        .map((item) => ({ contentTable: item, ContentShareLinkTable: null }));
+    }
+    return page.data as import("@/Types/dashboard").dashboardFetchDataType[];
+  });
 
   const uniqueTags = [
     ...new Set(allContent?.flatMap((x) => x.contentTable.tags)),

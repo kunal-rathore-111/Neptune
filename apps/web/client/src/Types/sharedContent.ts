@@ -1,20 +1,12 @@
+import type { CategoryType } from "@repo/libs";
+
 export type SharedContentDataType = {
   contentTable: {
     id: string;
     title: string;
     description: string | null;
     link: string;
-    category:
-    | "Development"
-    | "Finance"
-    | "Study"
-    | "Social"
-    | "GitHub"
-    | "Exams"
-    | "AI"
-    | "Research"
-    | "Design"
-    | "Others";
+    category: CategoryType;
     tags: string[] | null;
     userId: string;
     createdDate: Date;

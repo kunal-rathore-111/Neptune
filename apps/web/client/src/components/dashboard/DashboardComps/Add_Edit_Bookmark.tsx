@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { LinkIcon } from "@repo/icons";
+import { CATEGORIES } from "@repo/libs";
 import { KeyboardIcon } from "@repo/icons";
 import { XIcon } from "@repo/icons";
 import { Button, Field, FieldGroup, FieldLabel, toast } from "@repo/ui";
@@ -226,18 +227,8 @@ type inputsType = {
 };
 
 function InputSection({ inputs }: { inputs: inputsType }) {
-  const categoryArray = [
-    "Others",
-    "Development",
-    "Finance",
-    "Study",
-    "Social",
-    "GitHub",
-    "Exams",
-    "AI",
-    "Research",
-    "Design",
-  ];
+  const categoryArray = [...CATEGORIES];
+
 
   const filteredCategoryArray = [
     inputs.category,

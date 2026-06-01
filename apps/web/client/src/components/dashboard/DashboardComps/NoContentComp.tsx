@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAddBookMarkState } from "@/store/uiSlice";
 import { Plus, Inbox, Bookmark } from "lucide-react";
+import type { RootState } from "@/store";
 
 export function NoContentPresentComp() {
     const dispatch = useDispatch();
-
+    const isSharedProfileRouteHash = useSelector((state: RootState) => state.ui.isSharedProfileRouteHash);
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0, y: 30 },
@@ -96,7 +97,7 @@ export function NoContentPresentComp() {
                 variants={itemVariants}
             >
                 <span className=" text-zinc-500 dark:text-zinc-500">
-                    Your space is{" "}
+                    Space is{" "}
                 </span>
                 <span >
                     beautifully empty
@@ -112,17 +113,18 @@ export function NoContentPresentComp() {
 
             {/* Call to Action Button */}
             <motion.div variants={itemVariants}>
-                <motion.button
-                    onClick={() => dispatch(setAddBookMarkState(true))}
-                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-zinc-800 hover:shadow-xl dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100 dark:hover:shadow-zinc-950/20"
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                >
+                {!isSharedProfileRouteHash &&
+                    <motion.button
+                        onClick={() => dispatch(setAddBookMarkState(true))}
+                        className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-zinc-800 hover:shadow-xl dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-100 dark:hover:shadow-zinc-950/20"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                    >
 
-                    <span className="absolute inset-0 - from-violet-600/20 via-fuchsia-500/20 to-pink-500/20 opacity-0 transition-opacity duration-600 group-hover:opacity-100" />
-                    <Plus size={16} className="transition-transform duration-300 group-hover:rotate-90" />
-                    Add Bookmark
-                </motion.button>
+                        <span className="absolute inset-0 - from-violet-600/20 via-fuchsia-500/20 to-pink-500/20 opacity-0 transition-opacity duration-600 group-hover:opacity-100" />
+                        <Plus size={16} className="transition-transform duration-300 group-hover:rotate-90" />
+                        Add Bookmark
+                    </motion.button>}
             </motion.div>
         </motion.div >
     );

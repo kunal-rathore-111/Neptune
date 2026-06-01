@@ -2,8 +2,7 @@ import type { Request, Response } from 'express';
 import AppError from '../../middlewares/appError';
 import { AI_Server_URL } from '../../utils/envVariables';
 import { formatAndCleanUrl } from '@repo/libs';
-import axios from 'axios';
-import { db } from '../../config/dbDrizzle';
+import axios, { isAxiosError } from 'axios';
 import { findEmbeddingService } from '../../services/content/embeddingService';
 
 
@@ -18,16 +17,16 @@ const magicFill = async (req: Request, res: Response) => {
 
     const cleanURL = formatAndCleanUrl(url);
 
-    const aiServerNetworkResponse = await fetch(AI_Server_URL + '/magic-fill', {
+    const aiServerNetworkResponse = await axios(AI_Server_URL + '/magic-fill', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: cleanURL }),
+      data: { url: cleanURL },
     });
 
     // 3. Parse the JSON response from Hono
-    const aiResponse = await aiServerNetworkResponse.json();
+    const aiResponse = await aiServerNetworkResponse.data;
 
-    if (!aiServerNetworkResponse.ok || aiResponse.type === 'error') {
+    if (aiServerNetworkResponse.status !== 200 || aiResponse.type === 'error') {
       if (aiServerNetworkResponse.status === 400) {
         throw new AppError(aiResponse.message ?? 'Internal server error', 400, 'BadRequest');
       }
@@ -39,9 +38,12 @@ const magicFill = async (req: Request, res: Response) => {
       data: aiResponse.message,
       success: true,
     });
-  } catch (error) {
-    console.error("magic fill  Error----- ", error)
-    throw new AppError("Something went wrong", 500, "magicFillError")
+  } catch (error: any) {
+    console.error("magic fill  Error----- ", error);
+
+    if (isAxiosError(error)) throw new AppError(error.response?.data.message || "Something went wrong", error.status || 500, "magicFillError");
+    else
+      throw new AppError("Something went wrong", 500, "magicFillError")
   }
 };
 

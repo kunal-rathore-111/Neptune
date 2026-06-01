@@ -53,7 +53,7 @@ Content: ${cleanedBody}
             200,
         );
     } catch (error: any) {
-        console.error('ERROR--- ', error);
+        console.error('ERROR IN magic fill--- ', error);
         let message = 'Something went wrong';
         let status = 500;
         if (

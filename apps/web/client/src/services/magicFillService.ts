@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/api/axiosInstance";
 import { MagicFillUrl } from "@/api/urls";
 import { HandleError, type ErrorServiceResponse } from "./handleError";
+import type { CategoryType } from "@repo/libs";
 
 type magicFillServiceResponseType =
   | ErrorServiceResponse
@@ -10,17 +11,7 @@ type magicFillServiceResponseType =
       data: {
         title: string;
         description: string;
-        category:
-          | "Development"
-          | "Finance"
-          | "Study"
-          | "Social"
-          | "GitHub"
-          | "Exams"
-          | "AI"
-          | "Research"
-          | "Design"
-          | "Others";
+        category: CategoryType;
         tags: string[];
       };
     };

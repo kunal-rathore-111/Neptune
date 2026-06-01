@@ -34,9 +34,8 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
       type: "sharedContent",
     });
 
-  const date = props.selectedCardData.contentTable.updatedDate
-    .toString()
-    .slice(0, 10);
+  const date = new Date(props.selectedCardData.contentTable.updatedDate).toDateString();
+  //console.error(date)
 
 
   return (
@@ -126,7 +125,6 @@ export function LongCardOutlineComp(props: LongCardOutlineCompType) {
               <div
                 className={"flex w-full items-center justify-between text-sm"}
               >
-                {/* need to change to date */}
                 <div>{date} </div>
 
                 {/*  show the icons of edit update and delete only when the card is loaded in users dashboard not when the card was as the sharedCart (which can be identified by themeButton) */}

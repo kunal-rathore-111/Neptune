@@ -14,7 +14,7 @@ export default function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLayout(true);
-    }, (1400));
+    }, (1000));
     return () => clearTimeout(timer);
   }, []);
   return (

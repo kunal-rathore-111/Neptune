@@ -57,6 +57,13 @@
       "when": 1778011158786,
       "tag": "0007_sloppy_darkhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1780156106114,
+      "tag": "0008_wealthy_lady_bullseye",
+      "breakpoints": true
     }
   ]
 }

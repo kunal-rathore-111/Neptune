@@ -14,6 +14,7 @@ import ContactPage from "./Pages/Contact";
 import { ScrollToTop } from "@repo/ui";
 import React, { Suspense } from "react";
 import LoadingPage from "./Pages/Loading";
+import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 
 export default function Layout() {
   return (
@@ -26,12 +27,11 @@ export default function Layout() {
             <Route path="/" element={<Landing />} />
             <Route path="/sign-in" element={<Signin />} />
             <Route path="/sign-up" element={<Signup />} />
-            <Route path="/user/dashboard" element={<Dashboard />} />
+
             <Route
               path="/user/public/shared/profile/:hash"
               element={<SharedProfile />}
             />
-            <Route path="/user/profile" element={<UserProfilePage />} />
             <Route
               path="/user/public/shared/content/:content_share_hash"
               element={<SharedContent />}
@@ -40,6 +40,12 @@ export default function Layout() {
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms" element={<TermsofServicePage />} />
             <Route path="/contact" element={<ContactPage />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/user/dashboard" element={<Dashboard />} />
+              <Route path="/user/profile" element={<UserProfilePage />} />
+            </Route>
+
             <Route path="/*" element={<ErrorPage />} />
           </Routes>
         </Suspense>

@@ -20,7 +20,7 @@ import {
 } from "@repo/validation";
 import { useSign } from "@/hooks/react-query-hooks/useSign";
 import { PasswordRules, UsernameRules } from "@/lib/constants/content/rules";
-import { useFetchUserProfile } from "@/hooks/react-query-hooks/useUserProfile";
+import { useFetchUserProfile } from "@/hooks/react-query-hooks/useFetchUserProfile";
 import LoadingPage from "@/Pages/Loading";
 
 export type AuthMode = "signin" | "signup";

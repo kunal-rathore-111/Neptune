@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { index, pgEnum, pgTable, text, timestamp, uuid, varchar, vector } from 'drizzle-orm/pg-core';
+import { index, pgTable, text, timestamp, uuid, varchar, vector } from 'drizzle-orm/pg-core';
 
 export const UsersTable = pgTable('usersTable', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -8,45 +8,31 @@ export const UsersTable = pgTable('usersTable', {
   password: varchar('password', { length: 60 }).notNull(),
   createdAt: timestamp('createdAt').defaultNow().notNull(),
   updatedAt: timestamp('updatedAt').defaultNow().notNull(),
-  // profile soon
 });
-
-export const contentCategory = pgEnum('contentCategory', [
-  'Development',
-  'Finance',
-  'Study',
-  'Social',
-  'GitHub',
-  'Exams',
-  'AI',
-  'Research',
-  'Design',
-  'Others',
-]);
 
 export const ContentTable = pgTable(
   'contentTable',
   {
     id: uuid('id').primaryKey().defaultRandom().unique(),
-    title: text('title',).notNull().unique(),
+    title: text('title').notNull().unique(),
     description: text('description'),
     link: text('link'),
-    category: contentCategory().default('Others').notNull(),
+    // varchar instead of pgEnum — category list is validated at the application layer (Zod)
+    category: varchar('category', { length: 100 }).default('Others').notNull(),
     tags: varchar('tags', { length: 50 }).array(),
     userId: uuid('userId')
       .references(() => UsersTable.id, { onDelete: 'cascade' })
       .notNull(),
     createdDate: timestamp('createdDate').defaultNow().notNull(),
     updatedDate: timestamp('updatedDate').defaultNow().notNull(),
-    // embedding
-    embedding: vector("embedding", { dimensions: 768 }) // using gemini model and lowest dimension to keep the database small and fast
+    embedding: vector('embedding', { dimensions: 768 }),
   },
   (ContentTable) => ({
-    //indexing 
     userIndex: index('userIndex').on(ContentTable.userId),
-    embeddingIndex: index("embeddingIndex").using('hnsw', ContentTable.embedding.op("vector_cosine_ops")) // using cosine cause will also use for search , it was very fast in out usecase as compared to other methods
+    embeddingIndex: index('embeddingIndex').using('hnsw', ContentTable.embedding.op('vector_cosine_ops')),
   }),
 );
+
 
 export const tagsTable = pgTable('tagsTable', {
   // for vector search
