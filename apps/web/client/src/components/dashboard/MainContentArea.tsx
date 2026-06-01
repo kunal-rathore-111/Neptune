@@ -22,7 +22,6 @@ import { setAddBookMarkState, setEditCardState, setLongSelectedCard } from "@/st
 import { useSearchParams } from "react-router";
 import { useInView } from "framer-motion";
 import { useFetchSharedProfile } from "@/hooks/react-query-hooks/useFetchSharedProfile";
-import { all } from "axios";
 
 
 export function DashboardMainContentArea() {

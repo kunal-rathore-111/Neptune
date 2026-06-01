@@ -10,10 +10,7 @@ export default function UserProfilePage() {
     toast.error(error.message, { position: "top-center" });
     return <ErrorPage message={error.message} />;
   } // interceptor will redirect on 401 but need to handle other error like database and any other
-  if (response?.type === "error") {
-    toast.error(response.message, { position: "top-center" });
-    return <ErrorPage message={response.message} />;
-  } // interceptor will redirect on 401 but need to handle other error like database and any other
+
   if (isPending) return <LoadingPage />;
 
   const defaultValues = {

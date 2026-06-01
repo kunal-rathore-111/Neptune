@@ -14,7 +14,7 @@ import {
 } from "@repo/ui";
 import { useDashboardFetch } from "@/hooks/react-query-hooks/useDashboardFetch";
 import { MapCategoryWithIcon } from "@/lib/utils/mapCategoryIcon";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { useFetchSharedProfile } from "@/hooks/react-query-hooks/useFetchSharedProfile";
 import type { sharedProfileDataType } from "@/services/fetchSharedProfileService";
@@ -33,7 +33,6 @@ export function SideBarContentComp() {
 }
 
 function SideBar_Menu() {
-  const dispatch = useDispatch();
   const isSharedProfileRouteHash = useSelector((state: RootState) => state.ui.isSharedProfileRouteHash)
   // loading and error already handled in dashboard.tsx page
   const DashboardData = useDashboardFetch({ enabled: isSharedProfileRouteHash ? false : true });
