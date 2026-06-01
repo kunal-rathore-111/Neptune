@@ -11,10 +11,7 @@ import { NODE_ENV } from "../../utils/envVariables";
 
 export const sign = express();
 
-// Rate limiting via express-rate-limit is disabled on Vercel because its in-memory store
-// is per-serverless-instance and not shared — causes random 429s across instances.
-// Use Vercel Firewall / Redis-backed store for production rate limiting.
-// NODE_ENV === "production" && sign.use(signLimiter);
+//NODE_ENV === "production" && sign.use(signLimiter);
 
 // sign-up route
 sign.post('/sign-up', signZod(signUpSchema), signUpController);
