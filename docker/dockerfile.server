@@ -1,0 +1,23 @@
+
+FROM oven/bun:alpine
+
+WORKDIR ./apps
+
+COPY ./package.json ./package.json
+COPY ./bun.lock ./bun.lock
+COPY ./turbo.json ./turbo.json
+
+COPY ./packages/libs ./packages/libs
+COPY ./packages/eslint-config ./packages/eslint-config
+COPY ./packages/typescript-config ./packages/typescript-config
+COPY ./packages/validator ./packages/validator
+
+COPY ./apps/web/server/package.json ./apps/web/server/package.json
+
+RUN bun install
+
+COPY ./apps/web/server ./apps/web/server
+
+EXPOSE 3000
+
+CMD [ "bun", "run","docker:server" ]

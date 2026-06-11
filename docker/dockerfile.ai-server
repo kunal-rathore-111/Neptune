@@ -1,0 +1,23 @@
+
+FROM oven/bun:alpine
+
+WORKDIR /apps
+
+COPY ./package.json ./package.json
+COPY ./bun.lock ./bun.lock
+COPY ./turbo.json ./turbo.json
+
+COPY ./packages/libs ./packages/libs
+COPY ./packages/eslint-config ./packages/eslint-config
+COPY ./packages/typescript-config ./packages/typescript-config
+COPY ./packages/validator ./packages/validator
+
+COPY ./apps/aiServer/package.json ./apps/aiServer/package.json
+
+RUN bun install
+
+COPY ./apps/aiServer ./apps/aiServer
+
+EXPOSE 3002
+
+CMD [ "bun", "run","docker:aiServer" ]

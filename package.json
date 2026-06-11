@@ -13,6 +13,9 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "docker:aiServer": "bun run build && cd apps/aiServer && bun run start",
+    "docker:server": "bun run build && cd apps/web/server && bun run start",
+    "docker:client": "bun run build && cd apps/web/client && bun run start",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -22,8 +25,5 @@
     "apps/*",
     "apps/*/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "neptune": "./apps/web/client"
-  }
+  ]
 }

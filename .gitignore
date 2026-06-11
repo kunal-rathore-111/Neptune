@@ -43,3 +43,13 @@ coverage/
 *.njsproj
 *.sln
 *.sw?
+
+# Added ignore patterns
+*.tsxs
+neptune_block_diagram.png
+neptune_easy_copy_paste_guide.txt
+neptune_google_docs_prompt.txt
+neptune_replace_text_prompt.txt
+neptune_research_paper.txt
+neptune_synopsis.txt
+neptune_research_paper.md

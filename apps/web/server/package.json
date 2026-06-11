@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
     "build": "tsc -b",
     "start": "bun dist/index.js",
+    "dev": "bun run --hot src/index.ts",
     "generatee": "bunx drizzle-kit generate --config ./src/drizzle/drizzle.config/drizzle.config.ts",
     "migratee": "bunx drizzle-kit migrate --config ./src/drizzle/drizzle.config/drizzle.config.ts",
     "pushh": "--config ./src/drizzle/drizzle.config/drizzle.config.ts",

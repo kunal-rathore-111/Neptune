@@ -8,9 +8,9 @@
     ".": "./dist/index.js"
   },
   "scripts": {
+    "build": "tsc -b",
     "lint": "eslint . --max-warnings 0",
-    "check-types": "tsc --noEmit",
-    "build": "tsc -b"
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
