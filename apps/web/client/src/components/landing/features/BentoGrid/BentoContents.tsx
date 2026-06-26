@@ -325,7 +325,7 @@ export function Col3Row2() {
     };
   }, [isOn]);
 
-  const sharesArray = ["2ndmind.app/s/design-inspo", "2ndmind.app/s/ai-papers"];
+  const sharesArray = ["neptune.app/s/design-inspo", "neptune.app/s/ai-papers"];
 
   return (
     <motion.div className="relative flex flex-col rounded-l-none border border-black p-5 md:rounded-4xl md:border-t-0 lg:border-t lg:border-l-0 dark:border-white">
@@ -360,7 +360,7 @@ export function Col3Row2() {
                       className="text-[16px] text-fuchsia-400 dark:text-emerald-400"
                       variants={shareChild}
                     >
-                      2ndmind.app/s/abc123
+                      neptune.app/s/abc123
                     </motion.span>
                   </motion.div>
                 )}
@@ -381,7 +381,7 @@ export function Col3Row2() {
                   return (
                     <motion.span
                       key={idx}
-                      className="text-[16px] text-zinc-700 transition-colors hover:text-emerald-500 dark:text-zinc-300 dark:hover:text-emerald-400"
+                      className="text-[16px] text-emerald-500 transition-colors hover:text-blue-600 dark:text-amber-300 dark:hover:text-emerald-400"
                     >
                       - {text}
                     </motion.span>

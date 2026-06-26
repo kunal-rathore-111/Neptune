@@ -35,11 +35,10 @@ export const FloatingLabelInput: React.FC<{
       />
       <label
         htmlFor={id}
-        className={`pointer-events-none absolute left-10 text-sm font-medium transition-all duration-200 ${
-          isFocused || value
-            ? 'text-foreground -top-2 rounded-sm bg-white px-2 text-xs dark:bg-black'
-            : 'text-muted-foreground top-2.5'
-        }`}>
+        className={`pointer-events-none absolute left-10 text-sm font-medium transition-all duration-200 ${isFocused || value
+          ? 'text-foreground -top-2 rounded-sm bg-white px-2 text-xs dark:bg-black'
+          : 'text-muted-foreground top-2.5'
+          }`}>
         {placeholder}
       </label>
       {rightIcon && (

@@ -46,4 +46,5 @@ export * from './icons/Others';
 export * from './icons/Check';
 export * from './icons/Chatbot';
 export * from './icons/User';
+export * from './icons/Discord';
 
