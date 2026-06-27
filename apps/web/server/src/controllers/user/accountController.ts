@@ -5,7 +5,6 @@ import {
   fetchUserProfileService,
   updatePasswordService,
 } from '../../services/users/userAccountService';
-import { getShareLinkFunc } from '../../services/share/userShareLinkService';
 
 const fetchUserProfile = async (req: Request, res: Response) => {
   const result = await fetchUserProfileService(req.userId);

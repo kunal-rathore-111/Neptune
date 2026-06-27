@@ -64,6 +64,20 @@
       "when": 1780156106114,
       "tag": "0008_wealthy_lady_bullseye",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1782494003911,
+      "tag": "0009_clammy_phantom_reporter",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1782495280316,
+      "tag": "0010_sleepy_dorian_gray",
+      "breakpoints": true
     }
   ]
 }

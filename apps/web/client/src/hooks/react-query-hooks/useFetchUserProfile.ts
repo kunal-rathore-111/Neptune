@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useFetchUserProfile(options = {}) {
   const result = useQuery({
-    queryKey: ["useProfileData"],
+    queryKey: ["userProfileData"],
     queryFn: async () => {
       const response = await fetchUserProfileService();
       if (response.type === "error") {

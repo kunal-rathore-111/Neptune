@@ -16,12 +16,10 @@ import {
   signInSchema,
   signUpSchema,
   validatePasswordInput,
-  validateUsernameInput,
+  validateNameInput,
 } from "@repo/validation";
 import { useSign } from "@/hooks/react-query-hooks/useSign";
-import { PasswordRules, UsernameRules } from "@/lib/constants/content/rules";
-import { useFetchUserProfile } from "@/hooks/react-query-hooks/useFetchUserProfile";
-import LoadingPage from "@/Pages/Loading";
+import { PasswordRules, NameRules } from "@/lib/constants/content/rules";
 
 import { motion } from "framer-motion"
 
@@ -53,19 +51,16 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
     return <div>Invalid mode</div>;
   }
 
-  const navigate = useNavigate();
-  const { data: response, isLoading } = useFetchUserProfile();
-
   const content = authContent[mode];
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordValidation, setPasswordValidation] = useState<any>();
-  const [usernameValidation, setUsernameValidation] = useState<any>();
+  const [nameValidation, setNameValidation] = useState<any>();
 
-  const [username, setUsername] = useState<string>("");
-
+  const [name, setName] = useState<string>("");
+  const navigate = useNavigate();
   const { mutate: signMutate, isPending } = useSign();
 
 
@@ -73,20 +68,12 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
     setShowPassword(!showPassword);
   };
 
-  // effect to show/hide PasswordRules
-  useEffect(() => {
-    setPasswordValidation(validatePasswordInput(password));
-  }, [password]);
-  // effect to show/hide UsernameRules
-  useEffect(() => {
-    setUsernameValidation(validateUsernameInput(username));
-  }, [username]);
 
-  /* FORM SUBMISSION */
+  /* functions */
   async function handleSignFormSubmit(e: FormEvent) {
     e.preventDefault();
     const signData =
-      mode === "signin" ? { email, password } : { email, password, username };
+      mode === "signin" ? { email, password } : { email, password, name };
     // check zodValidation
     const result =
       mode === "signin"
@@ -95,26 +82,32 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
 
     if (!result.success) {
       //console.log(result.error.issues[0]);
-      toast.error(result.error.issues[0].message, { position: "top-right" });
+      toast.error(result.error.issues[0].message, { position: "top-center" });
       return;
     } else {
-      // if all above success then call useSign function to sign-in
+      // if all above success then call useSign function to sign-in or sign-up
       signMutate({ data: signData, mode });
-      // reset form
     }
   }
 
-  /* if userAlready logged in redirect to the dashboardPage */
+  function handleForgotPassword() {
+    navigate(`/forgot-password`);
+  }
+
+
+
+  // effect to show/hide PasswordRules
   useEffect(() => {
-    if (response && response?.type === "success") navigate("/user/dashboard");
-  }, [response]);
-  if (isLoading) return <LoadingPage />;
-  //hide the sign ui when the page is redirecting to dashboard
-  if (response?.type === "success") return <LoadingPage />;
+    setPasswordValidation(validatePasswordInput(password));
+  }, [password]);
+  // effect to show/hide nameRules
+  useEffect(() => {
+    setNameValidation(validateNameInput(name));
+  }, [name]);
 
   return (
     <>
-      <div className="flex items-center justify-center p-6 lg:w-full ">
+      <div className="flex items-center justify-center p-6 lg:w-full mb-10 ">
 
         {/* Main Card with shadcn/ui styling */}
         <fieldset disabled={isPending}
@@ -133,77 +126,92 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
           </div>
 
           <form onSubmit={handleSignFormSubmit} className="space-y-3">
-            {mode === "signup" ? (
+            <div className="flex flex-col gap-4">
+              {mode === "signup" ? (
+                <div className="space-y-2">
+                  {/* Full Name Input */}
+                  <Label htmlFor="name">Full Name</Label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
+                      <UserIcon size={18} />
+                    </span>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Full Name"
+                      className="pl-10"
+                    />
+                  </div>
+                  <InputValidationFeedback
+                    input={name}
+                    inputValidation={nameValidation}
+                    inputRules={NameRules}
+                  />
+                </div>
+              ) : null}
+
+              {/* Email Input */}
               <div className="space-y-2">
-                {/* Full Name Input */}
-                <Label htmlFor="username">Full Name</Label>
+                <Label htmlFor="email">Email</Label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
-                    <UserIcon size={18} />
+                    <MailIcon size={18} />
                   </span>
                   <Input
-                    id="username"
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Full Name"
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
                     className="pl-10"
                   />
                 </div>
-                <InputValidationFeedback
-                  input={username}
-                  inputValidation={usernameValidation}
-                  inputRules={UsernameRules}
-                />
               </div>
-            ) : null}
 
-            {/* Email Input */}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
-                  <MailIcon size={18} />
-                </span>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                  className="pl-10"
-                />
-              </div>
-            </div>
-
-            {/* Password Input */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
-                  <LockIcon size={18} />
-                </span>
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  className="px-10"
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground focus:outline-none"
+              {/* Password Input */}
+              <div className="space-y-2">
+                <Label
+                  className="justify-between"
+                  htmlFor="password"
                 >
-                  {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                </button>
+                  <span>Password</span>
+                  {mode === 'signin' &&
+                    <button
+                      className="cursor-pointer hover:underline"
+                      type="button"
+                      onClick={() => handleForgotPassword()}
+                    >
+                      Forgot Password
+                    </button>}
+                </Label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
+                    <LockIcon size={18} />
+                  </span>
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    className="px-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground focus:outline-none"
+                  >
+                    {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+                  </button>
+                </div>
+                <InputValidationFeedback
+                  input={password}
+                  inputValidation={passwordValidation}
+                  inputRules={PasswordRules}
+                />
               </div>
-              <InputValidationFeedback
-                input={password}
-                inputValidation={passwordValidation}
-                inputRules={PasswordRules}
-              />
             </div>
 
             {/* Submit Button */}
@@ -227,7 +235,6 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
               </span>
               <span className="border-border h-px flex-1 border-t dark:border-white " />
             </div>
-
 
             {/* OAuth section */}
             <div className="flex items-center gap-4 justify-center">

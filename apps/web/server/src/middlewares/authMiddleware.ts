@@ -1,13 +1,13 @@
 
 import type { Request, Response, NextFunction } from "express";
-import { checkJWT } from "../utils/jwt";
 import AppError from "./appError";
+import { checkJWTSession } from "../libs/sessions";
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 
     const token = req?.cookies?.token;
     if (!token) throw new AppError("Please Sign-in again", 401, "Unauthorized");
-    const decodeOp = checkJWT(token);
+    const decodeOp = await checkJWTSession(token);
     if (decodeOp) {
         req.userId = decodeOp.id;
         next();

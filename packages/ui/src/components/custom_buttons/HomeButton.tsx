@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { ButtonsClass } from '../*utils/styles';
+import { ButtonsClass } from '../utils/styles';
 import { HomeIcon } from '@repo/icons';
 
 export function HomeButton() {

@@ -8,7 +8,7 @@ type signInServiceType = {
   password: string;
 };
 type signUpServiceType = signInServiceType & {
-  username: string;
+  name: string;
 };
 
 export type signInUpFunctionType = {

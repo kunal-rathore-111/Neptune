@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
 import AppError from '../../middlewares/appError';
-import { AI_Server_URL } from '../../utils/envVariables';
 import { formatAndCleanUrl } from '@repo/libs';
 import axios, { isAxiosError } from 'axios';
 import { findEmbeddingService } from '../../services/content/embeddingService';
+import { AI_Server_URL } from '../../libs/utils/envVariables';
 
 
 const magicFill = async (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
 import type { ErrorRequestHandler } from 'express';
-import { NODE_ENV } from '../utils/envVariables';
+import { NODE_ENV } from '../libs/utils/envVariables';
 
 export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   const isProduction = NODE_ENV === 'production';

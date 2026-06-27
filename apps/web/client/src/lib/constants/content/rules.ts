@@ -19,9 +19,9 @@ export const PasswordRules = [
   },
 ];
 
-export const UsernameRules = [
+export const NameRules = [
   {
-    message: "Username length atleast 4",
+    message: "Name length atleast 4",
     test: (p: string) => p.length > 3,
   },
 ];

@@ -1,6 +1,6 @@
 import { and, desc, eq, lt } from 'drizzle-orm';
-import { db } from '../../config/dbDrizzle';
-import { ContentShareLinkTable, ContentTable } from '../../drizzle/schema';
+import { getDB } from "@repo/database";
+import { ContentShareLinkTable, ContentTable } from '@repo/database';
 import type { z } from 'zod';
 import type { contentZodSchema } from '@repo/validation';
 import { createContentShareLinkFunc, deleteContentShareLinkFunc } from '../share/contentShareService';
@@ -10,9 +10,9 @@ import { getEmbedding } from './embeddingService';
 
 
 
-
-
 export const getContentService = async (userId: string, cursor: string | undefined, limit: number) => {
+
+  const db = getDB();
   const data = await db
     .select(
       {
@@ -53,6 +53,7 @@ export const addContentService = async (data: z.infer<typeof contentZodSchema>, 
 
   // getEmbeddings
   const embedding = await getEmbedding(data);
+  const db = getDB();
 
 
   console.log('\nDB addContentDBFunction called\n');
@@ -83,6 +84,7 @@ interface deleteContent_DTO {
 }
 
 export const deleteContentService = async ({ userId, contentId }: deleteContent_DTO) => {
+  const db = getDB();
   console.log('\nDB deleteContentDBFunction called\n');
   const result = await db
     .delete(ContentTable)
@@ -108,6 +110,8 @@ export const updateContentService = async ({ userId, contentId, newColumnData }:
   const { title, description, link, category, tags, share } = newColumnData;
   console.log('\nDB updateContentDBFunction called\n');
   const updatedDate = new Date();
+  const db = getDB();
+
   const result = await db
     .update(ContentTable)
     .set({ title, description, link, category, tags, updatedDate, embedding })

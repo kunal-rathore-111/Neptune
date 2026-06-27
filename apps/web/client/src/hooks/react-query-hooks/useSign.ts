@@ -12,11 +12,13 @@ export function useSign() {
       if (response.type === "error") throw new Error(response.message);
       return response;
     },
+
     onSuccess: (response) => {
       toast.success(response.message, { position: "top-center" });
 
-      //here set userData
-      queryClient.invalidateQueries({ queryKey: ["useProfileData"] });
+      //here again fetch user user profile data silently
+      queryClient.invalidateQueries({ queryKey: ["userProfileData"] });
+
       navigate("/user/dashboard");
     },
     onError: (error: any) => {

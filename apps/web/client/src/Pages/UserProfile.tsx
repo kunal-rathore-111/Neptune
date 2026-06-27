@@ -5,7 +5,8 @@ import { toast } from "@repo/ui";
 import LoadingPage from "./Loading";
 
 export default function UserProfilePage() {
-  const { data: response, isPending, isError, error } = useFetchUserProfile();
+  const { data: response, isPending, isError, error } = useFetchUserProfile(); // already cached via Protected route call of useFetchUserProfile
+
   if (isError) {
     toast.error(error.message, { position: "top-center" });
     return <ErrorPage message={error.message} />;
@@ -14,7 +15,7 @@ export default function UserProfilePage() {
   if (isPending) return <LoadingPage />;
 
   const defaultValues = {
-    username: response.userProfileData.username,
+    name: response.userProfileData.name,
     email: response.userProfileData.email,
   };
 
