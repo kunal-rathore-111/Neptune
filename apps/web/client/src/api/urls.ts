@@ -1,11 +1,14 @@
 const env = import.meta.env;
 
 // --------Backned URLs--------
-const BackendInitalRoute: string =
-  env.VITE_MODE === "dev"
-    ? env.VITE_DEV_BACKEND_BASE_URL
-    : env.VITE_PROD_BACKEND_BASE_URL;
-if (!BackendInitalRoute) throw Error("No Base URL found for BACKEND");
+
+export const BackendRootUrl = env.VITE_MODE === "dev"
+  ? env.VITE_DEV_BACKEND_BASE_URL
+  : env.VITE_PROD_BACKEND_BASE_URL;
+
+if (!BackendRootUrl) throw Error("No Root URL found for BACKEND");
+
+const BackendInitalRoute: string = BackendRootUrl + '/app/v3'
 
 
 export const SignInUrl = BackendInitalRoute + "/sign-in";
@@ -68,10 +71,11 @@ export const ChatUrl = BackendInitalRoute + "/ai/global-chat";
 
 
 // --------Frontend URLs--------
-const FrontendInitalRoute =
+export const FrontendInitalRoute =
   env.VITE_MODE === "dev"
     ? env.VITE_DEV_FRONTEND_BASE_URL
     : env.VITE_PROD_FRONTEND_BASE_URL;
+
 if (!FrontendInitalRoute) throw Error("No Base URL found for FRONTEND");
 
 export const ContentShareUrl =

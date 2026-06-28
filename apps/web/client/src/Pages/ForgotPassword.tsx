@@ -1,8 +1,8 @@
 import type { ActionState } from "@/lib/types";
 import { otpService } from "@/services/otpService";
 import { validateOtpService } from "@/services/validateOtpService";
-import { LoaderIcon } from "@repo/icons";
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Field, FieldGroup, FieldLabel, Input, ThemeHomeComp, toast } from "@repo/ui";
+import { ArrowBigLeftDashIcon, LoaderIcon } from "@repo/icons";
+import { BackToHomeButton, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Field, FieldGroup, FieldLabel, Input, ThemeHomeComp, toast } from "@repo/ui";
 import { otpZod } from "@repo/validation";
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
@@ -98,7 +98,7 @@ export default function ForgotPasswordComp() {
 
     return (
         <section className="h-screen w-screen pb-40 dark:bg-black bg-white  lg:py-20  sm:py-16 py-8 relative flex items-center justify-center">
-            <Card className="px-6 py-4 sm:px-12 sm:py-8 relative gap-6  w-sm shadow-md dark:shadow-white  shadow-black" >
+            <Card className="p-6 sm:p-8 relative gap-6  w-sm shadow-md dark:shadow-white  shadow-black" >
 
                 <CardHeader className="text-center gap-6 p-0">
                     <ThemeHomeComp />

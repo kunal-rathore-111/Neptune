@@ -15,7 +15,8 @@ interface jwtInput {
     id?: string
     email: string,
     otp?: string,
-    name?: string
+    name?: string,
+    image?: string
 }
 
 export const createJWTSession = async (input: jwtInput) => {

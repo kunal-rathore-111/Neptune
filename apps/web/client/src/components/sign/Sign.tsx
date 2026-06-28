@@ -22,6 +22,7 @@ import { useSign } from "@/hooks/react-query-hooks/useSign";
 import { PasswordRules, NameRules } from "@/lib/constants/content/rules";
 
 import { motion } from "framer-motion"
+import { BackendRootUrl, FrontendInitalRoute } from "@/api/urls";
 
 export type AuthMode = "signin" | "signup";
 
@@ -93,6 +94,32 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   function handleForgotPassword() {
     navigate(`/forgot-password`);
   }
+
+
+  const initiateOAuthLogin = async (provider: string) => {
+    try {
+      const res = await fetch(BackendRootUrl + '/api/auth/csrf', {
+        credentials: "include"
+      });
+      const data = await res.json();
+
+      const form = document.createElement('form');
+      form.method = "POST";
+      form.action = `${BackendRootUrl}/api/auth/signin/${provider}?callbackUrl=${FrontendInitalRoute}/user/dashboard`;
+
+      const input = document.createElement('input');
+      input.type = "hidden";
+      input.value = data.csrfToken;
+      input.name = 'csrfToken';
+
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+
+    } catch (error) {
+      console.error(`Failed to initiate ${provider} login`, error);
+    }
+  };
 
 
 
@@ -238,9 +265,9 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
 
             {/* OAuth section */}
             <div className="flex items-center gap-4 justify-center">
-              <OAuthProviderButton label="Google" Icon={GoogleIcon} onClick={() => { }} />
-              <OAuthProviderButton label="Github" Icon={GithubIcon} onClick={() => { }} />
-              <OAuthProviderButton label="Discord" Icon={DiscordIcon} onClick={() => { }} />
+              <OAuthProviderButton label="Google" Icon={GoogleIcon} onClick={() => initiateOAuthLogin('google')} />
+              <OAuthProviderButton label="Github" Icon={GithubIcon} onClick={() => initiateOAuthLogin('github')} />
+              <OAuthProviderButton label="Discord" Icon={DiscordIcon} onClick={() => initiateOAuthLogin('discord')} />
             </div>
 
             {/* Footer */}

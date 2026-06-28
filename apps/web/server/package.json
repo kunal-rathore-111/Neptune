@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@auth/express": "^0.12.2",
     "@repo/database": "*",
     "@repo/libs": "*",
     "@repo/validation": "*",
