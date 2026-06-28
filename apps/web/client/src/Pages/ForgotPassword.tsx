@@ -1,8 +1,8 @@
 import type { ActionState } from "@/lib/types";
 import { otpService } from "@/services/otpService";
 import { validateOtpService } from "@/services/validateOtpService";
-import { ArrowBigLeftDashIcon, LoaderIcon } from "@repo/icons";
-import { BackToHomeButton, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Field, FieldGroup, FieldLabel, Input, ThemeHomeComp, toast } from "@repo/ui";
+import { LoaderIcon } from "@repo/icons";
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Field, FieldGroup, FieldLabel, Input, ThemeHomeComp, toast } from "@repo/ui";
 import { otpZod } from "@repo/validation";
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
