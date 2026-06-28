@@ -2,7 +2,7 @@ import { validatePasswordInput } from "@repo/validation";
 import type { Request, Response } from "express";
 import { hashPassword } from "../../libs/utils/hashFunc";
 import { getDB, UsersTable } from "@repo/database";
-import { eq } from "drizzle-orm";
+import { eq } from '@repo/database';
 import { NODE_ENV } from "../../libs/utils/envVariables";
 
 

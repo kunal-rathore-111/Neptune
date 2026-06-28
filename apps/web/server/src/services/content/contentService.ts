@@ -1,4 +1,4 @@
-import { and, desc, eq, lt } from 'drizzle-orm';
+import { and, desc, eq, lt } from '@repo/database';
 import { getDB } from "@repo/database";
 import { ContentShareLinkTable, ContentTable } from '@repo/database';
 import type { z } from 'zod';

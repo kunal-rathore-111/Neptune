@@ -1,5 +1,3 @@
-import { app } from '../src/index.js';
+import app from '../src/index';
 
-export default function handler(req: any, res: any) {
-  return app(req, res);
-}
+export default app;

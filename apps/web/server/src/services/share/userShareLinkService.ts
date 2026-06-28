@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { eq } from 'drizzle-orm';
+import { eq } from '@repo/database';
 import AppError from '../../middlewares/appError';
 import { ContentTable, getDB, UserShareLinkTable, UsersTable } from '@repo/database';
 

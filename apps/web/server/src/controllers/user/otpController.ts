@@ -1,5 +1,5 @@
 import { ForgotPasswordOTPTable, getDB, SignUpOTPTable, UsersTable } from "@repo/database";
-import { eq } from "drizzle-orm";
+import { eq } from '@repo/database';
 import type { Request, Response } from "express";
 import { createJWTSession } from "../../libs/sessions";
 import { NODE_ENV } from "../../libs/utils/envVariables";
