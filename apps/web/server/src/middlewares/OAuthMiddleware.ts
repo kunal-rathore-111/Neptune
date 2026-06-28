@@ -16,7 +16,7 @@ export function OAuthMiddleware(req: Request, res: Response, next: NextFunction)
         providers: [GitHub, Google, Discord],
         callbacks:
         {
-            async signIn({ user, account }) {
+            async signIn({ user, account }: any) {
                 try {
                     const db = getDB();
                     if (!user.email || !account) return false;
@@ -78,7 +78,7 @@ export function OAuthMiddleware(req: Request, res: Response, next: NextFunction)
 
 
             },
-            async redirect({ url }) {
+            async redirect({ url }: any) {
                 // any invalid frontends, postman will dirctly blocked by CORS in production
                 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
