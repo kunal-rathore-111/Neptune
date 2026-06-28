@@ -1,11 +1,15 @@
 const env = import.meta.env;
 
 // --------Backned URLs--------
-const BackendInitalRoute: string =
-  env.VITE_MODE === "dev"
-    ? env.VITE_DEV_BACKEND_BASE_URL
-    : env.VITE_PROD_BACKEND_BASE_URL;
-if (!BackendInitalRoute) throw Error("No Base URL found for BACKEND");
+
+export const BackendRootUrl = env.VITE_MODE === "dev"
+  ? env.VITE_DEV_BACKEND_BASE_URL
+  : env.VITE_PROD_BACKEND_BASE_URL;
+
+if (!BackendRootUrl) throw Error("No Root URL found for BACKEND");
+
+const BackendInitalRoute: string = BackendRootUrl + '/app/v3'
+
 
 export const SignInUrl = BackendInitalRoute + "/sign-in";
 
@@ -13,22 +17,36 @@ export const SignUpUrl = BackendInitalRoute + "/sign-up";
 
 export const SignOutUrl = BackendInitalRoute + "/sign-out";
 
-export const FetchDataUrl = BackendInitalRoute + "/user/content/fetch";
 
-export const AddBookmarkUrl = BackendInitalRoute + "/user/content/add";
-export const DeleteBookmarkUrl = BackendInitalRoute + "/user/content/delete";
-export const UpdateBookmarkUrl = BackendInitalRoute + "/user/content/update";
+
+const UserInitialRoute = BackendInitalRoute + '/user';
+
+export const FetchDataUrl = UserInitialRoute + "/content/fetch";
+
+export const ResetPasswordUrl = UserInitialRoute + '/account/reset-password';
+
+export const SendOtpUrl = UserInitialRoute + '/otp/email/send-otp';
+export const ValidateOtpUrl = UserInitialRoute + '/otp/validate-otp';
+
+const UserContentInitialRoute = UserInitialRoute + '/content';
+
+export const AddBookmarkUrl = UserContentInitialRoute + "/add";
+export const DeleteBookmarkUrl = UserContentInitialRoute + "/delete";
+export const UpdateBookmarkUrl = UserContentInitialRoute + "/update";
+
 export const ToggleContentShareUrl =
-  BackendInitalRoute + "/user/share-content/public/update-share-link";
+  UserInitialRoute + "/share-content/public/update-share-link";
 
 export const SharedContentUrl =
-  BackendInitalRoute + "/user/share-content/public";
+  UserInitialRoute + "/share-content/public";
 
 export const FetchUserProfileUrl =
-  BackendInitalRoute + "/user/account/user-profile";
+  UserInitialRoute + "/account/user-profile";
 
 export const UserProfileShareInitialUrl =
-  BackendInitalRoute + "/user/share-user";
+  UserInitialRoute + "/share-user";
+
+
 
 export const UserSharedProfileFetchUrl = UserProfileShareInitialUrl + '/profile';
 
@@ -40,10 +58,10 @@ export const ToggleUserProfileShareUrl =
 
 
 export const UpdatePasswordUrl =
-  BackendInitalRoute + "/user/account/update-user-password";
+  UserInitialRoute + "/account/update-user-password";
 
 export const DeleteAccountUrl =
-  BackendInitalRoute + "/user/account/delete-user-account";
+  UserInitialRoute + "/account/delete-user-account";
 
 export const MagicFillUrl = BackendInitalRoute + "/ai/magic-fill";
 
@@ -53,10 +71,11 @@ export const ChatUrl = BackendInitalRoute + "/ai/global-chat";
 
 
 // --------Frontend URLs--------
-const FrontendInitalRoute =
+export const FrontendInitalRoute =
   env.VITE_MODE === "dev"
     ? env.VITE_DEV_FRONTEND_BASE_URL
     : env.VITE_PROD_FRONTEND_BASE_URL;
+
 if (!FrontendInitalRoute) throw Error("No Base URL found for FRONTEND");
 
 export const ContentShareUrl =

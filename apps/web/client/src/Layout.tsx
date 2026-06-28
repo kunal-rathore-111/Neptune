@@ -15,6 +15,8 @@ import { ScrollToTop } from "@repo/ui";
 import React, { Suspense } from "react";
 import LoadingPage from "./Pages/Loading";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
+import { ResetPassword } from "./Pages/ResetPassword";
+const ForgotPassword = React.lazy(() => import("./Pages/ForgotPassword"));
 
 export default function Layout() {
   return (
@@ -23,28 +25,35 @@ export default function Layout() {
         {/* whenever route change the ScrollToTop comp listen and perform scroll */}
         <Suspense fallback={<LoadingPage />}>
           <ScrollToTop />
+
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/sign-in" element={<Signin />} />
-            <Route path="/sign-up" element={<Signup />} />
-
             <Route
               path="/user/public/shared/profile/:hash"
               element={<SharedProfile />}
             />
+
             <Route
               path="/user/public/shared/content/:content_share_hash"
               element={<SharedContent />}
             />
+
             <Route path="/docs" element={<Docs />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms" element={<TermsofServicePage />} />
             <Route path="/contact" element={<ContactPage />} />
 
             <Route element={<ProtectedRoute />}>
+              <Route path="/sign-in" element={<Signin />} />
+              <Route path="/sign-up" element={<Signup />} />
+              <Route path="/forgot-password/reset-password" element={<ResetPassword />} />
               <Route path="/user/dashboard" element={<Dashboard />} />
               <Route path="/user/profile" element={<UserProfilePage />} />
             </Route>
+
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+
+
 
             <Route path="/*" element={<ErrorPage />} />
           </Routes>

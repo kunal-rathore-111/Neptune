@@ -69,7 +69,7 @@ export function SideBarFooterComp(props: propsType) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="right" align="end" className="w-48 ml-2">
                   <DropdownMenuLabel>
-                    {data?.type === "success" ? data.userProfileData.username : "Account"}
+                    {data?.type === "success" ? data.userProfileData.name : "Account"}
                   </DropdownMenuLabel>
                   <DropdownMenuGroup onClick={() => navigate("/user/profile")}>
                     <DropdownMenuItem className="focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black">
@@ -95,7 +95,7 @@ export function SideBarFooterComp(props: propsType) {
               <SidebarMenuButton className="text-xs flex items-center gap-2 flex-1">
                 {avatarEl}
                 <span className="truncate">
-                  {data?.type === "success" ? data.userProfileData.username : "username"}
+                  {data?.type === "success" ? data.userProfileData.name : "name"}
                 </span>
               </SidebarMenuButton>
 

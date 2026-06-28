@@ -1,8 +1,8 @@
 import { cn } from '@repo/libs';
 import { ArrowBigLeftDashIcon } from '@repo/icons';
 import { useRef } from 'react';
-import { animateIconUsingRef, type IconHandle } from '../*utils/IconAnimateRef';
-import { ButtonsClass } from '../*utils/styles';
+import { animateIconUsingRef, type IconHandle } from '../utils/IconAnimateRef';
+import { ButtonsClass } from '../utils/styles';
 
 import { useNavigate } from 'react-router';
 

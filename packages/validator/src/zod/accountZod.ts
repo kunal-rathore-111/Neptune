@@ -16,17 +16,17 @@ export const signInSchema = z.object({
 });
 
 export const signUpSchema = signInSchema.extend({
-  username: z
+  name: z
     .string()
-    .min(4, { message: 'Please increase username length to atleast 4 letters' })
-    .max(100, { message: 'Please decrease username length to atmax 100 letters' }),
+    .min(4, { message: 'Please increase name length to atleast 4 letters' })
+    .max(100, { message: 'Please decrease name length to atmax 100 letters' }),
 });
 
 export const updatePassswordSchema = signInSchema.extend({
   newPassword: z
     .string()
-    .min(4, { message: 'Please increase username length to atleast 4 letters' })
-    .max(100, { message: 'Please decrease username length to atmax 100 letters' })
+    .min(4, { message: 'Please increase name length to atleast 4 letters' })
+    .max(100, { message: 'Please decrease name length to atmax 100 letters' })
     .regex(/[A-Z]/, { message: 'Please include alteast one uppercase letter in the new password' })
     .regex(/[a-z]/, { message: 'Please include alteast one lowercase letter in the new password' })
     .regex(/[0-9]/, { message: 'Please include alteast one number as letter in the new password' })
@@ -37,8 +37,8 @@ export function validatePasswordInput(input: string) {
   return signUpSchema.shape.password.safeParse(input);
 }
 
-export function validateUsernameInput(input: string) {
-  return signUpSchema.shape.username.safeParse(input);
+export function validateNameInput(input: string) {
+  return signUpSchema.shape.name.safeParse(input);
 }
 
 export type SignInTypes = z.infer<typeof signInSchema>;

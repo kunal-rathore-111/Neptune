@@ -6,12 +6,13 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 
 import { requestIdMiddleware } from './middlewares/requestIdMiddleware';
-
 import { indexRoute } from './routes/indexRoute';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 
-import { globalLimiter } from './utils/limiter';
+// import { globalLimiter } from './utils/limiter';
 import AppError from './middlewares/appError';
+import { NODE_ENV } from './libs/utils/envVariables';
+import { OAuthMiddleware } from './middlewares/OAuthMiddleware';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -40,6 +41,9 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.set('trust proxy', NODE_ENV === "production");
+
+app.use('/api/auth', OAuthMiddleware)
 
 
 //initial route

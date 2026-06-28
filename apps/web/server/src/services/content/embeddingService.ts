@@ -1,11 +1,10 @@
 import type { contentZodSchema } from "@repo/validation";
 import type z from "zod";
-import { AI_Server_URL } from "../../utils/envVariables";
 import AppError from "../../middlewares/appError";
 import axios from "axios";
 import { cosineDistance, eq } from "drizzle-orm";
-import { ContentTable } from "../../drizzle/schema";
-import { db } from "../../config/dbDrizzle";
+import { ContentTable, getDB } from "@repo/database";
+import { AI_Server_URL } from "../../libs/utils/envVariables";
 
 
 type aiServerEmbeddingResponseType = {
@@ -36,6 +35,7 @@ export const getEmbedding = async (data: z.infer<typeof contentZodSchema>) => {
 
 export const findEmbeddingService = async (embeddingVector: number[], userId: string) => {
     // if any error will auto capture by appError class
+    const db = getDB();
     const distance = cosineDistance(ContentTable.embedding, embeddingVector);
     // find top 5 data of the user's content in the table
     const result = await db.select({

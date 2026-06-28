@@ -1,6 +1,5 @@
 import crypto from 'crypto';
-import { db } from '../../config/dbDrizzle';
-import { ContentShareLinkTable, ContentTable, UserShareLinkTable } from '../../drizzle/schema';
+import { ContentShareLinkTable, ContentTable, getDB, UserShareLinkTable } from "@repo/database";
 import { eq } from 'drizzle-orm';
 import AppError from '../../middlewares/appError';
 
@@ -9,6 +8,7 @@ const hashLink = () => {
 };
 
 export const createContentShareLinkFunc = async (contentId: string, isNewContent: boolean) => {
+  const db = getDB();
   // First, check if user already has a share link if not new content
   if (!isNewContent) {
     const existingLink = await db
@@ -34,6 +34,8 @@ export const createContentShareLinkFunc = async (contentId: string, isNewContent
 };
 
 export const deleteContentShareLinkFunc = async (contentId: string) => {
+  const db = getDB();
+
   const result = await db
     .delete(ContentShareLinkTable)
     .where(eq(ContentShareLinkTable.contentId, contentId))
@@ -42,7 +44,8 @@ export const deleteContentShareLinkFunc = async (contentId: string) => {
 };
 
 export const dataByContentShareLinkFunc = async (content_share_Hash: string) => {
-  console.error('\n\n\n\n\n', content_share_Hash, '\n\n\n');
+  const db = getDB();
+
   const result = await db
     .select({
       contentTable: {

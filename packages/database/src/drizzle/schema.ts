@@ -1,14 +1,38 @@
-import { relations } from 'drizzle-orm';
-import { index, pgTable, text, timestamp, uuid, varchar, vector } from 'drizzle-orm/pg-core';
+import { integer, primaryKey } from 'drizzle-orm/pg-core';
+import { boolean, index, pgTable, text, timestamp, uuid, varchar, vector } from 'drizzle-orm/pg-core';
 
 export const UsersTable = pgTable('usersTable', {
   id: uuid('id').primaryKey().defaultRandom(),
-  username: varchar('username', { length: 250 }).notNull(),
+  name: text('name').notNull(),
   email: varchar('email', { length: 400 }).notNull().unique(),
-  password: varchar('password', { length: 60 }).notNull(),
-  createdAt: timestamp('createdAt').defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+  isVerified: boolean('isVerified').default(false).notNull(),
+  password: text('password'),
+  image: text('image'),
+  createdAt: timestamp('createdAt', { mode: "date", withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updatedAt', { mode: "date", withTimezone: true }).defaultNow().notNull(),
 });
+
+export const AccountsTable = pgTable('accountsTable', {
+  userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull(),
+  provider: text('provider').notNull(), // not using enum so flexible for later more provider options
+  providerAccountId: text('providerAccountId').notNull()
+}, (table) => ({
+  accountKey: primaryKey({ columns: [table.provider, table.providerAccountId] })
+}));
+
+
+export const SignUpOTPTable = pgTable('signUpOTPTable', {
+  email: text('email').primaryKey(), // will act as indexing as unique
+  otp: text('otp').notNull(),
+  attempts: integer('attempts').notNull().default(0),
+  expiresAt: timestamp('expiresAt', { withTimezone: true, mode: "date" }).notNull()
+})
+export const ForgotPasswordOTPTable = pgTable('forgotPasswordOTPTable', {
+  email: text('email').primaryKey(), // will act as indexing as unique
+  otp: text('otp').notNull(),
+  attempts: integer('attempts').notNull().default(0),
+  expiresAt: timestamp('expiresAt', { withTimezone: true, mode: "date" }).notNull()
+})
 
 export const ContentTable = pgTable(
   'contentTable',
@@ -18,11 +42,15 @@ export const ContentTable = pgTable(
     description: text('description'),
     link: text('link'),
     // varchar instead of pgEnum — category list is validated at the application layer (Zod)
-    category: varchar('category', { length: 100 }).default('Others').notNull(),
+
+    category: text('category').default('Others').notNull(),
+
     tags: varchar('tags', { length: 50 }).array(),
+
     userId: uuid('userId')
       .references(() => UsersTable.id, { onDelete: 'cascade' })
       .notNull(),
+
     createdDate: timestamp('createdDate').defaultNow().notNull(),
     updatedDate: timestamp('updatedDate').defaultNow().notNull(),
     embedding: vector('embedding', { dimensions: 768 }),
@@ -33,12 +61,6 @@ export const ContentTable = pgTable(
   }),
 );
 
-
-export const tagsTable = pgTable('tagsTable', {
-  // for vector search
-  id: uuid('id').primaryKey().defaultRandom(),
-  tags: varchar('tags', { length: 60 }).notNull().unique(),
-});
 
 export const UserShareLinkTable = pgTable('UserShareLinkTable', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -56,40 +78,4 @@ export const ContentShareLinkTable = pgTable('ContentShareLinkTable', {
     .references(() => ContentTable.id, { onDelete: 'cascade' })
     .notNull()
     .unique(), // one content will have one share link
-});
-
-//  RELATIONS
-export const UsersRelation = relations(UsersTable, ({ one, many }) => {
-  return {
-    userContent: many(ContentTable),
-    userLink: one(UserShareLinkTable),
-  };
-});
-
-export const ContentRelation = relations(ContentTable, ({ one }) => {
-  return {
-    user: one(UsersTable, {
-      fields: [ContentTable.userId],
-      references: [UsersTable.id],
-    }),
-    contentLink: one(ContentShareLinkTable),
-  };
-});
-
-export const UserLinkRelation = relations(UserShareLinkTable, ({ one }) => {
-  return {
-    user: one(UsersTable, {
-      fields: [UserShareLinkTable.userId],
-      references: [UsersTable.id],
-    }),
-  };
-});
-
-export const ContentLinkRelation = relations(ContentShareLinkTable, ({ one }) => {
-  return {
-    content: one(ContentTable, {
-      fields: [ContentShareLinkTable.contentId],
-      references: [ContentTable.id],
-    }),
-  };
 });

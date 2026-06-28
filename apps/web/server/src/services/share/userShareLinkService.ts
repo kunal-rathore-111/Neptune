@@ -1,14 +1,14 @@
 import crypto from 'crypto';
-import { db } from '../../config/dbDrizzle';
-import { ContentTable, UserShareLinkTable, UsersTable } from '../../drizzle/schema';
 import { eq } from 'drizzle-orm';
 import AppError from '../../middlewares/appError';
+import { ContentTable, getDB, UserShareLinkTable, UsersTable } from '@repo/database';
 
 const hashLink = () => {
   return crypto.randomBytes(32).toString('hex');
 };
 
 export const createShareLinkFunc = async (userId: string) => {
+  const db = getDB();
   // First, check if user already has a share link
   const existingLink = await db.select().from(UserShareLinkTable).where(eq(UserShareLinkTable.userId, userId));
 
@@ -27,6 +27,7 @@ export const createShareLinkFunc = async (userId: string) => {
 };
 
 export const deleteShareLinkFunc = async (userId: string) => {
+  const db = getDB();
   const result = await db
     .delete(UserShareLinkTable)
     .where(eq(UserShareLinkTable.userId, userId))
@@ -39,6 +40,7 @@ export const deleteShareLinkFunc = async (userId: string) => {
 };
 
 export const getShareLinkFunc = async (userId: string) => {
+  const db = getDB();
   const existingLink = await db.select().from(UserShareLinkTable).where(eq(UserShareLinkTable.userId, userId));
 
   if (existingLink.length > 0 && existingLink[0]) {
@@ -49,6 +51,7 @@ export const getShareLinkFunc = async (userId: string) => {
 };
 
 export const dataByUserShareLinkFunc = async (linkHash: string) => {
+  const db = getDB();
   const data = await db
     .select({
       UsersData: UsersTable,

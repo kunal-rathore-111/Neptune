@@ -1,30 +1,36 @@
-import { db } from '../../config/dbDrizzle';
-import { UsersTable } from '../../drizzle/schema';
+import { getDB, UsersTable } from '@repo/database';
 import AppError from '../../middlewares/appError';
-import { decodePassword, hashPassword } from '../../utils/hashFunc';
 import { eq } from 'drizzle-orm';
 import type { SignInTypes, SignUpTypes, UpdatePasswordTypes } from '@repo/validation';
+import { decodePassword, hashPassword } from '../../libs/utils/hashFunc';
 
-export const createUserService = async ({ username, email, password }: SignUpTypes) => {
+export const createUserService = async ({ name, email, password }: SignUpTypes) => {
   const hashedPassword = await hashPassword(password);
+  const db = getDB();
 
   const user = await db
     .insert(UsersTable)
     .values({
-      username,
+      name,
       email,
       password: hashedPassword,
     })
     .returning();
-  if (!user[0]?.id) throw new AppError('Signup failed, Please try again later', 500, 'Database Error');
-  return user[0];
-};
-export const findUserService = async ({ email, password }: SignInTypes) => {
-  const user = await db.query.UsersTable.findFirst({
-    where: eq(UsersTable.email, email),
-  });
 
+  const [newUser] = user;
+  if (!newUser?.id) throw new AppError('Signup failed, Please try again later', 500, 'Database Error');
+  return newUser;
+};
+
+export const findUserService = async ({ email, password }: SignInTypes) => {
+  const db = getDB();
+  const result = await db.select().from(UsersTable).where(
+    eq(UsersTable.email, email)
+  ).limit(1);
+
+  const [user] = result;
   if (!user) throw new AppError('User not found', 404, 'NotFound');
+  if (!user.password) throw new AppError("Password not found, please update password.", 404, "NotFound")
 
   const decodePasswordResponse = await decodePassword(password, user.password);
   if (!decodePasswordResponse) throw new AppError('Wrong password', 401, 'Unauthorized');
@@ -32,18 +38,21 @@ export const findUserService = async ({ email, password }: SignInTypes) => {
 };
 
 export const fetchUserProfileService = async (userId: string) => {
+  const db = getDB();
   // find the first user with that id
-  const result = await db.query.UsersTable.findFirst({ where: eq(UsersTable.id, userId) });
+  const result = await db.select().from(UsersTable).where(eq(UsersTable.id, userId)).limit(1);
 
-  if (!result) {
+  const [user] = result;
+  if (!user) {
     throw new AppError('User profile not found', 404, 'Not found');
   }
-  return result;
+  return user;
 };
 
 export const deleteAccountService = async ({ email, password }: SignInTypes) => {
   // first find user with the email and password, if found then delete
   const user = await findUserService({ email, password });
+  const db = getDB();
   return await db.delete(UsersTable).where(eq(UsersTable.id, user.id)).returning();
 };
 
@@ -52,7 +61,7 @@ export const updatePasswordService = async ({ email, password, newPassword }: Up
   const user = await findUserService({ email, password });
 
   const updatedHashedPass = await hashPassword(newPassword);
-
+  const db = getDB();
   const result = await db
     .update(UsersTable)
     .set({ password: updatedHashedPass })

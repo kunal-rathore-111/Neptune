@@ -2,8 +2,8 @@
   "name": "Neptune",
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "prettier": "^3.7.4",
-    "turbo": "^2.9.6",
+    "prettier": "^3.8.5",
+    "turbo": "^2.10.0",
     "typescript": "5.9.2"
   },
   "engines": {
@@ -13,9 +13,12 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "docker:aiServer": "bun run build && cd apps/aiServer && bun run start",
-    "docker:server": "bun run build && cd apps/web/server && bun run start",
-    "docker:client": "bun run build && cd apps/web/client && bun run start",
+    "drizzle:generate": "cd ./packages/database && bun run drizzle-kit generate --config=./src/drizzle/drizzle.config.ts",
+    "drizzle:push": "cd ./packages/database && bun run drizzle-kit push --config=./src/drizzle/drizzle.config.ts",
+    "build:database": "cd ./packages/database && bun run build",
+    "build:validator": "cd ./packages/validator && bun run build",
+    "build:ui": "cd ./packages/ui && bun run build",
+    "build:icons": "cd ./packages/icons && bun run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

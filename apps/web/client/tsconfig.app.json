@@ -36,6 +36,5 @@
   },
   "include": [
     "src",
-    "../../../packages/ui/src/tags-input",
   ]
 }

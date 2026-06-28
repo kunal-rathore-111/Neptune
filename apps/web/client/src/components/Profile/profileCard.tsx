@@ -34,7 +34,7 @@ import { OpenAccountDeletionPopUp } from "./OpenAccountDeletionPopUpComp";
 
 interface ProfileFormData {
   email: string;
-  username: string;
+  name: string;
   avatar?: string;
 }
 
@@ -47,7 +47,7 @@ interface SettingsProfile1Props {
 export const UserProfile = ({
   defaultValues = {
     email: "alex.morgan@email.com",
-    username: "alexmorgan",
+    name: "alexmorgan",
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar8.jpg",
   },
@@ -55,7 +55,7 @@ export const UserProfile = ({
 }: SettingsProfile1Props) => {
   const [avatarFiles, setAvatarFiles] = useState<File[]>([]);
 
-  const initials = defaultValues.username
+  const initials = defaultValues.name
     ?.split(" ")
     .map((n) => n[0])
     .join("")
@@ -153,7 +153,7 @@ export const UserProfile = ({
                 <Avatar className="size-20">
                   <AvatarImage
                     src={avatarPreview}
-                    alt={defaultValues.username}
+                    alt={defaultValues.name}
                     className="object-cover"
                   />
                   <AvatarFallback className="text-xl font-semibold">
