@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { createUserService, findUserService } from '../../services/users/userAccountService';
 import { createJWTSession } from '../../libs/sessions';
 import { NODE_ENV } from '../../libs/utils/envVariables';
+import { cookieOptions } from '../../libs/cookieOptions';
 
 export const signUpController = async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
@@ -59,21 +60,11 @@ export const signInController = async (req: Request, res: Response) => {
 };
 
 export const signOutController = (req: Request, res: Response) => {
-  // Clear the authentication cookie by setting it with expired date
+  // Clear the authentication cookie 
+  res.clearCookie('token', cookieOptions)
 
-  res.cookie('token', '', {
-    httpOnly: true,
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
-    secure: NODE_ENV === 'production' ? true : false,
-    expires: new Date(0), // Set expiration to (Jan 1, 1970) = immediately expired
-  })
-
-  res.cookie('hasTokenCookie', '', {
-    httpOnly: false,
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
-    secure: NODE_ENV === 'production' ? true : false,
-    expires: new Date(0), // Set expiration to (Jan 1, 1970) = immediately expired
-  });
+  res.clearCookie('hasTokenCookie', { ...cookieOptions, httpOnly: false }
+  );
 
   return res.status(200)
     .json({
