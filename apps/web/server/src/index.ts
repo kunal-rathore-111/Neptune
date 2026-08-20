@@ -14,7 +14,7 @@ import AppError from './middlewares/appError';
 import { NODE_ENV } from './libs/utils/envVariables';
 import { OAuthMiddleware } from './middlewares/OAuthMiddleware';
 
-const app = express();
+export const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
 app.use(helmet());
@@ -61,5 +61,3 @@ if (process.env.VERCEL !== 'true') {
   });
 }
 
-
-export default app;
