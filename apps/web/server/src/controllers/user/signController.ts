@@ -15,13 +15,10 @@ export const signUpController = async (req: Request, res: Response) => {
   const id = userData.id;
   const token = await createJWTSession({ id, email });
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
-    secure: NODE_ENV === 'production' ? true : false,
-  });
+  res.cookie('token', token, cookieOptions);
 
   res.cookie('hasTokenCookie', true, {
+    ...cookieOptions,
     httpOnly: false, // for protected route validation
   })
 
@@ -42,13 +39,10 @@ export const signInController = async (req: Request, res: Response) => {
 
   const jwtToken = await createJWTSession({ id, email }); // creating jwt and sending in cookies
 
-  res.cookie('token', jwtToken, {
-    httpOnly: true,
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax', // this logic for http (secure true) (none only works with secure true)
-    secure: NODE_ENV === 'production' ? true : false,
-  });
+  res.cookie('token', jwtToken, cookieOptions);
 
   res.cookie('hasTokenCookie', true, {
+    ...cookieOptions,
     httpOnly: false, // for protected route validation
   })
 
