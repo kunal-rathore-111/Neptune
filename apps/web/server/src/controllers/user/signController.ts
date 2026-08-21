@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 import { createUserService, findUserService } from '../../services/users/userAccountService';
 import { createJWTSession } from '../../libs/sessions';
-import { NODE_ENV } from '../../libs/utils/envVariables';
 import { cookieOptions } from '../../libs/cookieOptions';
 
 export const signUpController = async (req: Request, res: Response) => {
@@ -15,10 +14,11 @@ export const signUpController = async (req: Request, res: Response) => {
   const id = userData.id;
   const token = await createJWTSession({ id, email });
 
-  res.cookie('token', token, cookieOptions);
+  res.cookie('token', token, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
 
   res.cookie('hasTokenCookie', true, {
     ...cookieOptions,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: false, // for protected route validation
   })
 
@@ -39,10 +39,14 @@ export const signInController = async (req: Request, res: Response) => {
 
   const jwtToken = await createJWTSession({ id, email }); // creating jwt and sending in cookies
 
-  res.cookie('token', jwtToken, cookieOptions);
+  res.cookie('token', jwtToken, {
+    ...cookieOptions,
+    maxAge: 7 * 24 * 60 * 60 * 1000
+  });
 
   res.cookie('hasTokenCookie', true, {
     ...cookieOptions,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: false, // for protected route validation
   })
 

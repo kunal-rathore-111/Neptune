@@ -93,7 +93,7 @@ async function validateOtp(req: Request, res: Response) {
 
                         res.cookie('forgotPasswordToken', session, {
                             ...cookieOptions,
-                            maxAge: 24 * 60 * 1000 * 60 * 3
+                            maxAge: 24 * 60 * 1000 * 60
                         });
 
                         res.cookie('hasForgotPasswordCookie', true, {
@@ -120,7 +120,7 @@ async function validateOtp(req: Request, res: Response) {
 
                         res.cookie('token', session, {
                             ...cookieOptions,
-                            maxAge: 24 * 60 * 1000 * 60 * 3
+                            maxAge: 24 * 60 * 1000 * 60
                         })
                         res.cookie('hasTokenCookie', true, {
                             ...cookieOptions,
