@@ -23,6 +23,10 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   if (statusCode === 401 || message === 'User profile not found') {
     res.clearCookie('token', cookieOptions);
     res.clearCookie('hasTokenCookie', { ...cookieOptions, httpOnly: false });
+
+
+    console.error("Testing why the cookie is getting auto cleared after successfull login")
+
     res.clearCookie('forgotPasswordToken', cookieOptions);
     res.clearCookie('hasForgotPasswordCookie', { ...cookieOptions, httpOnly: false });
   }
