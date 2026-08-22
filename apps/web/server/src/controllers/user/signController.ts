@@ -59,10 +59,9 @@ export const signInController = async (req: Request, res: Response) => {
 
 export const signOutController = (req: Request, res: Response) => {
   // Clear the authentication cookie 
-  res.clearCookie('token', cookieOptions)
-
-  res.clearCookie('hasTokenCookie', { ...cookieOptions, httpOnly: false }
-  );
+  console.error('[CLEAR_COOKIE_TRACE: SIGN_OUT_CONTROLLER] Clearing cookies due to manual sign-out request');
+  res.clearCookie('token', cookieOptions);
+  res.clearCookie('hasTokenCookie', { ...cookieOptions, httpOnly: false });
 
   return res.status(200)
     .json({

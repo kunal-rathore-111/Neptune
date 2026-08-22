@@ -22,8 +22,10 @@ export async function resetPassword(req: Request, res: Response) {
             .where(eq(UsersTable.email, email));
 
         // Clear the token cookie so it can't be reused!
+        console.error('[CLEAR_COOKIE_TRACE: RESET_PASSWORD_CONTROLLER] Clearing forgot password cookies after password reset');
         res.clearCookie('forgotPasswordToken', cookieOptions);
         res.clearCookie('hasForgotPasswordCookie', { ...cookieOptions, httpOnly: false });
+
 
         return res.status(200).json({ message: "Password updated successfully." });
     }
