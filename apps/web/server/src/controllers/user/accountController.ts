@@ -23,11 +23,11 @@ const deleteAccount = async (req: Request, res: Response) => {
     throw new AppError('Account not deleted, please try again', 500, 'InternalError');
   }
   else {
-    console.error('[CLEAR_COOKIE_TRACE: DELETE_ACCOUNT_CONTROLLER] Clearing cookies due to user account deletion');
     res.clearCookie("token", cookieOptions);
     res.clearCookie("hasTokenCookie", { ...cookieOptions, httpOnly: false });
     return res.status(200).send({ message: 'Account deleted successfully' });
   }
+
 
 };
 

@@ -21,13 +21,12 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   // Automatically clears all auth and forgot-password cookies from the client browser
   // whenever any 401 Unauthorized or 'User profile not found' error occurs across the server.
   if (statusCode === 401 || message === 'User profile not found') {
-    console.error(`[CLEAR_COOKIE_TRACE: ERROR_MIDDLEWARE] Clearing cookies due to status ${statusCode}, message: "${message}"`);
-
     res.clearCookie('token', cookieOptions);
     res.clearCookie('hasTokenCookie', { ...cookieOptions, httpOnly: false });
     res.clearCookie('forgotPasswordToken', cookieOptions);
     res.clearCookie('hasForgotPasswordCookie', { ...cookieOptions, httpOnly: false });
   }
+
 
 
 
