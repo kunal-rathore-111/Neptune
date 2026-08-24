@@ -7,7 +7,7 @@ export default function Categories() {
     <div className="flex items-center border-y text-black/70 dark:text-white/60">
       <span className="flex h-full items-center gap-2 p-1">
         <DotComp />
-        <div className="text-4xl font-semibold uppercase"> Categories </div>
+        <div className="text-3xl md:text-4xl font-semibold uppercase"> Categories </div>
       </span>
       <Marquee className="flex-1 [mask-image:linear-gradient(to_right,transparent,black_80px,black_calc(100%-80px),transparent)]">
         {CATEGORIES.map((word, idx) => (

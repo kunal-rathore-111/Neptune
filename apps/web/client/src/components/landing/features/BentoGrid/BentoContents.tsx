@@ -193,7 +193,7 @@ export function Col2Row1() {
 export function Col2Row2() {
   return (
     <>
-      <div className="mt-5 flex flex-col items-start justify-center rounded-4xl rounded-b-none border border-black p-5 md:rounded-br-4xl dark:border-white dark:bg-black">
+      <div className="mt-5 flex flex-col items-start justify-center rounded-4xl rounded-b-none border border-black p-5 md:rounded-br-4xl dark:border-white dark:bg-black ">
         <div className="flex flex-col gap-1">
           <p className="text-lg font-extralight">Privacy</p>
           <div className="flex flex-col gap-3">
@@ -241,7 +241,7 @@ export function Col3Row1() {
 
   return (
     <>
-      <div className="flex flex-col gap-3 border-black p-5 md:rounded-4xl md:border md:border-t-0 lg:rounded-l-none lg:border-t lg:border-b-0 lg:border-l-0 dark:border-white">
+      <div className="flex flex-col gap-3 border-black p-5 md:rounded-4xl md:border md:border-t-0 lg:rounded-l-none lg:border-t lg:border-b-0 lg:border-l-0 dark:border-white border-l border-r rounded-l-3xl rounded-r-lg">
         <motion.p
           variants={introducingSoonParent}
           initial={"hidden"}
@@ -328,7 +328,7 @@ export function Col3Row2() {
   const sharesArray = ["neptune.app/s/design-inspo", "neptune.app/s/ai-papers"];
 
   return (
-    <motion.div className="relative flex flex-col rounded-l-none border border-black p-5 md:rounded-4xl md:border-t-0 lg:border-t lg:border-l-0 dark:border-white">
+    <motion.div className="rounded-l-3xl rounded-r-3xl relative flex flex-col  border border-black p-5 md:rounded-4xl md:border-t-0 lg:border-t lg:border-l-0 dark:border-white">
       <div className="flex flex-col gap-1">
         <div className="flex flex-col gap-3">
           <h4 className="flex items-center gap-2 text-2xl">

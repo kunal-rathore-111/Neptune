@@ -24,7 +24,7 @@ function HeroSection() {
       {/* app intro text */}
       <div className="md:space-y-6 lg:space-y-4">
         <div className="flex flex-col gap-6">
-          <h1 className="text-8xl leading-25 font-semibold">
+          <h1 className="text-7xl md:text-8xl leading-20 md:leading-25 font-semibold">
             Neptune, <br /> Your Second Mind <br /> with AI
           </h1>
           <div>
@@ -34,31 +34,18 @@ function HeroSection() {
             </p>
           </div>
         </div>
-        <div className="space-y-6">
-          <div className="flex flex-col items-center gap-8 text-center">
-            <div className="flex items-center justify-center gap-3">
-              <Button asChild>
-                <motion.button
-                  whileHover={"animate"}
-                  onClick={() => navigate("/sign-up")}
-                >
-                  Get Started Free
-                  {<SendIcon />}
-                </motion.button>
-              </Button>
+        <div className="space-y-6 pt-5">
 
-              <Button
-                variant={"secondary"}
-                className="border border-amber-900/40 bg-white/10 shadow-sm hover:bg-gray-300/30 dark:border-white/30 dark:hover:bg-zinc-300/14"
-                asChild
-              >
-                {/* <motion.button whileHover={"animate"}>
-                  View demo
-                  {<ClapIcon />}
-                </motion.button> */}
-              </Button>
-            </div>
-          </div>
+          <Button asChild>
+            <motion.button
+              whileHover={"animate"}
+              onClick={() => navigate("/sign-up")}
+            >
+              Get Started Free
+              {<SendIcon />}
+            </motion.button>
+          </Button>
+
           <div className="flex items-center justify-center gap-2">
             <AvatarGroupComp />
             <span className="flex items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">

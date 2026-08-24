@@ -12,7 +12,7 @@ export default function Audience() {
     <>
       <div className="mt-0 flex flex-col overflow-hidden">
         <h3
-          className="text-6xl leading-none font-semibold text-black/70 uppercase dark:text-white/60"
+          className="text-5xl md:text-6xl leading-none font-semibold text-black/70 uppercase dark:text-white/60"
           {...animateIconUsingRef(AnimateRef)}
         >
           Love from our Audience

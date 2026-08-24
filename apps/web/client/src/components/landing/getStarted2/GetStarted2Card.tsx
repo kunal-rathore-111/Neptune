@@ -17,7 +17,7 @@ export function GetStarted2Card() {
     const w = window.innerWidth;
     if (w < 768) //mobile
     {
-      setDimensions({ width: "300px", height: "150px" });
+      setDimensions({ width: "300px", height: "170px" });
     } else if (w < 1024) {
       setDimensions({ width: "480px", height: "260px" });
     } else {
@@ -35,13 +35,13 @@ export function GetStarted2Card() {
           height={dimensions.height}
           width={dimensions.width}
         >
-          <CardBody className="flex h-auto w-auto bg-zinc-500/20 px-20 py-12">
+          <CardBody className="flex h-auto w-auto bg-zinc-500/20 px-20 py-4 md:py-12">
             <CardItem
               className="flex w-full flex-col items-center gap-4 text-xs"
               translateX={7}
               translateY={-7}
             >
-              <div className="w-fit font-sans text-4xl font-bold whitespace-nowrap uppercase">
+              <div className="w-fit font-sans text-xl md:text-4xl font-bold whitespace-nowrap uppercase">
                 <p>Start building your</p>
                 <p>second mind today.</p>
               </div>

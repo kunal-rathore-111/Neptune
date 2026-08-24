@@ -18,7 +18,7 @@ import { EmailLink, GithubRepoUrl } from "@/api/urls";
 
 export default function Docs() {
   return (
-    <main className="my-14 flex w-full flex-col items-start gap-5 rounded-2xl border px-14 py-10 text-start shadow-sm shadow-black dark:border-zinc-400 dark:shadow-zinc-200/70">
+    <main className="my-14 flex w-full flex-col items-start gap-5 rounded-2xl border md:px-14 py-10 text-start shadow-sm shadow-black dark:border-zinc-400 dark:shadow-zinc-200/70">
       <div className="border-b-2 py-8 lg:w-230">
         <div className="flex flex-col gap-10">
           {/*What is 2nd Mind?  */}
@@ -27,7 +27,7 @@ export default function Docs() {
               <div className="flex w-fit items-center gap-1 rounded-sm border border-zinc-500 bg-zinc-200 px-2 text-xs text-zinc-600">
                 <DotComp /> Documentation
               </div>
-              <div className="flex items-end md:w-1/7 lg:w-1/12">
+              <div className="flex items-end w-1/6 md:w-1/7 lg:w-1/12">
                 <ThemeHomeComp />
               </div>
             </div>
