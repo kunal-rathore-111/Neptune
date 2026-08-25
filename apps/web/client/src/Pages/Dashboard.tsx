@@ -47,7 +47,7 @@ export default function Dashboard() {
     <>
       <SidebarProvider className="[--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]" defaultOpen={false}>
         <AppSideBar isSharedDashboard={isSharedProfileRouteHash ? true : false}></AppSideBar>
-        <main className="flex w-screen ">
+        <main className="flex w-full ">
           <DashboardMainContentArea />
           {/* handles the chatbot icon+the side drawer */}
           {!isSharedProfileRouteHash && <ChatBotDrawerComp />}

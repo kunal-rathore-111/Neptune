@@ -4,10 +4,11 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { store } from "./store";
 import { Toaster, TooltipProvider } from "@repo/ui";
 
+const client = new QueryClient();
+
 
 export default function App() {
 
-  const client = new QueryClient();
 
 
   return (
@@ -19,7 +20,7 @@ export default function App() {
           <QueryClientProvider client={client}>
 
             <div className="flex w-full flex-col items-center text-zinc-700 dark:text-zinc-300">
-              <div className="md:max-w-2xl lg:max-w-full">
+              <div className="w-full md:max-w-2xl lg:max-w-full">
                 <Layout></Layout>
               </div>
             </div>
