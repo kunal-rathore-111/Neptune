@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <SidebarProvider className="[--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]">
+      <SidebarProvider className="[--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]" defaultOpen={false}>
         <AppSideBar isSharedDashboard={isSharedProfileRouteHash ? true : false}></AppSideBar>
         <main className="flex w-screen ">
           <DashboardMainContentArea />
