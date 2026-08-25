@@ -2,7 +2,6 @@ import Layout from "./Layout";
 import { Provider } from "react-redux";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { store } from "./store";
-import { useEffect, useState } from "react";
 import { Toaster, TooltipProvider } from "@repo/ui";
 
 
