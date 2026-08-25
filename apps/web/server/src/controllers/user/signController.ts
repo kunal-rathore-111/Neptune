@@ -5,7 +5,6 @@ import { cookieOptions } from '../../libs/cookieOptions';
 
 export const signUpController = async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
-  // Using email as name - no separate name field needed
   const result = await createUserService({ email, name, password });
   // remove password from data to return user data on frontend
   //  Destructure "password as _ named variable" out, and put everything else into "userData"
