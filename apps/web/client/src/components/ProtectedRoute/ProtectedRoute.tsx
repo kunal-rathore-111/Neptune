@@ -27,7 +27,7 @@ export function ProtectedRoute() {
     if (!hasSessionCookie && !isSignPage) // return to sign-in
     {
         console.error("no cookie found");
-        console.error("hasSessionCookie: " + hasSessionCookie);
+        return <Navigate to='/user/sign-in' />
     }
 
     else if (hasSessionCookie && isSignPage)
