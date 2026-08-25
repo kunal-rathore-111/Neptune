@@ -1,7 +1,7 @@
 
 
 import { getDB, ForgotPasswordOTPTable, SignUpOTPTable, UsersTable } from "@repo/database";
-import { eq } from "drizzle-orm";
+import { eq } from '@repo/database';
 
 import { createTransport } from "nodemailer";
 

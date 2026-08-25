@@ -25,7 +25,10 @@ export function ProtectedRoute() {
     }
 
     if (!hasSessionCookie && !isSignPage) // return to sign-in
-        return <Navigate to={'/sign-in'} replace />
+    {
+        console.error("no cookie found");
+        return <Navigate to='/sign-in' />
+    }
 
     else if (hasSessionCookie && isSignPage)
         return <Navigate to={'/user/dashboard'} replace /> // if at sign-in and already have cookie then redirect to dashboard

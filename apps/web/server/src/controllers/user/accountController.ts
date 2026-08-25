@@ -5,6 +5,7 @@ import {
   fetchUserProfileService,
   updatePasswordService,
 } from '../../services/users/userAccountService';
+import { cookieOptions } from '../../libs/cookieOptions';
 
 const fetchUserProfile = async (req: Request, res: Response) => {
   const result = await fetchUserProfileService(req.userId);
@@ -21,7 +22,13 @@ const deleteAccount = async (req: Request, res: Response) => {
   if (result.length === 0) {
     throw new AppError('Account not deleted, please try again', 500, 'InternalError');
   }
-  return res.status(200).send({ message: 'Account deleted successfully' });
+  else {
+    res.clearCookie("token", cookieOptions);
+    res.clearCookie("hasTokenCookie", { ...cookieOptions, httpOnly: false });
+    return res.status(200).send({ message: 'Account deleted successfully' });
+  }
+
+
 };
 
 const updatePassword = async (req: Request, res: Response) => {

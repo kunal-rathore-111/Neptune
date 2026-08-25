@@ -1,8 +1,9 @@
 import { ForgotPasswordOTPTable, getDB, SignUpOTPTable, UsersTable } from "@repo/database";
-import { eq } from "drizzle-orm";
+import { eq } from '@repo/database';
 import type { Request, Response } from "express";
 import { createJWTSession } from "../../libs/sessions";
 import { NODE_ENV } from "../../libs/utils/envVariables";
+import { cookieOptions } from "../../libs/cookieOptions";
 
 
 
@@ -91,13 +92,12 @@ async function validateOtp(req: Request, res: Response) {
                         const session = await createJWTSession({ email, otp });
 
                         res.cookie('forgotPasswordToken', session, {
-                            httpOnly: true,
-                            sameSite: NODE_ENV === 'production' ? 'none' : 'lax', // this logic for http (secure true) (none only works with secure true)
-                            secure: NODE_ENV === 'production' ? true : false,
-                            maxAge: 24 * 60 * 1000 * 60 * 3
+                            ...cookieOptions,
+                            maxAge: 24 * 60 * 1000 * 60
                         });
 
                         res.cookie('hasForgotPasswordCookie', true, {
+                            ...cookieOptions,
                             httpOnly: false, // for protected route validation
                         })
 
@@ -119,12 +119,11 @@ async function validateOtp(req: Request, res: Response) {
                         });
 
                         res.cookie('token', session, {
-                            httpOnly: true,
-                            sameSite: NODE_ENV === "production" ? 'none' : 'lax',
-                            secure: NODE_ENV === "production" ? true : false,
-                            maxAge: 24 * 60 * 1000 * 60 * 3
+                            ...cookieOptions,
+                            maxAge: 24 * 60 * 1000 * 60
                         })
                         res.cookie('hasTokenCookie', true, {
+                            ...cookieOptions,
                             httpOnly: false, // for protected route validation
                         })
 

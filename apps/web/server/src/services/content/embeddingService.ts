@@ -2,7 +2,7 @@ import type { contentZodSchema } from "@repo/validation";
 import type z from "zod";
 import AppError from "../../middlewares/appError";
 import axios from "axios";
-import { cosineDistance, eq } from "drizzle-orm";
+import { cosineDistance, eq } from '@repo/database';
 import { ContentTable, getDB } from "@repo/database";
 import { AI_Server_URL } from "../../libs/utils/envVariables";
 

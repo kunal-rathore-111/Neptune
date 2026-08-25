@@ -1,5 +1,6 @@
 import type { ErrorRequestHandler } from 'express';
 import { NODE_ENV } from '../libs/utils/envVariables';
+import { cookieOptions } from '../libs/cookieOptions';
 
 export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   const isProduction = NODE_ENV === 'production';
@@ -14,6 +15,22 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
   const errorCode = err?.code || err?.cause?.code;
   const errorName = err?.name;
+
+
+  // Central Auth & Session Error Handling:
+  // Automatically clears all auth and forgot-password cookies from the client browser
+  // whenever any 401 Unauthorized or 'User profile not found' error occurs across the server.
+  if (statusCode === 401 || message === 'User profile not found') {
+    res.clearCookie('token', cookieOptions);
+    res.clearCookie('hasTokenCookie', { ...cookieOptions, httpOnly: false });
+    res.clearCookie('forgotPasswordToken', cookieOptions);
+    res.clearCookie('hasForgotPasswordCookie', { ...cookieOptions, httpOnly: false });
+  }
+
+
+
+
+
 
   // Postgres unique constraint error (23505)
   if (errorCode === '23505') {

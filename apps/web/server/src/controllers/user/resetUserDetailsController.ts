@@ -1,9 +1,8 @@
-import { validatePasswordInput } from "@repo/validation";
 import type { Request, Response } from "express";
 import { hashPassword } from "../../libs/utils/hashFunc";
 import { getDB, UsersTable } from "@repo/database";
-import { eq } from "drizzle-orm";
-import { NODE_ENV } from "../../libs/utils/envVariables";
+import { eq } from '@repo/database';
+import { cookieOptions } from "../../libs/cookieOptions";
 
 
 
@@ -23,18 +22,10 @@ export async function resetPassword(req: Request, res: Response) {
             .where(eq(UsersTable.email, email));
 
         // Clear the token cookie so it can't be reused!
-        res.cookie('forgotPasswordToken', '', {
-            expires: new Date(0),
-            httpOnly: true,
-            sameSite: NODE_ENV === 'production' ? "none" : 'lax',
-            secure: NODE_ENV === 'production' ? true : false,
-        });
-        res.cookie('hasForgotPasswordCookie', '', {
-            expires: new Date(0),
-            httpOnly: false,
-            sameSite: NODE_ENV === 'production' ? "none" : 'lax',
-            secure: NODE_ENV === 'production' ? true : false,
-        });
+        res.clearCookie('forgotPasswordToken', cookieOptions);
+        res.clearCookie('hasForgotPasswordCookie', { ...cookieOptions, httpOnly: false });
+
+
 
         return res.status(200).json({ message: "Password updated successfully." });
     }

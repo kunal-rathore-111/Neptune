@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { ContentShareLinkTable, ContentTable, getDB, UserShareLinkTable } from "@repo/database";
-import { eq } from 'drizzle-orm';
+import { eq } from '@repo/database';
 import AppError from '../../middlewares/appError';
 
 const hashLink = () => {

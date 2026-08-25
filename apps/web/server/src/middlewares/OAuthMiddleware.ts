@@ -4,7 +4,7 @@ import GitHub from "@auth/express/providers/github";
 import Google from "@auth/express/providers/google";
 import type { NextFunction, Request, Response } from "express";
 import { AccountsTable, getDB, UsersTable } from '@repo/database';
-import { and, eq } from "drizzle-orm";
+import { and, eq } from '@repo/database';
 import AppError from "./appError";
 import { createJWTSession } from "../libs/sessions";
 import { NODE_ENV } from "../libs/utils/envVariables";
@@ -16,7 +16,7 @@ export function OAuthMiddleware(req: Request, res: Response, next: NextFunction)
         providers: [GitHub, Google, Discord],
         callbacks:
         {
-            async signIn({ user, account }) {
+            async signIn({ user, account }: any) {
                 try {
                     const db = getDB();
                     if (!user.email || !account) return false;
@@ -78,7 +78,7 @@ export function OAuthMiddleware(req: Request, res: Response, next: NextFunction)
 
 
             },
-            async redirect({ url }) {
+            async redirect({ url }: any) {
                 // any invalid frontends, postman will dirctly blocked by CORS in production
                 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 

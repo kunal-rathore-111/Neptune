@@ -1,6 +1,6 @@
 import { getDB, UsersTable } from '@repo/database';
 import AppError from '../../middlewares/appError';
-import { eq } from 'drizzle-orm';
+import { eq } from '@repo/database';
 import type { SignInTypes, SignUpTypes, UpdatePasswordTypes } from '@repo/validation';
 import { decodePassword, hashPassword } from '../../libs/utils/hashFunc';
 

@@ -26,7 +26,7 @@ export default function Audience() {
           <motion.div className="mt-8 flex items-center justify-center gap-7">
             <Marquee>
               {AudienceCommentArray.map((data, idx) => (
-                <AudienceCard data={data} idx={idx} />
+                <AudienceCard data={data} idx={idx} key={idx} />
               ))}
             </Marquee>
           </motion.div>

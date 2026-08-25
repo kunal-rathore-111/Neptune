@@ -4,7 +4,7 @@ import z from "zod";
 import { CATEGORIES } from "@repo/libs";
 
 export const gorqModel = new ChatGroq({
-    model: 'llama-3.3-70b-versatile',
+    model: 'openai/gpt-oss-20b',
     apiKey: groqAPI, temperature: 0
 });
 
