@@ -9,8 +9,6 @@ const client = new QueryClient();
 
 export default function App() {
 
-
-
   return (
     <>
       <Provider store={store}>
