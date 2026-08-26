@@ -1,6 +1,6 @@
 import { DashboardMainContentArea } from "@/components/dashboard/MainContentArea";
 import { AppSideBar } from "@/components/dashboard/DashboardComps/sidebar/SideBarLayout";
-import { SidebarProvider, toast } from "@repo/ui";
+import { SidebarProvider, SidebarTrigger, toast } from "@repo/ui";
 import { useFetchUserProfile } from "@/hooks/react-query-hooks/useFetchUserProfile";
 import LoadingPage from "./Loading";
 import ErrorPage from "./ErrorPage";
@@ -46,8 +46,12 @@ export default function Dashboard() {
   return (
     <>
       <SidebarProvider className="[--sidebar-width:8rem] md:[--sidebar-width:14rem] lg:[--sidebar-width:16rem]" defaultOpen={false}>
-        <AppSideBar isSharedDashboard={isSharedProfileRouteHash ? true : false}></AppSideBar>
-        <main className="flex w-full ">
+        <AppSideBar isSharedDashboard={isSharedProfileRouteHash ? true : false} />
+
+
+        <main className="flex w-full mx-4 ">
+
+
           <DashboardMainContentArea />
           {/* handles the chatbot icon+the side drawer */}
           {!isSharedProfileRouteHash && <ChatBotDrawerComp />}

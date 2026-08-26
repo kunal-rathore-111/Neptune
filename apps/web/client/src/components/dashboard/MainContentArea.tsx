@@ -6,6 +6,7 @@ import {
   InputGroupInput,
   Sheet,
   SheetContent,
+  SidebarTrigger,
   ThemeToggleButton,
 } from "@repo/ui";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
@@ -122,6 +123,11 @@ function DashboardSection() {
         <div className="flex w-full flex-col gap-3">
           {/* Header: justify-between spreads the H1 and Button */}
           <div className="flex w-full items-center justify-between">
+            {/* sidebar trigger button for the mobile view only */}
+            <SidebarTrigger
+              variant="link"
+              className="block md:hidden  text-zinc-500 hover:text-black dark:hover:text-white group-data-[state=collapsed]:size-8 group-data-[state=collapsed]:flex group-data-[state=collapsed]:items-center group-data-[state=collapsed]:justify-center"
+            />
             <h1 className="text-2xl font-semibold">All Bookmarks</h1>
             <div className="flex gap-4 items-center ">
               {!isSharedProfileRouteHash &&
@@ -156,6 +162,7 @@ function DashboardSection() {
             </InputGroupAddon>
           </InputGroup>
         </div>
+
         {/*  list of cards */}
         <DashboardDataList finalDisplayData={finalDisplayData} />
 
