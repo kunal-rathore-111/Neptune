@@ -25,8 +25,8 @@ export default function SampleCards() {
   };
   return (
     <>
-      <div className="mt-0 border-y pt-10  flex flex-col overflow-hidden ">
-        <h3 className="mb-10 flex w-full  items-center justify-center gap-1 text-6xl font-semibold text-black/70 uppercase dark:text-white/60">
+      <div className="mt-0 border-y pt-10  flex flex-col overflow-hidden">
+        <h3 className="mb-10 flex w-full  items-center justify-center gap-1 text-5xl md:text-6xl font-semibold text-black/70 uppercase dark:text-white/60">
           # See how your data is organized
         </h3>
         <hr />

@@ -6,14 +6,14 @@ export function BentoGrid() {
       {/* first col */}
       <Col1 />
       {/* 2ndCol */}
-      <div className="col-span-1 grid min-h-120 grid-rows-[60%_40%]">
+      <div className="col-span-1 grid grid-rows-[75%_30%]">
         {/* 2nd colRow1 */}
         <Col2Row1 />
         {/* 2nd colRow2 */}
         <Col2Row2 />
       </div>
       {/* 3rd col */}
-      <div className="grid min-h-120 md:col-span-2 md:grid-rows-[35%_65%] lg:col-span-1">
+      <div className="grid col-span-2 md:grid-rows-[35%_65%] lg:col-span-1">
         {/* 3rd Row1 */}
         <Col3Row1 />
 
