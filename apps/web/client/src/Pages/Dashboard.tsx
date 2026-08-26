@@ -1,6 +1,6 @@
 import { DashboardMainContentArea } from "@/components/dashboard/MainContentArea";
 import { AppSideBar } from "@/components/dashboard/DashboardComps/sidebar/SideBarLayout";
-import { SidebarProvider, SidebarTrigger, toast } from "@repo/ui";
+import { SidebarProvider, toast } from "@repo/ui";
 import { useFetchUserProfile } from "@/hooks/react-query-hooks/useFetchUserProfile";
 import LoadingPage from "./Loading";
 import ErrorPage from "./ErrorPage";
