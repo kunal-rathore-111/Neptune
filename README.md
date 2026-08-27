@@ -1,222 +1,181 @@
-# Neptune
+# 🪐 Neptune (2nd Mind)
 
-[![Monorepo](https://img.shields.io/badge/monorepo-Turborepo-black)](https://turbo.build/)
-[![Runtime](https://img.shields.io/badge/runtime-Bun-orange)](https://bun.sh/)
-[![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20Vite-blue)](https://vite.dev/)
-[![Backend](https://img.shields.io/badge/backend-Express%20%2B%20Hono-green)](https://expressjs.com/)
-[![Database](https://img.shields.io/badge/database-PostgreSQL-336791)](https://www.postgresql.org/)
-[![Language](https://img.shields.io/badge/language-TypeScript-3178C6)](https://www.typescriptlang.org/)
+<div align="center">
 
-Neptune is an AI-powered bookmark and knowledge management platform. It helps users save useful web content, automatically generate bookmark metadata from URLs, organize links with categories and tags, search saved knowledge semantically, chat with saved content, and share public content/profile links.
+![Neptune Banner](https://img.shields.io/badge/Neptune-AI--Powered%20Second%20Brain-6366f1?style=for-the-badge&logo=brain&logoColor=white)
 
-## Live Demo
+**An AI-Powered Personal Knowledge Base & Smart Bookmark Platform for Engineers, Researchers, and Creators.**
 
-https://neptune-frontend-beta.vercel.app/
+[![Bun](https://img.shields.io/badge/Bun-v1.3.5-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.com)
+[![Turborepo](https://img.shields.io/badge/Turborepo-v2.10-ef4444?style=flat-square&logo=turborepo&logoColor=white)](https://turbo.build/)
+[![React](https://img.shields.io/badge/React-v19.2-61dafb?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![Hono](https://img.shields.io/badge/Hono-v4.12-e36002?style=flat-square&logo=hono&logoColor=white)](https://hono.dev/)
+[![Express](https://img.shields.io/badge/Express-v5.1-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-4169e1?style=flat-square&logo=postgresql&logoColor=white)](https://github.com/pgvector/pgvector)
+[![LangChain](https://img.shields.io/badge/LangChain-AI-1C3C3C?style=flat-square&logo=langchain&logoColor=white)](https://langchain.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
-## Table of Contents
+</div>
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Repository Structure](#repository-structure)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Database](#database)
-- [Docker](#docker)
-- [Scripts](#scripts)
-- [Documentation](#documentation)
-- [Testing](#testing)
-- [Contributing](#contributing)
+---
 
-## Features
+## 🚀 Overview
 
-- User signup, signin, signout, password update, and account deletion.
-- Protected dashboard for managing saved content.
-- Bookmark create, read, update, delete, category, tag, and share workflows.
-- Magic Fill URL processing to generate title, description, category, and tags.
-- AI chat flow for asking questions about saved knowledge.
-- Public share links for individual content and user profiles.
-- Shared Zod validation schemas across workspaces.
-- PostgreSQL database schema and Drizzle migration files.
-- Dockerfiles and GitHub Actions workflows for deployment pipelines.
+Modern knowledge workers and developers save hundreds of articles, repositories, documents, and videos daily. Traditional bookmark tools result in fragmented, unsearchable "bookmark graveyards" where critical information is routinely lost.
 
-## Architecture
+**Neptune (2nd Mind)** bridges this gap by acting as an **intelligent extension of human memory**. It automatically parses web content, generates vector embeddings, categorizes saved links, and powers a contextual RAG (Retrieval-Augmented Generation) assistant so you can instantly search or converse directly with your saved library.
+
+---
+
+## ✨ Core Features
+
+- **⚡ Instant Search**: Zero-latency, multi-attribute filtering by title, URL, tag, description, or category.
+- **🪄 AI Magic-Fill**: Automatic URL metadata extraction, AI summary generation, auto-tagging, and smart category assignment.
+- **💬 RAG Assistant (Neptune AI)**: Context-aware AI chatbot powered by LangChain and Groq/Gemini that answers questions grounded directly in your stored bookmarks.
+- **🏷️ Smart Taxonomies**: Built-in category management (*Development, Design, Productivity, DevOps, AI & Research, Finance*) with custom color-coded tags.
+- **🔗 Shareable Knowledge Hub**: Public hash links for sharing individual content items or full personal profile collections.
+- **🔐 Enterprise Security**: Private-by-default architecture, email OTP verification, password reset flows, JWT session tokens, and strict CORS/rate limiting.
+
+---
+
+## 🏗️ System Architecture
+
+Neptune is built as a high-performance monorepo, decoupling client rendering, core API management, and AI retrieval microservices.
 
 ```mermaid
-flowchart LR
-    Client[React Vite Client] --> Server[Express API Server]
-    Server --> DB[(PostgreSQL)]
-    Server --> AI[Hono AI Server]
-    AI --> LLM[Google GenAI / Groq]
-    AI --> Scraper[Cheerio URL Scraper]
+flowchart TD
+    subgraph Client ["💻 Client Layer"]
+        UI["React 19 SPA (Vite + Tailwind v4)\nRedux Toolkit + TanStack Query"]
+    end
+
+    subgraph Backend ["⚡ Web API Server (Express)"]
+        API["Express v5 API Server\nAuth, Content Management, Sharing & OTP"]
+    end
+
+    subgraph AIService ["🤖 AI Microservice (Hono + Bun)"]
+        AI["Hono Microservice\nWeb Scraper + Vector Embeddings + RAG"]
+        LLM["LangChain Pipeline\nGoogle Gemini & Groq Models"]
+        AI --> LLM
+    end
+
+    subgraph Storage ["💾 Data & Vector Engine"]
+        DB[("PostgreSQL Database\nDrizzle ORM + pgvector\nHNSW Cosine Indexing (768-dim)")]
+    end
+
+    UI -->|"REST API Requests"| API
+    UI -->|"RAG Queries & Magic-Fill"| AI
+    API -->|"Data Persistence & User Auth"| DB
+    AI -->|"Vector Storage & Similarity Search"| DB
+    AI -->|"Live Web Scraping (Cheerio)"| Web["🌐 External Web Pages"]
 ```
 
-The project is split into independent workspaces:
+---
 
-- `apps/web/client`: React frontend.
-- `apps/web/server`: Express backend API.
-- `apps/aiServer`: Hono AI microservice.
-- `packages/*`: shared UI, icons, validation, TypeScript config, ESLint config, and utility libraries.
+## 🛠️ Tech Stack
 
-## Tech Stack
+| Component | Technologies | Description |
+| :--- | :--- | :--- |
+| **Frontend UI** | React 19, Vite, Tailwind CSS v4, Framer Motion, Redux Toolkit, TanStack Query | Responsive SPA with real-time UI updates and smooth animations |
+| **Web API Server** | Express.js v5, Node.js / Bun, TypeScript, Helmet, Cookie Parser | Core REST backend for authentication, authorization, and CRUD ops |
+| **AI Engine** | Hono, Bun, LangChain, Google Gemini (`text-embedding-004`), Groq (`llama-3.3-70b`) | High-speed microservice for metadata scraping, embeddings, and RAG |
+| **Database** | PostgreSQL, Drizzle ORM, `pgvector` extension | Relational data store with 768-dimensional vector cosine distance search |
+| **Monorepo** | Turborepo, Bun Workspaces | Workspace management, task execution pipeline, and shared packages |
 
-| Area | Tools |
-| --- | --- |
-| Frontend | React, Vite, TypeScript, Tailwind CSS, Redux Toolkit, TanStack Query |
-| Backend API | Bun, Express, Drizzle ORM, Zod, JWT, Cookie Parser |
-| AI Service | Bun, Hono, LangChain, Cheerio, Google GenAI, Groq |
-| Database | PostgreSQL, Drizzle migrations |
-| Monorepo | Turborepo, Bun workspaces |
-| DevOps | Docker, GitHub Actions, Vercel config |
+---
 
-## Repository Structure
+## 📁 Repository Structure
 
-```text
-.
-├── .github/workflows
-│   ├── ai-server.yml
-│   ├── client.yml
-│   └── server.yml
-├── apps
-│   ├── aiServer
-│   └── web
-│       ├── client
-│       └── server
-├── docker
-│   ├── dockerfile.ai-server
-│   ├── dockerfile.client
-│   └── dockerfile.server
-├── packages
-│   ├── eslint-config
-│   ├── icons
-│   ├── libs
-│   ├── typescript-config
-│   ├── ui
-│   └── validator
-├── CONTRIBUTING.md
-├── INSTALLATION_AND_EXECUTION.md
-├── TEST_CASES_AND_RESULTS.md
-├── package.json
-├── turbo.json
-└── README.md
+```
+Neptune/
+├── apps/
+│   ├── web/
+│   │   ├── client/          # React 19 + Vite SPA Frontend
+│   │   └── server/          # Express REST API Backend
+│   └── aiServer/            # Bun + Hono AI Microservice (Magic-Fill, Embeddings & RAG)
+├── packages/
+│   ├── database/            # Drizzle ORM schemas & pgvector configuration
+│   ├── validator/           # Shared Zod validation schemas
+│   ├── ui/                  # Shared UI component library
+│   ├── icons/               # Shared icon assets
+│   ├── libs/                # Shared utility functions
+│   ├── typescript-config/   # Shared TypeScript configurations
+│   └── eslint-config/       # Shared ESLint rules
+├── package.json             # Monorepo root configuration
+└── turbo.json               # Turborepo build pipeline
 ```
 
-## Getting Started
+---
 
-Install dependencies:
+## 🚀 Quick Start Guide
+
+### Prerequisites
+- **Bun**: `^1.3.5` (or Node.js `>= 18`)
+- **PostgreSQL**: `^15` with `pgvector` extension enabled
+- **API Keys**: Google Gemini AI Key and/or Groq API Key
+
+### 1. Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/your-org/neptune.git
+cd neptune
+
+# Install workspace dependencies
 bun install
 ```
 
-Run all development services:
+### 2. Environment Setup
+
+Create `.env` files in `apps/web/server` and `apps/aiServer`:
 
 ```bash
-bun run dev
+# apps/web/server/.env
+PORT=3001
+DATABASE_URL="postgresql://user:password@localhost:5432/neptune"
+JWT_SECRET="your-secure-jwt-secret"
+AI_SERVER_URL="http://localhost:3002"
+
+# apps/aiServer/.env
+PORT=3002
+BACKEND_URL="http://localhost:3001"
+GEMINI_API_KEY="your-gemini-api-key"
+GROQ_API_KEY="your-groq-api-key"
 ```
 
-Default local URLs:
+### 3. Database Migrations
 
-| Service | URL |
-| --- | --- |
-| Frontend | `http://localhost:5173` |
-| Backend API | `http://localhost:3000` |
-| AI Server | `http://localhost:3002` |
-
-For complete local setup, see [INSTALLATION_AND_EXECUTION.md](./INSTALLATION_AND_EXECUTION.md).
-
-## Environment Variables
-
-The project uses separate `.env` files for each app:
-
-```text
-apps/web/client/.env
-apps/web/server/.env
-apps/aiServer/.env
-```
-
-Environment examples and explanations are available in [INSTALLATION_AND_EXECUTION.md](./INSTALLATION_AND_EXECUTION.md).
-
-## Database
-
-Database schema, migrations, and Drizzle configuration are included in:
-
-```text
-apps/web/server/src/drizzle/schema.ts
-apps/web/server/src/drizzle/migrations/
-apps/web/server/src/drizzle/drizzle.config/drizzle.config.ts
-```
-
-Run migrations:
+Generate and push database schemas using Drizzle Kit:
 
 ```bash
-cd apps/web/server
-bun run migratee
+bun run drizzle:generate
+bun run drizzle:push
 ```
 
-## Docker
+### 4. Running Local Servers
 
-Dockerfiles are available for all runtime services:
-
-```text
-docker/dockerfile.client
-docker/dockerfile.server
-docker/dockerfile.ai-server
-```
-
-Build images from the repository root:
+Start all microservices and the frontend SPA concurrently:
 
 ```bash
-docker build -f docker/dockerfile.client -t neptune-client .
-docker build -f docker/dockerfile.server -t neptune-server .
-docker build -f docker/dockerfile.ai-server -t neptune-ai-server .
+bun dev
 ```
 
-Run commands and environment examples are documented in [INSTALLATION_AND_EXECUTION.md](./INSTALLATION_AND_EXECUTION.md).
+- **Frontend App**: `http://localhost:5173`
+- **Web API Server**: `http://localhost:3001`
+- **AI Microservice**: `http://localhost:3002`
 
-## Scripts
+---
 
-Root scripts:
+## 🧪 Available Scripts
 
-| Command | Description |
-| --- | --- |
-| `bun run dev` | Run all workspace development servers through Turborepo |
-| `bun run build` | Build all configured workspaces |
-| `bun run lint` | Run lint checks |
-| `bun run check-types` | Run TypeScript checks |
-| `bun run format` | Format TypeScript, TSX, and Markdown files |
+| Command | Action |
+| :--- | :--- |
+| `bun run dev` | Start all applications concurrently in development mode |
+| `bun run build` | Build all frontend apps, servers, and shared packages |
+| `bun run lint` | Run ESLint checks across the monorepo |
+| `bun run check-types` | Run TypeScript type checking across all workspaces |
 
-Backend database scripts:
+---
 
-| Command | Location | Description |
-| --- | --- | --- |
-| `bun run generatee` | `apps/web/server` | Generate Drizzle migration files |
-| `bun run migratee` | `apps/web/server` | Apply Drizzle migrations |
+## 📜 License
 
-## Documentation
-
-- [Installation and Execution Steps](./INSTALLATION_AND_EXECUTION.md)
-- [Contribution Steps](./CONTRIBUTING.md)
-- [Test Cases and Results](./TEST_CASES_AND_RESULTS.md)
-
-Project report and user manual files are intentionally excluded from this repository submission.
-
-## Testing
-
-Current verification is based on:
-
-```bash
-bun run check-types
-bun run lint
-bun run build
-```
-
-Manual functional test cases are listed in [TEST_CASES_AND_RESULTS.md](./TEST_CASES_AND_RESULTS.md).
-
-## Contributing
-
-Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before making changes.
-
-## License
-
-This repository does not currently include a license file. Add one before distributing or accepting external open-source contributions.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
