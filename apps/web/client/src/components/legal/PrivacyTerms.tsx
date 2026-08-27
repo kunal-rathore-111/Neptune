@@ -15,7 +15,7 @@ export default function PrivacyTerms(props: PrivacyTermsDTO) {
   const lastUpdate = POLICY_DATE;
 
   return (
-    <div className="my-14 flex w-full flex-col items-start gap-5 rounded-2xl border px-14 py-12 text-start shadow-sm shadow-black dark:border-zinc-400 dark:shadow-zinc-200/70">
+    <div className="my-14  flex  flex-col items-center gap-5 rounded-2xl border px-14 py-12 text-start shadow-sm shadow-black dark:border-zinc-400 dark:shadow-zinc-200/70">
       <div className="lg:w-230">
         <div className="border-y-2">
           <div className="flex items-center justify-between py-4">
