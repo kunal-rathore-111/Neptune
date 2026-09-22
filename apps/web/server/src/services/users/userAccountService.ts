@@ -29,8 +29,9 @@ export const findUserService = async ({ email, password }: SignInTypes) => {
   ).limit(1);
 
   const [user] = result;
+  console.error('\n\n\n\n ', user, '\n\n')
   if (!user) throw new AppError('User not found', 404, 'NotFound');
-  if (!user.password) throw new AppError("Password not found, please update password.", 404, "NotFound")
+  if (!user.password) throw new AppError("No password found, please log out and perform forgot password.", 404, "NotFound")
 
   const decodePasswordResponse = await decodePassword(password, user.password);
   if (!decodePasswordResponse) throw new AppError('Wrong password', 401, 'Unauthorized');

@@ -67,35 +67,28 @@ export default function DashboardDataList({ finalDisplayData }: DashboardDataLis
   const cardsData = RoundRobinConversion(cols);
 
   return (
-    <div className="my-2 flex flex-col items-center gap-10">
-      <div
-        className={cn("grid gap-10", {
-          "grid-cols-1": cols === 1,
-          "grid-cols-2": cols === 2,
-          "grid-cols-3": cols === 3,
-          "grid-cols-4": cols === 4,
-        })}
-      >
-        {/* traverse cols- col1 then col2 then col3 */}
-        {cardsData.map((cardDataRows, idx) => {
-          return (
-            <div key={idx} className="space-y-8">
-              {cardDataRows.map((cardData) => {
-                return (
-                  /* traverse all rows on that coln */
-                  <motion.div
-                    layoutId={cardData.contentTable.id}
-                    className="break-inside-avoid"
-                    key={cardData.contentTable.id}
-                  >
-                    <ContentCard cardData={cardData} />
-                  </motion.div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+    <div
+      className={cn("flex flex-wrap items-center w-full gap-10")}
+    >
+      {/* traverse cols- col1 then col2 then col3 */}
+      {cardsData.map((cardDataRows, idx) => {
+        return (
+          <div key={idx} className="space-y-8">
+            {cardDataRows.map((cardData) => {
+              return (
+                /* traverse all rows on that coln */
+                <motion.div
+                  layoutId={cardData.contentTable.id}
+                  className="break-inside-avoid"
+                  key={cardData.contentTable.id}
+                >
+                  <ContentCard cardData={cardData} />
+                </motion.div>
+              );
+            })}
+          </div>
+        );
+      })}
     </div>
   );
 }

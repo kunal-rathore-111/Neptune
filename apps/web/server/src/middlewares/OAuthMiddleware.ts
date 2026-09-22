@@ -13,6 +13,7 @@ import { NODE_ENV } from "../libs/utils/envVariables";
 
 export function OAuthMiddleware(req: Request, res: Response, next: NextFunction) {
     const authHandler = ExpressAuth({
+        trustHost: true,
         providers: [GitHub, Google, Discord],
         callbacks:
         {
