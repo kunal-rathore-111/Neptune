@@ -7,7 +7,7 @@ import { AccountsTable, getDB, UsersTable } from '@repo/database';
 import { and, eq } from '@repo/database';
 import AppError from './appError';
 import { createJWTSession } from '../libs/sessions';
-import { NODE_ENV } from '../libs/utils/envVariables';
+import { cookieOptions } from '../libs/cookieOptions';
 
 export function OAuthMiddleware(req: Request, res: Response, next: NextFunction) {
   const authHandler = ExpressAuth({
@@ -68,16 +68,13 @@ export function OAuthMiddleware(req: Request, res: Response, next: NextFunction)
             });
             res.cookie('token', token, {
               maxAge: 3 * 24 * 60 * 60 * 1000,
-              httpOnly: true,
-              sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
-              secure: NODE_ENV === 'production' ? true : false,
+              ...cookieOptions,
             });
 
             res.cookie('hasTokenCookie', true, {
               maxAge: 3 * 24 * 60 * 60 * 1000,
+              ...cookieOptions,
               httpOnly: false,
-              sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
-              secure: NODE_ENV === 'production' ? true : false,
             });
             return true;
           }
@@ -89,7 +86,7 @@ export function OAuthMiddleware(req: Request, res: Response, next: NextFunction)
       async redirect({ url }: any) {
         // any invalid frontends, postman will dirctly blocked by CORS in production
         const FRONTEND_URL = process.env.Frontend_URL || 'http://localhost:5173';
-        
+
         if (url.startsWith(FRONTEND_URL)) {
           return url;
         }
