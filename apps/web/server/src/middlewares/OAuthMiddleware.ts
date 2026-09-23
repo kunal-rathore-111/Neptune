@@ -89,7 +89,7 @@ export function OAuthMiddleware(req: Request, res: Response, next: NextFunction)
       async redirect({ url }: any) {
         // any invalid frontends, postman will dirctly blocked by CORS in production
         const FRONTEND_URL = process.env.Frontend_URL || 'http://localhost:5173';
-
+        
         if (url.startsWith(FRONTEND_URL)) {
           return url;
         }

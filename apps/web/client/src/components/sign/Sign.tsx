@@ -290,8 +290,9 @@ const SignComp = ({ mode }: { mode: AuthMode }) => {
   );
 };
 
-export default SignComp;
 
+
+export default SignComp;
 
 
 type OAuthProviderButtonProps = {
