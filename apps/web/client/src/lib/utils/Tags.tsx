@@ -21,7 +21,7 @@ interface TagsDTO {
 export default function Tags({ tags, childVariant, sliceCount = 3 }: TagsDTO) {
   const displayTags = tags.slice(0, sliceCount);
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap">
       {displayTags.map((tag, idx) => {
         const color = getColor(tag);
 

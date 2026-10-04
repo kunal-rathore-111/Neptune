@@ -1,5 +1,5 @@
 import { and, desc, eq, lt } from '@repo/database';
-import { getDB } from "@repo/database";
+import { getDB } from '@repo/database';
 import { ContentShareLinkTable, ContentTable } from '@repo/database';
 import type { z } from 'zod';
 import type { contentZodSchema } from '@repo/validation';
@@ -7,41 +7,35 @@ import { createContentShareLinkFunc, deleteContentShareLinkFunc } from '../share
 import AppError from '../../middlewares/appError';
 import { getEmbedding } from './embeddingService';
 
-
-
-
 export const getContentService = async (userId: string, cursor: string | undefined, limit: number) => {
-
   const db = getDB();
   const data = await db
-    .select(
-      {
-        // all data except the embeddings
-        contentTable: {
-          id: ContentTable.id,
-          userId: ContentTable.userId,
-          title: ContentTable.title,
-          link: ContentTable.link,
-          description: ContentTable.description,
-          category: ContentTable.category,
-          tags: ContentTable.tags,
-          createdDate: ContentTable.createdDate,
-          updatedDate: ContentTable.updatedDate,
-        },
-        ContentShareLinkTable: {
-          id: ContentShareLinkTable.id,
-          shareHash: ContentShareLinkTable.contentSharehash,
-          contentId: ContentShareLinkTable.contentId
-        }
-      })
+    .select({
+      // all data except the embeddings
+      contentTable: {
+        id: ContentTable.id,
+        userId: ContentTable.userId,
+        title: ContentTable.title,
+        link: ContentTable.link,
+        description: ContentTable.description,
+        category: ContentTable.category,
+        tags: ContentTable.tags,
+        createdDate: ContentTable.createdDate,
+        updatedDate: ContentTable.updatedDate,
+      },
+      ContentShareLinkTable: {
+        id: ContentShareLinkTable.id,
+        shareHash: ContentShareLinkTable.contentSharehash,
+        contentId: ContentShareLinkTable.contentId,
+      },
+    })
     .from(ContentTable)
-    .leftJoin(ContentShareLinkTable,
-      eq(ContentShareLinkTable.contentId, ContentTable.id))
+    .leftJoin(ContentShareLinkTable, eq(ContentShareLinkTable.contentId, ContentTable.id))
     .where(
       and(
         eq(ContentTable.userId, userId),
-        cursor ? lt(ContentTable.updatedDate, new Date(cursor)) : undefined //if cursor exists then find data less then the cursor date
-      )
+        cursor ? lt(ContentTable.updatedDate, new Date(cursor)) : undefined, //if cursor exists then find data less then the cursor date
+      ),
     )
     .orderBy(desc(ContentTable.updatedDate))
     .limit(limit + 1);
@@ -50,11 +44,9 @@ export const getContentService = async (userId: string, cursor: string | undefin
 };
 
 export const addContentService = async (data: z.infer<typeof contentZodSchema>, userId: string) => {
-
   // getEmbeddings
   const embedding = await getEmbedding(data);
   const db = getDB();
-
 
   console.log('\nDB addContentDBFunction called\n');
 
@@ -102,8 +94,6 @@ interface updateContent_DTO extends deleteContent_DTO {
 }
 /* need to add share update logic */
 export const updateContentService = async ({ userId, contentId, newColumnData }: updateContent_DTO) => {
-
-
   // getEmbeddings
   const embedding = await getEmbedding(newColumnData);
 

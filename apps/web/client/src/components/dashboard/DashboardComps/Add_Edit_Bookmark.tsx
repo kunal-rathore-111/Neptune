@@ -148,7 +148,7 @@ export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
   return (
     <>
       <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">
-        <div className="relative flex h-full max-h-[90vh] w-150 flex-col rounded-xl border bg-zinc-100 p-7 text-start text-xs shadow-sm shadow-zinc-900 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
+        <div className="relative flex w-150 flex-col rounded-xl border bg-zinc-100 px-7 py-14 text-start text-xs shadow-sm shadow-zinc-900 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
           <span className="absolute -top-2 -right-2 z-20 rounded-full border-2 bg-zinc-300 p-0.5">
             {
               <XIcon
@@ -229,7 +229,6 @@ type inputsType = {
 function InputSection({ inputs }: { inputs: inputsType }) {
   const categoryArray = [...CATEGORIES];
 
-
   const filteredCategoryArray = [
     inputs.category,
     ...categoryArray.filter((cat) => cat != inputs.category),
@@ -250,7 +249,7 @@ function InputSection({ inputs }: { inputs: inputsType }) {
   const [linkValidation, setLinkValidation] = useState<any>();
   const [titleValidation, setTitleValidation] = useState<any>();
 
-  useEffect(() => { }, [inputs.share]);
+  useEffect(() => {}, [inputs.share]);
 
   useEffect(() => {
     setLinkValidation(validateLinkInput(inputs.link));

@@ -1,92 +1,36 @@
 import { ContentCard } from "./ContentCard";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import type { dashboardFetchDataType } from "@/Types/dashboard";
-import { useSidebar } from "@repo/ui";
-import { cn } from "@repo/libs";
 import { NoContentPresentComp } from "./NoContentComp";
 
 type DashboardDataListInput = {
-  finalDisplayData: dashboardFetchDataType[] | undefined,
-}
+  finalDisplayData: dashboardFetchDataType[] | undefined;
+};
 
-export default function DashboardDataList({ finalDisplayData }: DashboardDataListInput) {
-
-  /*  check sidebar is open or not for no. of cols on the dashboard */
-  const { open } = useSidebar();
-
-
-  const getCols = (width: number, open: boolean) => {
-    if (open) {
-      // sidebar open, less space
-      if (width >= 1400) return 3;
-      if (width >= 1090) return 2;
-      return 1;
-    } else {
-      if (width >= 1500) return 4;
-      if (width >= 1100) return 3;
-      if (width >= 600) return 2;
-      return 1;
-    }
-  };
-
-  const [cols, setCols] = useState<number>(getCols(window.innerWidth, open));
-
-
-  useEffect(() => {
-    const handleResizeEvent = () => {
-      //  console.error(window.innerWidth);
-      const newCols = getCols(window.innerWidth, open);
-      setCols((prev) => (prev === newCols ? prev : newCols)); // it helps to avoid unnecessary renders, cause if width change even one pixel it will render and frontend will lag
-    };
-    handleResizeEvent(); // updates when open changes
-    window.addEventListener("resize", handleResizeEvent); // when window resize call handleResizeEvent
-    return () => {
-      window.removeEventListener("resize", handleResizeEvent);
-    };
-  }, [open]);
-
-  // function to convert the [] into [[][][]] to render cards in form of Masonry layout
-  function RoundRobinConversion(cols: number) {
-    const result: dashboardFetchDataType[][] = []; // [][] row col wise
-    // put cols according to screen size (cols)
-    for (let i = 0; i < cols; i++) result.push([]); // [[], [], []] if col =3
-    // traverse the cardsData (backend data) and put col wise
-    finalDisplayData?.forEach((element, i) => {
-      result[i % cols].push(element);
-    });
-    return result;
-  }
-
+export default function DashboardDataList({
+  finalDisplayData,
+}: DashboardDataListInput) {
   if (finalDisplayData && finalDisplayData.length === 0) {
-    return <div className="items-center justify-center flex">
-      <NoContentPresentComp />
-    </div>;
+    return (
+      <div className="flex items-center justify-center">
+        <NoContentPresentComp />
+      </div>
+    );
   }
-
-  const cardsData = RoundRobinConversion(cols);
 
   return (
-    <div
-      className={cn("flex flex-wrap items-center w-full gap-10")}
-    >
+    <div className="flex w-full flex-wrap items-center gap-6">
       {/* traverse cols- col1 then col2 then col3 */}
-      {cardsData.map((cardDataRows, idx) => {
+      {finalDisplayData?.map((cardData) => {
         return (
-          <div key={idx} className="space-y-8">
-            {cardDataRows.map((cardData) => {
-              return (
-                /* traverse all rows on that coln */
-                <motion.div
-                  layoutId={cardData.contentTable.id}
-                  className="break-inside-avoid"
-                  key={cardData.contentTable.id}
-                >
-                  <ContentCard cardData={cardData} />
-                </motion.div>
-              );
-            })}
-          </div>
+          /* traverse all rows on that coln */
+          <motion.div
+            layoutId={cardData.contentTable.id}
+            className="break-inside-avoid"
+            key={cardData.contentTable.id}
+          >
+            <ContentCard cardData={cardData} />
+          </motion.div>
         );
       })}
     </div>
