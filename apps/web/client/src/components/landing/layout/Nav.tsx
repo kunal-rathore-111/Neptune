@@ -29,9 +29,9 @@ export const Nav = () => {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-all duration-300">
-      <nav className="mx-auto flex h-14.5 w-full items-center bg-white/20 px-8 backdrop-blur-sm dark:bg-black/0">
-        <div className="flex gap-10">
+    <header className="fixed inset-x-0 top-0 z-20 border-b border-transparent transition-all duration-300">
+      <nav className="mx-auto flex h-14.5 w-full items-center gap-1 bg-white/20 px-8 backdrop-blur-sm dark:bg-black/0">
+        <div className="flex gap-5 md:gap-10">
           <div
             className="flex cursor-pointer items-center"
             id="top"
@@ -90,23 +90,26 @@ export const Nav = () => {
           >
             <GithubIcon size={18} />
           </a>
-          <div className="h-4 w-px bg-zinc-300 dark:bg-zinc-700" />
-          <Button
-            variant={"secondary"}
-            onClick={() => navigate("/sign-in")}
-            size="sm"
-            className="rounded-sm text-xs transition-colors duration-400 hover:bg-zinc-300 hover:text-zinc-900 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
-          >
-            Sign In
-          </Button>
+          <div className="hidden h-4 w-px bg-zinc-300 md:block dark:bg-zinc-700" />
 
-          <Button
-            onClick={() => navigate("/sign-up")}
-            size="sm"
-            className="rounded-sm text-xs transition-colors duration-400"
-          >
-            Sign Up
-          </Button>
+          <div className="hidden space-x-2 md:block">
+            <Button
+              variant={"secondary"}
+              onClick={() => navigate("/sign-in")}
+              size="sm"
+              className="rounded-sm text-xs transition-colors duration-400 hover:bg-zinc-300 hover:text-zinc-900 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+            >
+              Sign In
+            </Button>
+
+            <Button
+              onClick={() => navigate("/sign-up")}
+              size="sm"
+              className="rounded-sm text-xs transition-colors duration-400"
+            >
+              Sign Up
+            </Button>
+          </div>
         </div>
       </nav>
     </header>

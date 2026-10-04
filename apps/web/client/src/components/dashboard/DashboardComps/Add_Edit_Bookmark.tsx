@@ -148,7 +148,7 @@ export function Add_Edit_BookMarkCard(props: AddBookMarkCardDTO) {
   return (
     <>
       <div className="fixed inset-0 z-10 flex max-h-screen items-center justify-center bg-black/30 backdrop-blur-xs">
-        <div className="relative flex w-150 flex-col rounded-xl border bg-zinc-100 px-7 py-14 text-start text-xs shadow-sm shadow-zinc-900 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
+        <div className="relative flex w-100 flex-col rounded-xl border bg-zinc-100 px-2 py-14 text-start text-xs shadow-sm shadow-zinc-900 md:w-150 md:px-7 dark:bg-zinc-950/80 dark:shadow-zinc-300/90">
           <span className="absolute -top-2 -right-2 z-20 rounded-full border-2 bg-zinc-300 p-0.5">
             {
               <XIcon
@@ -266,7 +266,7 @@ function InputSection({ inputs }: { inputs: inputsType }) {
   return (
     <FieldGroup className="max-w-sm gap-5">
       <Field className="gap-1">
-        <FieldLabel htmlFor="block-start-input ">URL</FieldLabel>
+        <FieldLabel htmlFor="block-start-input">URL</FieldLabel>
         <InputGroup className="rounded-md border-2 focus:border-2 has-[[data-slot=input-group-control]:focus-visible]:border-yellow-600 has-[[data-slot=input-group-control]:focus-visible]:ring-0">
           <InputGroupInput
             placeholder="https://example.com "
@@ -323,10 +323,10 @@ function InputSection({ inputs }: { inputs: inputsType }) {
         <TagsInputComp tricks={inputs.tags} setTricks={inputs.setTags} />
       </Field>
 
-      <div className="flex items-center justify-between">
-        <div className="flex flex-2 gap-2">
+      <div className="items- flex flex-col justify-between md:flex-row">
+        <div className="flex items-center gap-2">
           <label htmlFor="category" className="text-sm">
-            Category
+            Category:
           </label>
           <select
             value={inputs.category}
@@ -343,7 +343,7 @@ function InputSection({ inputs }: { inputs: inputsType }) {
             })}
           </select>
         </div>
-        <div className="flex items-center gap-3 py-2">
+        <div className="flex items-center gap-3 py-2 text-sm">
           Make shareable
           <Checkbox
             checked={inputs.share}
