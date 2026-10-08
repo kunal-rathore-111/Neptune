@@ -20,10 +20,8 @@ export default function DashboardDataList({
 
   return (
     <div className="flex w-full flex-wrap items-center gap-6">
-      {/* traverse cols- col1 then col2 then col3 */}
       {finalDisplayData?.map((cardData) => {
         return (
-          /* traverse all rows on that coln */
           <motion.div
             layoutId={cardData.contentTable.id}
             className="break-inside-avoid"

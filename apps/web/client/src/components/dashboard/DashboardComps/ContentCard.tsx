@@ -51,7 +51,7 @@ export function ContentCard({ cardData }: ContentCardType) {
 
   return (
     <div
-      className="relative flex h-50 w-90 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 md:w-60 lg:h-45 lg:w-68 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90"
+      className="relative flex h-50 w-90 flex-col justify-between rounded-xl bg-zinc-100 p-3 text-start text-xs shadow-sm shadow-zinc-900 md:w-60 lg:h-45 lg:w-64 dark:border-4 dark:bg-[#100A10] dark:shadow-zinc-300/90"
       onMouseEnter={() => setShouldShowEDUB(true)}
       onMouseLeave={() => setShouldShowEDUB(false)}
     >
